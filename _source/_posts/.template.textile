@@ -1,0 +1,29 @@
+---
+layout: post
+title: 
+author: Luke Bayes
+post_image_flickr: 
+post_image_author_link: 
+post_image_author_name: 
+post_image_license: 
+post_image_local: 
+post_image_title: 
+---
+
+h1. {{ page.title }}
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+h2. Introduction Header
+
+Introduction here
+
+<span class="attribution">
+<image class="bordered" src="{{ page.post_image_local }}" title="{{ page.post_image_title}}" />
+<a href="{{ page.post_image_flickr }}">{{ page.post_image_title }}</a> courtesy of <a href="{{ page.post_image_author_link }}">{{ page.post_image_author_name }}</a> and the <a href="{{ page.post_image_license }}">Creative Commons</a> license.
+</span>
+
+h2. Conclusion
+
+This brings us to the end of the "{{ page.title }}" post. If you find anything here in error, <a target="_blank" href="http://groups.google.com/group/projectsprouts">please let us know</a>, or better yet - <a target="_blank" href="https://github.com/lukebayes/project-sprouts/blob/gh-pages/_source/_posts">fork</a>, fix and send a pull request.
+
