@@ -1,0 +1,32 @@
+---
+layout: post
+title: HaXe 1.05 Supports Flash Player 9!
+author: Ali Mills
+---
+
+h1. HaXe 1.05 Supports Flash Player 9!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I just noticed that "haXe 1.05":http://haxe.org/download was released yesterday, and it now "supports publishing to Flash Player 9":http://haxe.org/tutos/flash9.  I'm impressed.  "Nicolas":http://ncannasse.free.fr/ (of "MTASC, the first ActionScript 2 Open Source free compiler":http://tech.motion-twin.com/mtasc.html fame) is a super-coder.
+
+I haven't tried publishing a Flash Player 9 SWF yet, but I will soon.  Here are some "haXe":http://haxe.org/ links:
+ 
+* "haXe introduction":http://haxe.org/intro
+
+* "haXe reference":http://haxe.org/ref
+
+* "haXe license":http://haxe.org/license 
+
+* "haXe for Flash 9":http://haxe.org/tutos/flash9
+
+* "haXe and the 'private' keyword":http://lists.motion-twin.com/pipermail/haxe/2006-August/004142.html
+
+* "porting ActionScript 2.0 to haXe":http://haxe.org/tutos/as2_compare
+
+* "download haXe":http://haxe.org/download
+
+
+
+
+

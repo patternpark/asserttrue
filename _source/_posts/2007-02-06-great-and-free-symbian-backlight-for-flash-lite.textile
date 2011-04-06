@@ -1,0 +1,20 @@
+---
+layout: post
+title: Great and Free Symbian Backlight for Flash Lite
+author: Ali Mills
+---
+
+h1. Great (and Free) Symbian Backlight for Flash Lite
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Demonstrating "Flash Lite":http://www.adobe.com/products/flashlite/ applications is difficult when the device's backlight keeps turning off.
+
+For devices like the "PSP":http://www.us.playstation.com/PSP, "Treo":http://www.palm.com/us/products/smartphones/treo700w/, "Clix":http://www.iriveramerica.com/prod/ultra/clix/clix-2GB.aspx, and "LG Chocolate":http://estore.vzwshop.com/chocolate/ it's easy to keep the backlight on.  In the case of the "Clix":http://www.iriveramerica.com/prod/ultra/clix/clix-2GB.aspx it just stays on.  For the "LG Chocolates":http://estore.vzwshop.com/chocolate/ you just plug the device in.  And, for the "PSP":http://www.us.playstation.com/PSP and "Treo":http://www.palm.com/us/products/smartphones/treo700w/ you just adjust a backlight setting on the device.
+
+For "Symbian":http://www.symbian.com/ devices (most "Nokias":http://www.nokia.com/) keeping it on isn't so easy.  You need the help of third-party software.  The best and most inclusive third-party software I've found is "S60SpotOn":http://www.outbank.de/index.php?id=29.  And, it's free!  I prefer "S60SpotOn":http://www.outbank.de/index.php?id=29 to "Torch":http://www.compsoc.man.ac.uk/~ashley/ because it works on Nokia S60 3rd edition, S60 2nd edition FP3, S60 2nd edition.  I could only get "Torch":http://www.compsoc.man.ac.uk/~ashley/ to run on Nokia S60 2nd edition.
+
+To avoid the error message _"Certificate Error contact the application supplier"_ you might get when installing "S60SpotOn":http://www.outbank.de/index.php?id=29 on a Nokia S60 3rd edition device, you'll need to change the "Software installation" setting from "Signed Only" to "All" and the "Onlline certic check" to "Off".  The "E-Series":http://www.e-series.org/ blog describes how to change the settings on a "Nokia E61":http://www.e-series.org/archives/45 and "Nokia E62":http://www.e-series.org/archives/192 at "http://www.e-series.org/archives/45":http://www.e-series.org/archives/45 and "http://www.e-series.org/archives/192":http://www.e-series.org/archives/192, respectively.
+
+If you want to go the other way on the "Treo":http://www.palm.com/us/products/smartphones/treo700w/.  If you want to turn its keyboard backlight off, you should try the "Treo Keylight":http://www.pocketmax.net/smf/index.php?topic=3209.msg20859#msg20859.  It's working great for me on a "Treo 700W":http://www.palm.com/us/products/smartphones/treo700w/.
+

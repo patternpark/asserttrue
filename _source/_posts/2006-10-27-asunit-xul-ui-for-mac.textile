@@ -1,0 +1,39 @@
+---
+layout: post
+title: AsUnit XUL UI for Mac?!
+author: Luke Bayes
+---
+
+h1. AsUnit XUL UI for Mac?!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I'm sure there is an easier way to make this happen, but I was really glad to hear that *someone* figured out how to get our XUL UI utility running on MAC OSX!
+
+Many thanks to David Drescher for working through this and posting the results of his efforts to the list, following is what he found:
+
+----------------8<----------------
+
+I've been messing around with getting the XUL ui working in os x 10.4 and I thought I would pass what I learned on to anyone who's interested:
+
+It looks like with the new 1.8.0.4 release of XULRunner won't let you start up the asunit ui from the command line.  Instead you now have to use the xulrunner-bin binary to first install the application from the terminal:
+
+$ xulrunner-bin --install-app /path/to/XULUI-Mac/
+
+This creates a folder /Applications/asunit/ which contains a new asunit.app os x application folder.  You can now just double click on the application to launch the ui.
+
+(note: the xulrunner-bin binary can be found in /Library/Frameworks/XUL.framework/ once you've installed XULRunner).
+
+It should be possible to use the provided application structure to create a standalone mac app to distribute via dmg if you also include the XULRunner framework.
+
+-Dave
+
+---------------->8----------------
+
+Hopefully we'll have a simpler binary soon, but in lieu of that, this should at least help the Mac folks get some traction.
+
+
+Thanks Dave!
+
+
+

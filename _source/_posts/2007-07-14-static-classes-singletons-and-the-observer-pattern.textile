@@ -1,0 +1,100 @@
+---
+layout: post
+title: Static Classes, Singletons and the Observer Pattern
+author: Luke Bayes
+---
+
+h1. Static Classes, Singletons and the Observer Pattern
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Over the years, Ali and I have spent quite a lot of time trying to sort out when to use static classes, when to use the <a href="http://en.wikipedia.org/wiki/Singleton_pattern">Singleton</a> pattern and when to do the work required to avoid them.
+
+There has been a <a href="http://c2.com/cgi/wiki?SingletonsAreEvil">long</a> and <a href="http://c2.com/cgi/wiki?SingletonGlobalProblems">ongoing</a> <a href="http://c2.com/cgi/wiki?SimpletonPattern">discussion</a> in the OOP and <a href="http://c2.com/cgi/wiki?WelcomeVisitors">patterns community</a> on this subject by people far more intelligent and experienced than I am. It is really their knowledge and experience that will be essentially repackaged for ActionScript development here.
+
+Following are the primary arguments that compel me to look for a better way.
+
+<b>Testable Code</b>
+
+Singletons make it incredibly difficult to effectively test other code. Let's look at the most common Singleton that I've seen flailing around in ActionScript applications. The Singleton Service. The justification goes like this:
+
+There is only one internet, but many of my objects need to access it, so I should hide my service interface behind a Singleton so that anyone can get at it any time.
+
+Then you see methods like this:
+<typo:code>
+public class MyFeature {
+
+	public function doSomethingRemote():void {
+		SingletonService.getInstance().doSomethingRemote();
+	}
+}
+{% endhighlight %}
+That doesn't look so bad until you want to write a unit test for the MyFeature class. You now have to start jumping through hoops in your Singleton to figure out if you're in the 'test context' or not. How do you switch out your live service with a <a href="http://www.martinfowler.com/articles/mocksArentStubs.html">stub</a>? 
+<br/>
+Instead of reaching out to the global scope and retrieving a service, instances of this class should be handed a service when they are created.<typo:code>
+public class MyFeature {
+	private var _service:IService;
+	
+	public function set service(service:IService):void {
+		_service = service;
+	}
+	
+	public function get service():IService {
+		return _service;
+	}
+
+	public function doSomethingRemote():void {
+		service.doSomethingRemote();
+	}
+}
+{% endhighlight %}
+This model works great in plain old ActionScript, but particularly well in MXML where we can then have something like the following:
+<typo:code>
+<MyService id="myService" url="http://www.example.com/api" />
+<MyFeature service="{myService}" />
+{% endhighlight %}
+<b>Execution Context</b>
+
+Singletons, like globals (yes, I'm glaring in the general direction of '_root') create context dependence. 
+
+This means that when your execution context changes, you have unexpected outcomes. For example, when you load an application that relies on Singletons into another application, whose Singleton gets used? If you've done any reading on <a href="http://blogs.adobe.com/rgonzalez/2006/06/applicationdomain.html">ApplicationDomain</a>, you'll see that it really depends. Being unclear about which Singleton you're using is absolutely not desirable as many of us learned the hard way back in the dark days of unrestrained _root usage.
+
+Execution context is related to the testable code argument in that your test harness is simply another context in which your code is expected to run. 
+It is different for those of you who aren't writing tests (you know who you are), but should still be aware of the likely fact that your application may be executed in some unexpected context. 
+
+You may want to be thinking about <a href="http://www.adobeair.com/">Adobe AIR</a> right now, okay not that one, <a href="http://labs.adobe.com/technologies/air/">this one</a>.
+
+There are a number of additional arguments against using Singletons, but these two are the strongest and, in my experience, the most applicable to ActionScript development.
+
+What it really comes down to is that the assumption, "I only ever want one of these," is almost always proven wrong with time.
+
+Consider the Mouse and Keyboard. One might think that these interfaces should be Singletons, but they <a href="http://www.popularmechanics.com/technology/industry/4217348.html">would</a>  be <a href="http://www.ehomeupgrade.com/entry/4072/microsoft_surface_watch">wrong</a>! Consider Monitors - some of us remember when there could be only one! How about the Operating System itself? Anyone using <a href="http://www.parallels.com/">Parallels</a>? 
+
+Just about anything you can think of that might appear to be a Singleton will turn out to be context dependent.
+
+<b>Static Classes</b>
+
+So if Singletons are so bad, should I just use static classes?
+
+Absolutely not! Static classes carry with them all of the problems of Singletons and then some. Admittedly, I have used static classes in the past for things like math utilities or string utilities. These are features that will not be impacted by a change in context and additionally will gain very little from polymorphism.
+<br/>
+Basically, if I'm writing a static class, I work hard to adhere to the fundamental principles of functional programming. 
+
+If I send value <code>a</code> to this function and it returns value <code>b</code> once, then every time I send it value <code>a</code> in the future, it must always return value <code>b</code>. 
+
+Simply put, this means that the object has no internal state that may change the return values of a method. These kinds of classes tend to be useful and do occasionally make sense. If you want to expose some algorithms or constant values throughout your application and feel it would be too time-consuming to inject a helper instance all over the place, go for it - but you should feel bad about it.
+
+<b>The Observer</b>
+
+I felt compelled to write this article because I keep seeing smart, experienced people create (and worse - encourage others to create) Singleton and static EventDispatchers. This is unequivocally a bad idea. If your objects need to reach out to the global scope in order to subscribe to or broadcast some event, you need to do some deep reading on the benefits of <a href="http://www.martinfowler.com/articles/injection.html">Inversion of Control</a> and the <a href="http://c2.com/cgi/wiki?CompositePattern">Composite pattern</a>.
+
+<b>In Closing</b>
+
+In my opinion business-driven schedules are the only valid justification for using the Singleton pattern, and even then it often winds up costing the business more than it saved. 
+Singletons and static classes usually indicate <a href="http://www.martinfowler.com/bliki/TechnicalDebt.html">technical debt</a> and a failure of intellectual rigor. 
+
+In general, if I don't understand the problem at hand well enough to avoid globals I should probably stop writing code until I do. The urge toward Singletons is usually a good moment to step back and reexamine the current design. Alternatively, the appearance of static classes that hold state are like an alarm screaming for me to immediately stop writing code and consider my choices.
+
+In spite of this criticism anyone digging through enough of my own code will surely find both of these <a href="http://en.wikipedia.org/wiki/Code_smell">smells</a> waiting for them and should at least know that I didn't go down without a fight.
+
+

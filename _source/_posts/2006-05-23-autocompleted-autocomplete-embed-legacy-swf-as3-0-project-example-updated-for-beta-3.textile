@@ -1,0 +1,348 @@
+---
+layout: post
+title: AutoCompleted - AutoComplete [Embed]/Legacy SWF/AS3.0 Project example updated for Beta 3
+author: Ali Mills
+---
+
+h1. AutoCompleted :: AutoComplete [Embed]/Legacy SWF/AS3.0 Project example updated for Beta 3
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I've updated the <a href="/files/AutoComplete.zip">AutoComplete ActionScript Project</a> that includes <a href="http://www.asserttrue.com/articles/2006/04/18/library-type-assets-in-actionscript-3-0-using-the-embed-metatdata-tag">compile time</a> and <a href="http://www.asserttrue.com/articles/2006/05/16/library-type-assets-in-actionscript-3-0-using-assets-created-with-current-releases-of-flash-authoring">run time</a> library type assets for <a href="http://labs.adobe.com/flexproductline/">Flex 2.0 Beta 3</a>.  Here it is:
+
+<center>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="AutoCompleteRunner" width="400" height="50" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab">
+<param name="movie" value="/files/AutoCompleteRunner.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#869ca7" />
+<param name="allowScriptAccess" value="sameDomain" />
+<embed src="/files/AutoCompleteRunner.swf" quality="high" bgcolor="#869ca7" width="400" height="50" name="AutoCompleteRunner" align="middle" play="true" loop="false" quality="high" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed>
+</object>
+</center>
+
+You can download the complete <a href="/files/AutoComplete.zip">AutoComplete ActionScript Project</a> files from <a href="/files/AutoComplete.zip">here</a>.
+
+This project was built by example over the three previous posts <a href="http://www.asserttrue.com/articles/2006/04/09/actionscript-projects-in-flex-builder-2-0">ActionScript Projects in Flex Builder 2.0</a>, <a href="http://www.asserttrue.com/articles/2006/04/18/library-type-assets-in-actionscript-3-0-using-the-embed-metatdata-tag">Library Type Assets in ActionScript 3.0 :: using the [Embed] metatdata tag</a>, and <a href="http://www.asserttrue.com/articles/2006/05/16/library-type-assets-in-actionscript-3-0-using-assets-created-with-current-releases-of-flash-authoring">Library Type Assets in ActionScript 3.0 :: using assets created with current releases of Flash Authoring</a>.  In some of those posts, I commented on a few quirky issues I'd found with Flex.  Well, I'm glad to say that with the advance to <a href="http://labs.adobe.com/flexproductline/">Flex 2.0 Beta 3</a> many of those them have been resolved.  Woo Hoo!  The menu option to create new ActionScript projects is now grouped with the other project options.  The <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/package.html#trace()">_trace()_ </a>method is no longer packaged in the _flash.util_ package and can be called without an import.  The resulting SWF file size is still shrinking; for <a href="/files/AutoComplete.zip">AutoComplete</a> it dropped from 18k in beta 2 to 6k in <a href="http://labs.adobe.com/flexproductline/">beta 3</a> - wow.  And, most exciting is that the framework source code is shipping.  The one question that I still have is, will the framework be open-sourced?  That would be exciting!  The updated <a href="http://labs.adobe.com/wiki/index.php/Flex_Builder:overview#New_in_the_beta_3_release">New in the beta 3 release</a> notes say, "Flex Builder 2 now includes a copy of the source code for the core Flex framework, enabling you to debug into the Flex source code or looking up the implementation from a component instance."  It doesn't sound like they're open-sourced yet.  Hopefully they will be when the final release ships.
+
+Updating <a href="/files/AutoComplete.zip">AutoComplete</a> for <a href="http://labs.adobe.com/flexproductline/">Flex 2.0 Beta 3</a> didn't take much work.  Using <a href="http://labs.adobe.com/wiki/index.php/Flex:Beta_2_to_Beta_3_Changes">Beta 2 to Beta 3 Changes</a> as a reference, I renamed _getClassByName()_ to <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/utils/package.html#getDefinitionByName()">_getDefinitionByName()_</a> and changed the import for it and <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/utils/package.html#describeType()">_describeType()_</a> to <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/utils/package.html">_flash.utils_</a>.  I also changed the import for <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/text/TextField.html">_TextField_</a> and <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/text/TextFieldType.html"> _TextFieldType_</a> to <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/text/package-detail.html">_flash.text_</a>.  That was pretty much it.
+
+Cleaning up _AutoCompleteRunner_'s layout, I ran into some hurdles that all revolved around retrieving the height of _LegacyMovieClip_ (which I've since renamed to _LegacyMovieClipStub_).  In the first implementation, _LegacyAsClip_ accepted a SWF URL constructor parameter and automatically started loading it.  When trying to apply layout logic, it became clear that that was a bad design, because it essentially meant that you could never listen to any of _LegacyMovieClip_'s load related events.  And, in order to get the height of an asset - which you need in order to properly apply layout logic - you have to know when it's loaded.  So, I moved the load logic into an overridden implementation of <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/display/Loader.html">_Loader_</a>'s <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/display/Loader.html#load()">_load()_</a>.  
+
+The next hurdle I hit was trying to find out when the _LegacyAsSkeleton_ was loaded within _RememberAnimation.swf_.  Since _LegacyAsSkeleton_ was a code-behind to the MovieClip _RememberAnimation_, and _RememberAnimation_ was being attached at when _RememberAnimation.swf_ loaded, when either <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/events/Event.html#INIT">_Event.INIT_</a> or <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/events/Event.html#COMPLETE">_Event.COMPLETE_</a> fired _LegacyAsSkeleton_ didn't have a height yet.  Oddly, <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/events/Event.html#INIT">_Event.INIT_</a>  was event firing before <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/events/Event.html#COMPLETE">_Event.COMPLETE_</a> which according to <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/display/Loader.html#Loader()">_Loader_</a>'s documentation shouldn't be the case.
+
+I cleared these hurdles by extending the AS2 class _LegacyAsSkeleton_ with _LegacyMovieClipSkeleton_ which does nothing more than invoke an _onLoad()_ on its stub (in our case _LegacyMovieClipStub_) when its own _onLoad()_ fires.
+
+The class looks like:
+
+*AS2 LegacyMovieClipSkeleton*
+{% highlight actionscript %}
+class LegacyMovieClipSkeleton extends LegacyAsSkeleton {
+
+	public function LegacyMovieClipSkeleton() {
+	}
+	
+	private function onLoad():Void {
+		invoke("onLoad");
+	}
+
+}
+{% endhighlight %}
+
+and *AS2 LegacyAsSkeleton* like:
+
+{% highlight actionscript %}
+class LegacyAsSkeleton extends MovieClip {
+	private static var AVM1_POSTFIX:String = "_AVM1"; 
+	private static var AVM2_POSTFIX:String = "_AVM2"; 
+
+	private var avm1Connection:LocalConnection;
+	private var avm2Connection:LocalConnection;
+	private var connectionKey:String;
+
+	public function LegacyAsSkeleton() {
+		avm1Connection = new LocalConnection();
+		avm2Connection = new LocalConnection();
+		connectionKey = createConnectionKey(_url);
+		initAvm1Connection();
+	}
+	
+	private function createConnectionKey(url:String):String {
+		var splitUrl:Array = url.split("/");
+		return splitUrl[splitUrl.length - 1];
+	}
+	
+	private function initAvm1Connection():Void {
+		var avm1Key:String = connectionKey + AVM1_POSTFIX;
+		var context:MovieClip = this;
+		avm1Connection.invoke = function(methodName:String, args:Array) {
+			context[methodName].apply(context, args);
+		};
+		avm1Connection.connect(avm1Key);
+	}
+
+	public function invoke(methodName:String, args:Array):Void {
+		var avm2Key:String = connectionKey + AVM2_POSTFIX;
+		if(args.length > 0) {
+			avm2Connection.send(avm2Key, methodName, args);
+		}
+		else {
+			avm2Connection.send(avm2Key, methodName);
+		}
+	}
+
+}
+{% endhighlight %}
+
+Then, I defined an _onLoad()_ method on _LegacyMovieClipStub_ that dispatches and ON_LOAD event.  The new _LegacyMovieClipStub_ looks like:
+
+*AS3 LegacyMovieClipStub*
+{% highlight actionscript %}
+package {
+	import flash.events.Event;
+	import flash.net.URLRequest;
+	
+	public class LegacyMovieClipStub extends LegacyAsStub {
+		public static var ON_LOAD:String = "onLoad";
+		
+		public function LegacyMovieClipStub() {
+		}
+
+		public function onLoad():void {
+			dispatchEvent(new Event(ON_LOAD));
+		}
+
+		public function loadMovie(url:String):void {
+			var urlRequest:URLRequest = new URLRequest(url);
+			load(urlRequest);
+		}
+		
+		public function stop():void {
+			invoke("stop");
+		}
+		
+		public function play():void {
+			invoke("play");
+		}
+		
+		// the rest of MovieClip's interface ...
+		// - draw methods should probably wrap Graphics calls
+		// - _x, _y, _height, and _width should be handled in AS3
+		// - if it makes sense to do so, pass on to AS2
+	}
+}
+{% endhighlight %}
+
+and *AS3 LegacyAsStub* like:
+{% highlight actionscript %}
+package {
+	import flash.display.Loader;
+	import flash.net.LocalConnection;
+	import flash.net.URLRequest;
+	import flash.system.LoaderContext;
+
+	public class LegacyAsStub extends Loader {
+		private static var AVM1_POSTFIX:String = "_AVM1"; 
+		private static var AVM2_POSTFIX:String = "_AVM2"; 
+
+		private var avm1Connection:LocalConnection;
+		private var avm2Connection:LocalConnection;
+		private var connectionKey:String;
+		
+		public function LegacyAsStub() {
+		}
+		
+		public override function load(request:URLRequest, context:LoaderContext = null):void {
+			avm1Connection = new LocalConnection();
+			avm2Connection = new LocalConnection();
+			connectionKey = createConnectionKey(request.url);
+			initAvm2Connection();
+			super.load(request);
+		}
+
+		private function createConnectionKey(url:String):String {
+			var splitUrl:Array = url.split("/");
+			return splitUrl[splitUrl.length - 1];
+		}
+
+		private function initAvm2Connection():void {
+			var avm2Key:String = connectionKey + AVM2_POSTFIX;
+			avm2Connection.client = this;
+			avm2Connection.connect(avm2Key);
+		}
+		
+		public function invoke(methodName:String, ... args):void {
+			var avm1Key:String = connectionKey + AVM1_POSTFIX;
+			avm1Connection.send(avm1Key, "invoke", methodName, args);
+		}
+	}
+}
+{% endhighlight %}
+
+_AutoCompleteRunner_ handles the ON_LOAD event by calling _draw().  Luckily, by then _LegacyMovieClipStub_'s height is defined.  The new _AutoComplteRunner_ looks like:
+
+*AutoCompleteRunner*
+{% highlight actionscript %}
+package {
+	import flash.display.Bitmap;
+	import flash.display.SimpleButton;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.events.ProgressEvent;
+	import flash.net.SharedObject;
+	import flash.net.URLRequest;
+	import flash.utils.describeType;
+	import flash.utils.getDefinitionByName;
+	import mx.validators.EmailValidator;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+
+	public class AutoCompleteRunner extends Sprite {
+		[Embed(source="/img/Remember_up.png")] private var Remember_UpImage:Class;
+		[Embed(source="/img/Remember_over.png")] private var Remember_OverImage:Class;
+		[Embed(source="/img/Remember_down.png")] private var Remember_DownImage:Class;
+
+		private static var ANIMATION_LOCATION:String = "swf/RememberAnimation.swf";
+		private var animation:LegacyMovieClipStub;
+		private var savedWords:Array;
+		private var persistenceLayer:SharedObject; 
+		private var autoCompleteTxt:AutoComplete;
+		private var rememberBtn:SimpleButton;
+
+		public var className:String;
+	
+		public function AutoCompleteRunner() {
+			visible = false;
+			savedWords = new Array();
+            this.addEventListener(KeyboardEvent.KEY_DOWN, keyDownHandler);
+			
+			configureStage();
+			
+			persistenceLayer = SharedObject.getLocal("AutoCompleteRunner"); 
+			configureSharedObject(persistenceLayer);
+						
+			autoCompleteTxt = new AutoComplete("Start typing...");
+			configureAutoComplete(autoCompleteTxt);
+			addChild(autoCompleteTxt);
+
+			rememberBtn = new SimpleButton();
+			configureButton(rememberBtn, "Remember");
+			rememberBtn.addEventListener(MouseEvent.CLICK, clickHandler);
+			addChild(rememberBtn);
+
+			animation = new LegacyMovieClipStub();
+//			animation.contentLoaderInfo.addEventListener(Event.INIT, initHandler);
+//			animation.contentLoaderInfo.addEventListener(Event.COMPLETE, completeHandler);
+			animation.addEventListener(LegacyMovieClipStub.ON_LOAD, onLoadHandler);
+			animation.load(new URLRequest(ANIMATION_LOCATION));
+			addChild(animation);			
+		}
+		
+		private function onLoadHandler(event:Event):void {
+			draw();
+			visible = true;
+		}
+		
+//		private function initHandler(event:Event):void {
+//			trace(">> init");
+//		}
+				
+//		private function completeHandler(event:Event):void {
+//			trace(">> complete");
+//		}
+
+		private function draw():void {
+			var childrenWidth:int;
+			for(var i:int = 0; i < this.numChildren; i++) {
+				childrenWidth += this.getChildAt(i).width;
+			}
+			
+			var availableWidth:int = stage.stageWidth - childrenWidth;
+			var padding:int = availableWidth/2;
+			var gutter:int = 10;
+			var pos:int = padding;
+			var child:DisplayObject;
+			
+			for(var i:int = 0; i < this.numChildren; i++) {
+				child = this.getChildAt(i);
+				child.x = pos;
+				child.y = (stage.stageHeight - child.height)/2;
+				pos += gutter + child.width;
+			}
+		}
+		
+		private function configureStage():void {
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+		}
+		
+		private function configureSharedObject(sharedObject:SharedObject):void {
+			if(sharedObject.data.savedWords != undefined) {
+				savedWords = sharedObject.data.savedWords;
+			}
+		}
+				
+		private function configureAutoComplete(autoComplete:AutoComplete):void {
+			autoComplete.addToDictionary("Flex");
+			autoComplete.addToDictionary("Fireworks");
+			autoComplete.addToDictionary("Dreamweaver");
+			autoComplete.addToDictionary("Contribute");
+			autoComplete.addToDictionary("ColdFusion");
+			autoComplete.addToDictionary("Flash Paper");
+			autoComplete.addToDictionary("Flash");
+			autoComplete.addToDictionary("Breeze");
+			autoComplete.addToDictionary("JRun");
+			autoComplete.addToDictionary("Director");
+			autoComplete.addToDictionary("Studio");
+			autoComplete.addToDictionary("Captivate");
+			autoComplete.addToDictionary("RoboHelp");
+			autoComplete.addToDictionary("Authorware");
+			autoComplete.addToDictionary("Web Publishing System");	
+			
+			var len:uint = savedWords.length;
+			for(var i:uint; i < len; i++) {
+				autoComplete.addToDictionary(savedWords[i]);
+			}
+		}
+
+		private function configureButton(button:SimpleButton, name:String):void {
+			button.upState = createImage(name + "_UpImage");
+			button.overState = createImage(name + "_OverImage");
+			button.downState = createImage(name + "_DownImage");
+			button.hitTestState = createImage(name + "_UpImage");
+			button.useHandCursor = true;
+			button.focusRect = false;
+		}
+
+		private function createImage(embedLinkage:String):Bitmap {
+			if(className == null) {
+				className = describeType(this).@name.toXMLString();
+			}
+			var imgName:String = className + "_" + embedLinkage;
+			var imgRef:Object = getDefinitionByName(imgName);
+			var img:Bitmap = new imgRef();
+			return img;
+		}
+
+        private function keyDownHandler(e:KeyboardEvent):void {
+            if(e.keyCode == Keyboard.ENTER) {
+				clickHandler(new MouseEvent(MouseEvent.CLICK));
+            }
+        }
+
+		private function clickHandler(event:MouseEvent):void {
+			var newWord:String = autoCompleteTxt.text;
+			autoCompleteTxt.addToDictionary(newWord);
+			savedWords.push(newWord);
+			persistenceLayer.data.savedWords = savedWords;
+			persistenceLayer.flush();
+			animation.play();
+//			animation.exec("gotoAndStop", 10);
+		}
+	}
+}
+{% endhighlight %}
+
+Again, you can download the source and assets for this project <a href="/files/AutoComplete.zip">here</a>. 
+

@@ -1,0 +1,18 @@
+---
+layout: post
+title: Flash Player 7 === Universally Available
+author: Ali Mills
+---
+
+h1. Flash Player 7 === Universally Available
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+To make the most universally available application  today (multiplatform / cross-platfrom / cross-software / cross-hardware) that runs on "win":http://www.windows.com/Passion/index_enu.html, "mac":http://www.apple.com/macosx/, and "nix":http://www.kernel.org/ desktops; multiple palmtops; and all modern browsers, you need to publish to the Flash Player 7.  That's right, the SWF format that's two versions old.
+
+The most recent mobile phone player, "Flash Lite 2.0":http://www.adobe.com/products/flashlite/, "is based on the Flash Player 7":http://www.adobe.com/products/flashlite/productinfo/features/#item-1, so by targeting Flash Player 7 you can develop for phones.  Flash Player 7 also "runs on Pocket PCs":http://www.adobe.com/products/flashplayer_pocketpc/ and "is the most recent version of the player for Linux":http://weblogs.macromedia.com/emmy/archives/2005/12/why_isnt_there.cfm, so you also get Pocket PC and Linux support by deploying to it.
+
+If you're interested in developing a code-base that'll be able to run in as many environments as possible, write that code-base in a language that will compile to Flash Player 7 bytecode.  Languages to choose from today are "ActionScript 2.0":http://tech.motion-twin.com/mtasc.html, "C#":http://www.globfx.com/products/neoswiff/, "XAML":http://www.xamlon.com/software/xamlonpro/flash/, "RVML":http://www.kinesissoftware.com/products/index.php, and "haXe":http://www.haxe.org.
+
+Have fun building the future today!
+

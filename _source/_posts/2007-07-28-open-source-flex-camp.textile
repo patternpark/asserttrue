@@ -1,0 +1,18 @@
+---
+layout: post
+title: Open Source Flex Camp
+author: Ali Mills
+---
+
+h1. Open Source Flex (Camp)
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Besides the opportunity to hang with so many great Flex developers and Adobe engineers, the part of "Flex Camp":http://flexcamp.eventbrite.com/  I enjoyed most tonight was clarifying the multiple levels of participation available to the community now that the "Flex framework is open source":http://www.adobe.com/aboutadobe/pressroom/pressreleases/200704/042607Flex.html.  Basically, there are three levels of participation.  They are researcher, adviser, and contributor.  Details follow...As a researcher, you're taking in information.  You're interested in learning how the framework is changing and why.  There's no single resource to find that out today (although "http://www.flex.org/":http://www.flex.org/ is close and "a single resource is on the way":http://flexwiki.adobe.com/confluence/display/ADOBE/Home), so the Adobe folks at FlexCamp recommend following framework engineer's blogs, "checking on Labs":http://labs.adobe.com/wiki/index.php/Flex:Open_Source, "pulling down and reading the nightly build source":http://labs.adobe.com/technologies/flex/sdk/flex3sdk.html, and "reading the specifications":http://flexwiki.adobe.com/confluence/display/ADOBE/Flex+3+Planning as they're released.  They recommended the blogs of "Matt Chotin":http://weblogs.macromedia.com/mchotin/, "Alex Harui":http://blogs.adobe.com/aharui/, "Gordon Smith":http://blogs.adobe.com/gosmith/, "Ely Greenfield":http://www.quietlyscheming.com/blog/, and "Ted Patrick":http://www.onflex.org/ted/.  I've also noticed there's an "Open at Adobe blog":http://blogs.adobe.com/open/ and a "http://opensource.adobe.com/":http://opensource.adobe.com/ page.  They're probably good ones to watch.
+
+As an adviser, the second level of participation, you're taking in information and providing feedback on the future direction of Flex.  You pull down and use the "nightly builds":http://labs.adobe.com/technologies/flex/sdk/flex3sdk.htm and when you find bugs, you file them in the "Jira":http://www.atlassian.com/software/jira/ based "public bug system":http://bugs.adobe.com/flex/.  According to the team at FlexCamp, just filing isn't quite enough.  You should also use the "system":http://bugs.adobe.com/flex/ to "vote on the importance":https://bugs.adobe.com/confluence/display/ADOBE/Voting+on+existing+bugs of existing bugs.  Apparently, "voting":https://bugs.adobe.com/confluence/display/ADOBE/Voting+on+existing+bugs  plays a significant role in prioritization.  The thorough  adviser may also want to join the "Flex Open Source discussion group":http://groups.google.com/group/flex-open-source.
+
+And finally, as a contributor you're taking in information, providing feedback, and submitting bug fixes.  The infrastructure for this level of participation isn't ready yet, though.  There's still legal work to do around accepting contributions from sources outside Adobe, and deciding which source control software to use.  (Let's hope it's "Subversion":http://subversion.tigris.org/!)  I was assured that accepting contributions isn't part "B" or "C" of the open source plan.  It falls into part "A", so we should see the infrastructure starting to take shape soon.
+
+By the way, the idea of multiple levels of participation and their titles researcher, adviser, and contributor aren't official.  Not even close.  They're just how I left FlexCamp thinking about things. 
+

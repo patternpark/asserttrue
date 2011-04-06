@@ -1,0 +1,19 @@
+---
+layout: post
+title: Going Apollo Camping!
+author: Ali Mills
+---
+
+h1. Going Apollo Camping!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+<a href="http://www.lukebayes.com">Luke</a> and <a href="http://www.alimills.com">I</a> will be heading to <a href="http://maps.google.com/maps?f=q&hl=en&q=601+Townsend+St,+San+Francisco,+CA+94103&ie=UTF8&z=16&om=1&iwloc=addr">Adobe</a> later today for <a href="http://apollocamp.eventbrite.com/">Apollo Camp</a>.  We're excited!  Long ago, we gave up working on <a href="http://osflash.org/pipermail/osflash_osflash.org/2006-February/007659.html">SwfRunner</a> because of Apollo rumors.  From what I've seen so far, it looks like the Apollo team has pulled it off.  Nice work!
+
+If you're there tonight and <a href="http://www.asserttrue.com/articles/2006/05/09/twosday-may-9-2006-keynotes">see either of us</a>, say 'hello'.  We'll chat up <a href="http://www.asunit.org">AsUnit</a>, Flash Lite, Flash, Flex, AS3, AS2, <a href="http://www.haxe.org">HaXe</a>, <a href="http://www.ruby-lang.org/en/">Ruby</a>, <a href="http://developer.mozilla.org/en/docs/XULRunner">XULRunner</a>, <a href="http://code.google.com/apis/gdata/index.html">Google Data (GData)</a>, <a href="http://www.chumby.com">Chumby</a> and of course <a href="http://labs.adobe.com/wiki/index.php/Apollo">Apollo</a>.  If you buy Luke a drink at <a href="http://www.marsbarsf.com/directions.html">Mars</a>, he may even fill you in on his latest super-secret project. :)
+
+See you there.
+
+
+Ali
+

@@ -1,0 +1,52 @@
+---
+layout: post
+title: Flex2 MXML Project Support in AsUnit
+author: Luke Bayes
+---
+
+h1. Flex2 MXML Project Support in AsUnit
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+[Updated on 10/12/2006 because of changes to the available release]
+
+I'm excited to announce cleaner support for MXML projects in AsUnit!
+
+The latest framework build found in <a href="http://www.asserttrue.com/articles/2006/10/05/asynchronous-test-methods-in-asunit#svnDirections">sourceforge svn</a> now has support for Flex applications. This new build allows you to create and run unit tests against visual entities that both do extend UIComponent, and do not extend UIComponent! Just call addChild() in your setUp method and AsUnit will figure out what to do with it.
+
+This is a huge deal if you're working on Component development because some components may compose visual entities that don't implement IUIComponent. If you simply build your Application test fixture using the FlexRunner base class, whenever you call addChild() in a TestCase, the framework will determine where to attach that child. If it's an IUIComponent, it will be attached to the Application directly, if it is not an IUIComponent, it will be attached to the Application.rawChildren array.
+
+Following is an example test Fixture using the latest sources from svn. Just copy the code into a file and name it "ProjectNameRunner.mxml" (replace ProjectName with your project name), and tell FlexBuilder to use that File as the Application root.
+
+<typo:code class="code-example">
+<?xml version="1.0" encoding="utf-8"?>
+<FlexRunner xmlns="asunit.textui.*" xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="runTests()">
+    <mx:Style source="../css/Lifebin.css"/>
+    <mx:Script>
+    	<![CDATA[
+    		import asunit.textui.TestRunner;
+			
+			public function runTests():void {
+	    		start(AllTests, null, TestRunner.SHOW_TRACE);
+			}
+    	]]>
+    </mx:Script>
+</FlexRunner>
+{% endhighlight %}
+
+Just manage the start() method the same way you always would in the past and you're up and running!
+
+A quick explanation of the start method:
+<typo:code>
+start(test:Class, method:String=null, showTrace:Boolean=false):void;
+{% endhighlight %}
+
+test:Class argument should reference the Class definition of a TestCase or TestSuite - something that implements the Test interface.
+
+method:String=null argument is an optional string name of a single method to execute. This is really important when testing visual entities because if this argument is not null, only the test method identified will be executed and tearDown/cleanUp will not be called. This gives you the ability to actually see and interact with the visual entity while testing. Once it's working and your tests are passing, leave the argument null so that all test methods will be called.
+
+showTrace:Boolean=false argument will send the TestResult string to the trace window when all tests have finished executing. This argument is great if you're like me and keep closing the running swf, but then want to see some detail in a failure. It's also essential for hooking AsUnit up to some external continuous integration tool.
+
+
+
+

@@ -1,0 +1,41 @@
+---
+layout: post
+title: SilVaFUG Flex Application Frameworks Presentation
+author: Luke Bayes
+---
+
+h1. SilVaFUG Flex Application Frameworks Presentation
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+As per our "earlier post":http://www.asserttrue.com/articles/2007/10/10/speaking-at-silicon-valley-flex-user-grounp-tomorrow, Ali and I presented on Flex Application Frameworks last week at "SilVaFUG":http://www.silvafug.org/.
+
+You can "watch a recording of the preso here":http://adobechats.adobe.acrobat.com/p12266504/, "check out our slides here":http://www.asserttrue.com/files/ApplicationFrameworks/index.html and "grab the source files here":http://www.asserttrue.com/files/TooDoo.zip
+
+<center>
+<a href="http://adobechats.adobe.acrobat.com/p12266504/"><img src="http://www.asserttrue.com/files/ApplicationFrameworksPreso.jpg" alt="SilveFUG Application Frameworks Recording" width="500" height="318" /></a>
+</center>
+The preso itself turned out pretty well, but the amazing part was the discussion that took place afterward. Ali and I are really grateful to the smart folks that attended and contributed to the second half as that was the conversation that we were really looking for.
+
+My only regret (other than the grating sound of one's own voice and laughter) is that we did a _horrible_ job of repeating people's questions. The room was pretty small and voices carried well, so if you were there it didn't seem necessary. Of course the microphones didn't pick up much of the earlier comments. Thankfully, once the discussion got going, Tom did a great job of running the wireless mic around the room so that most of the questions and comments were picked up.
+
+*Comments and Corrections*
+
+During the preso, some attendees pointed out that (contrary to what we were saying), the "MVCS framework":http://www.adobe.com/devnet/flex/articles/blueprint.html by "Joe Berkovitz":http://www.joeberkovitz.com/ actually _can_ be "downloaded":http://download.macromedia.com/pub/developer/reviewtube_src.zip and is embedded in the sample application from his article that we linked to. Unfortunately, those comments weren't on mic, but we have added a correction to our slide show that mentions this.
+
+_Sorry Joe!_
+
+At around 59:00 minutes, "Doug McCune":http://dougmccune.com/blog/ brought up a really great point about "Cairngorm":http://labs.adobe.com/wiki/index.php/Cairngorm. He mentioned that if you're a contractor that is working on other people's projects and going from client to client, the only framework that you _must_ know is Cairngorm. He made the point that it's the most likely Application Framework that you'll encounter within the enterprise. We both agreed with that point, but added that you should investigate "PureMVC":http://www.puremvc.org/ as the very next step.
+
+We wound up having a great time after the event as well - especially since the "ESRIA":http://esria.com/ "guys":http://clintm.esria.com/ bought round after round at my favorite bar, "Mars":http://www.marsbarsf.com/, and "Tinic Uro":http://www.kaourantin.net/ took us to his favorite "late-night burrito joint":http://www.yelp.com/biz/SGRmnarrNuVEsAjYdEoA0w that - as promised - left a multi-day impression!
+
+"Deepa Subramaniam":http://iamdeepa.com/blog/ from Adobe had some great contributions to the conversation that left us with the continuing impression that Adobe truly is interested in helping us all solve our day to day problems more efficiently.
+
+*Conclusion*
+
+If you don't have the patience to watch the whole thing online our conclusion was that "PureMVC":http://www.puremvc.org by Cliff Hall beats out the alternatives. You can check out the following slide for a list of our reasons.
+
+<center>
+<img src="/files/ApplicationArchitectureConclusion.jpg" width="500" height="381" />
+</center>
+

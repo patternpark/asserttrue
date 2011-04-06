@@ -1,0 +1,33 @@
+---
+layout: post
+title: MAX - Design Patterns in ActionScript 3
+author: Ali Mills
+---
+
+h1. MAX :: Design Patterns in ActionScript 3
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+In two weeks, "Luke":http://www.adobe.com/events/max/speaker_bios/#b and "I":http://www.adobe.com/events/max/speaker_bios/#m will be at "MAX":http://www.adobe.com/events/max/ where we'll be giving two sessions on "Design Patterns in ActionScript 3":http://www.adobe.com/events/max/sessions/wd306w.html.  The first session is on Wednesday, October 25 from 1:45pm â€“ 2:45pm in "rooms 4201 â€“ 4202 of the Lando space":http://www.venetian.com/events/meetings/L4.cfm.  The second is on Thursday, October 26 from 3:00pm â€“ 4:00pm in "rooms 4105 - 4106 of the Delfino space":http://www.venetian.com/events/meetings/L4.cfm.  Both "Lando and Delfino":http://www.venetian.com/events/meetings/L4.cfm are on the fourth floor.  If you have a "Google Calendar":http://calendar.google.com account, you can add our session to it by clicking the following buttons:
+
+<br />
+<center>
+<table cellpadding=0 cellspacing=0 border=0 width=400>
+  <tr>
+    <td align=center><a href="http://www.google.com/calendar/event?action=TEMPLATE&text=MAX%20%3A%3A%20Design%20Patterns%20in%20ActionScript%203&dates=20061025T204500Z/20061025T214500Z&details=&location=Lando%2C%204201%20%E2%80%93%204202%20in%20The%20Venetian%20Hotel%2C%20Las%20Vegas%2C%20Nevada&trp=false&sprop=http%3A%2F%2Fwww.adobe.com%2Fevents%2Fmax%2Fsessions%2Fwd306w.html&sprop=name:MAX%202006" target="_blank"><img src="http://www.google.com/calendar/images/ext/gc_button2.gif" border=0></a></td>
+    <td align=center><a href="http://www.google.com/calendar/event?action=TEMPLATE&text=MAX%20%3A%3A%20Design%20Patterns%20in%20ActionScript%203&dates=20061026T220000Z/20061026T230000Z&details=&location=Delfino%2C%204105%20-%204106%20in%20The%20Venetian%20Hotel%2C%20Las%20Vegas%2C%20Nevada&trp=false&sprop=http%3A%2F%2Fwww.adobe.com%2Fevents%2Fmax%2Fsessions%2Fwd306w.html&sprop=name:MAX%202006" target="_blank"><img src="http://www.google.com/calendar/images/ext/gc_button2.gif" border=0></a></td>
+  </tr>
+  <tr>
+    <td align=center>for Wednesday</td>
+    <td align=center>for Thursday</td>
+  </tr>
+</table>
+</center>
+<br />
+
+If you're registered for "MAX":http://www.adobe.com/events/max/, use the "MAX Session Scheduler":http://adobe.eeginc.com/launchschedule.html to add our session to your schedule.  Lists of all "Wednesday":http://www.adobe.com/events/max/agenda/wednesday/ and "Thursday":http://www.adobe.com/events/max/agenda/thursday/ sessions are posted "here":http://www.adobe.com/events/max/agenda/wednesday/ and "here":http://www.adobe.com/events/max/agenda/thursday/.  If you want something more portable than the "MAX Session Scheduler":http://adobe.eeginc.com/launchschedule.html, "Bill Perry":http://www.flashdevices.net/ is soliciting "MAX conference guides in Flash Lite":http://www.flashdevices.net/2006/10/max-conference-guide-in-flash-lite.html that he'll be uploading to his "site":http://www.flashdevices.net/ as he gets them.
+
+If you haven't already registered for "MAX":http://www.adobe.com/events/max/, you still can!  Go to "https://www.adobemax06.com/":https://www.adobemax06.com/ and do it.
+
+Finally, if you can't register but are planning to be in Vegas and want to attend something "Adobe":http://www.adobe.com related, consider attending "Ted Patrick's":http://www.onflex.org/ted/ unconference "MAXUP":http://barcamp.org/MAXUP.  I'll be there demonstrating a "mobile iCalendar reader":http://www.asserttrue.com/articles/2006/10/06/maxup-mobile-icalendar-reader project I'm working on.  "Many other people":http://www.onflex.org/ted/2006/10/maxup-sessions_09.php will be there, too.  To sign up for "MAXUP":http://barcamp.org/MAXUP, just follow "Ted's instructions":http://www.onflex.org/ted/2006/10/maxup-call-for-speakers.php.
+

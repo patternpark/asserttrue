@@ -1,0 +1,18 @@
+---
+layout: post
+title: Open Source Flex?!
+author: Luke Bayes
+---
+
+h1. Open Source Flex?!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Apparently Adobe is <a href="http://labs.adobe.com/wiki/index.php/Flex:Open_Source">planning on going open-source with the Flex framework</a>.
+
+It seems this release will include not only the Flex Framework, but also the mxmlc compiler and debugger!
+
+This is really exciting news, thanks to whoever made this call!
+
+
+

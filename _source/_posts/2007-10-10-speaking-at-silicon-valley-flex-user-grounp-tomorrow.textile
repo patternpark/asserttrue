@@ -1,0 +1,16 @@
+---
+layout: post
+title: Speaking at Silicon Valley Flex User Group Tomorrow
+author: Ali Mills
+---
+
+h1. Speaking at Silicon Valley Flex User Group Tomorrow
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Tomorrow, Thursday, October 11th, 2007 at 7:30pm Luke and I will present on Flex microarchitectures at the Silicon Valley Flex User Group ("SilVaFUG":http://www.silvafug.org/) in "Adobe's San Francisco building":http://www.adobe.com/aboutadobe/maps/sf_map.html. We'll be comparing and contrasting the many frameworks/microarchitectures/seedworks known to us. We've been looking into "Cairngorm":http://labs.adobe.com/wiki/index.php/Cairngorm, "PureMVC":http://www.puremvc.org/, "ARP":http://osflash.org/projects/arp, "MVCS":http://www.adobe.com/devnet/flex/articles/blueprint.html, "Flest":http://code.google.com/p/flest/, "Model-Glue: Flex":http://www.model-glue.com/flex.cfm, "ServerBox Foundry":http://www.servebox.com/foundry/doku.php, "Guasax":http://www.guasax.com, and "Slide":http://www.memorphic.com/news/ to prepare.
+
+If you're in San Francisco near "601 Townsend":http://www.adobe.com/aboutadobe/maps/sf_map.html at 7:30pm tomorrow, you might consider stopping by.  If you're an expert with any of these projects, it'd be great to see you and hear what you have to say.  Neither Luke nor I are, so I'm sure you could teach us and the group something when we roll into the discussion.
+
+And, if you're aware of other projects, please leave a comment and tell us about them.
+

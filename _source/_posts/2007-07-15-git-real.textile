@@ -1,0 +1,35 @@
+---
+layout: post
+title: Git Real
+author: Luke Bayes
+---
+
+h1. Git Real
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I recognize that I'm a couple of years late to the party, but I just caught <a href="http://www.youtube.com/watch?v=4XpnKHJAok8">this video</a> of <a href="http://en.wikipedia.org/wiki/Linus_Torvalds">Linus Torvalds</a> giving a demo of his new-ish Source Code Management (SCM) tool called <a href="http://git.or.cz/">git</a>.
+
+I'm a long time <a href="http://subversion.tigris.org/">SVN</a> user and probably won't be switching whole hog right away, but so far the arguments seem compelling and my first walk-through was a real pleasure.
+
+Some of the key features of git that sound attractive:
+
+  * *Distributed:* It seems they've figured out a way to get a truly distributed system in place where there just doesn't have to be a single, central repository. Developers can _push_ and _pull_ changes amongst each other and eventually just deliver their _trunk_ to a primary maintainer. I'm curious about how this would really work as I go on and offline, but it sounds like Linus takes patches via email that bring repositories up to date. It also seems that there is a way to establish a 'primary' repository, but the great thing is that if there is a failure on the primary server, every single developer actually has a complete copy of that repo! If your SVN server fails, you're rolling back to the most recent backup. Are you doing _nightlies_?
+
+  * *Fast:* For those of you that know me, you know that I'm notoriously impatient. This system brings the entire repository to your local machine which means that you can run diffs, look at logs and roll back as far back as you want and these operations are all local - so they're screamingly fast.
+
+  * *Branching/Merging:* Apparently, merging has been made much simpler. I can't say how true this is, but I can say that merging with SVN is not easy. If what Linus says in his demo is true, we're not alone in our failure to branch as often as we should. With this system, it seems like this process is so much easier that it's trivial.
+
+Some problems with the current implementation as I see it:
+
+  * *Installers?:* I couldn't find any installers other than RPMs for download. This means that today, if you want to use or even try git on any system other than Linux, you're building from source using make. This is a trivial process, but definitely not one that our designers will be comfortable with.
+
+  * *GUI:* SVN has some <a href="http://tortoisesvn.tigris.org/">really great GUI front ends</a> that make it much easier for non-terminal people to get comfortable. I definitely use SVN from the terminal today, but without Tortoise, I probably wouldn't have made it this far. Git does have a <a href="http://www.spearce.org/2007/01/git-gui-screenshots.html">basic GUI</a> layer that it ships with, it's just not Tortoise.
+
+  * *Tool Support:* I don't tend to use SVN from TextMate or Eclipse, but if you do, it doesn't seem like there is much tool integration for git at this time.
+
+  * *Attitude:* I feel kind of funny being the one saying this as I tend to be pretty critical myself. But the way Linus personally and publicly attacks the SVN and CVS developers just sounds rude. These are people that have contributed their time with no financial compensation and helped millions of other developers with open-source products that are extremely valuable and important. If you disagree with some fundamental, technical decisions discuss those choices. It just sounds mean spirited to call people out like that and it takes away from the real discussion of the technology.
+
+All in all, I do believe I'll be moving toward using git in the future as it does seem to bring better speed and reliability. I just wish Linus was more considerate when giving us the details!
+
+

@@ -1,0 +1,119 @@
+---
+layout: post
+title: HaXe Found!
+author: Ali Mills
+---
+
+h1. HaXe Found!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+In comments to the last post "Where's haXe?":http://www.asserttrue.com/articles/2006/08/02/wheres-haxe, "*iongion*":http://www.asserttrue.com/articles/2006/08/02/wheres-haxe#comments did a great job spotting many of the ways in which "haXe":http://www.haxe.org differs from "ActionScript 2.0":http://www.adobe.com/support/documentation/en/flash/.  Highlights of the differences in syntax follow:
+
+<br />
+<typo:code class="code-example">
+package mediator.events;
+{% endhighlight %} 
+
+In haXe, "source code files can begin with an optional package declaration":http://www.haxe.org/ref#packages_and_imports.  The files should exist in subdirectories mapping to the package declaration.
+
+<br />
+<typo:code class="code-example">
+    private var listeners:Array<EventListener>;
+{% endhighlight %}
+
+HaXe uses "typed arrays":http://www.haxe.org/ref#arrays.  In the code snippet above, the type parameter _&lt;EventListener&gt;_ means that the _listeners_ array contains objects of type _EventListener_.
+<br />
+<typo:code class="code-example">
+    private var eventTarget:Dynamic;
+{% endhighlight %}
+
+HaXe uses "Dynamic":http://www.haxe.org/ref#dynamic instead of "Object":http://haxe.org/tutos/as2_compare#object to signify that a variable can be of any type.
+
+<br />
+<typo:code class="code-example">
+    public function new(?eventTarget:Dynamic) {
+{% endhighlight %}
+
+Class "constructors in haXe are named _new_":http://www.haxe.org/ref#constructor instead of the name of the class being defined.
+
+And, function "parameters can be made optional by using a question mark before the parameter name":http://www.haxe.org/ref#optional_arguments.  In the code above, _eventTarget_ is an optional parameter.
+
+<br />
+<typo:code class="code-example">
+        if(eventTarget) this.eventTarget = eventTarget else this.eventTarget = this; 
+{% endhighlight %}
+
+HaXe doesn't have a ternary operator.  Instead of using the syntax _this.eventTarget = (eventTarget) ? eventTarget : this;_ "use the _if_ syntax above":http://haxe.org/tutos/as2_compare#ternary_operator.
+
+<br />
+<typo:code class="code-example">
+    public function addEventListener(type:EventType, handler:Dynamic, context:Dynamic):Void {
+{% endhighlight %}
+
+HaXe has "enums":http://www.haxe.org/ref#the_power_of_enum which are containers for fixed numbers of values.  They're ideal when you want to ensure that only certain values are used (for example, constant values for event types).  "Enums are defined in files that conain other classes and possibly other enums":http://www.haxe.org/ref#packages_and_imports.  To use them, "the file in which the enum is declared must first be imported, or you can use the full type path to access constructors as if they were static fields of the enum type":http://www.haxe.org/ref#enum_constructors.  The code above uses the enum _EventType_ which is defined in the _mediator.events.Event_ class.  That class looks like:
+
+{% highlight actionscript %}
+package mediator.events;
+
+enum EventType {
+	CLICK;
+	CHANGE;
+}
+
+class Event {
+	public var type(default, null):EventType;
+	public var target(default, null):Dynamic;
+	public var bubbles(default, null):Bool;
+
+	public function new(type:EventType, ?bubbles:Bool) {
+		this.type = type;
+		this.bubbles = if(bubbles) true else false;
+	}
+}
+{% endhighlight %}
+
+By importing the above class with the statement:
+
+<typo:code>
+import mediator.events.Event;
+{% endhighlight %} 
+
+we have access to the _EventType_ enum.
+
+Also, notice the declaration of the class variables _type_, _target_, and _bubbles_ in the _Event_ class definition above.  They've been declared as read-only with "haXe's getter/setter declaration style":http://www.haxe.org/ref#properties of (getter, setter); where the combination _(default, null)_ signifies read-only.
+
+<br />
+<typo:code class="code-example">
+        for(i in 0...listeners.length) {
+            if(listeners[i].equals(listener)) {
+                return listeners.splice(i, 1)[0];
+            }
+        }
+{% endhighlight %}
+
+Since haXe uses "iterators":http://www.haxe.org/ref#iterators, "_for_ loops look a little differently":http://www.haxe.org/ref#for than they do in other languages.  In the above code, an _IntIter_ (int iterator) is built with the _..._ (three dots) operator and used to iterate through the elements of the _listeners_ array.
+
+<br />
+<typo:code class="code-example">
+    public function dispatchEvent(event:Event):Bool {
+{% endhighlight %}
+
+In haXe, the "Boolean type is Bool":http://haxe.org/tutos/as2_compare#boolean.
+
+<br />
+<typo:code class="code-example">
+        untyped {event["target"] = eventTarget;}
+{% endhighlight %}
+
+To avoid type-checking for a block of code in haXe, "wrap the block of code in _untyped{}_":http://www.haxe.org/ref#untyped.
+
+<br />
+<typo:code class="code-example">
+                Reflect.callMethod(listener.context, listener.handler, [event]);
+{% endhighlight %}
+
+There is "no Function class in haXe":http://haxe.org/tutos/as2_compare#function, and the "Function objectâ€™s call() and apply() are replaced by Reflect.callMethod":http://haxe.org/tutos/as2_compare#function_class.
+<br />
+
+

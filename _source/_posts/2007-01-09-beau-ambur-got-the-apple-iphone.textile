@@ -1,0 +1,22 @@
+---
+layout: post
+title: Beau Ambur Got the Apple iPhone Pictures!
+author: Ali Mills
+---
+
+h1. Beau Ambur Got the Apple iPhone (Pictures)!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Congratulations to our friend "Beau Ambur":http://www.beausf.com from "Metaliq":http://www.metaliq.com for getting the "first Apple iPhone pictures on the internet":http://flickr.com/photos/beausf/351847182/in/photostream/ and for becoming "the most popular digg in the last 365 days":http://www.digg.com/news/popular/365days with his pictures.  Wow, those are both pretty impressive feats!
+
+No word on Flash Player or Flash Lite support for the "Apple iPhone":http://www.apple.com/iphone/.  We'll just have to wait and see...
+
+*Update:*
+
+According to "Engadget":http://www.engadget.com/, "the iPhone is first party software ONLY":http://www.engadget.com/2007/01/09/the-iphone-is-not-a-smartphone/ and not a device that allows software to be installed.  So, even if it ships with a Flash Player (and why would it since its an "Apple":http://www.apple.com/ product), it sounds like we won't be able to get SWFs on the phone.  Poop!
+
+This decision strikes me as going against the spirit of "NIX on phones":http://opencellphone.org/index.php?title=Main_Page.
+
+Hopefully this decision is one of the things that will change before the phone ships in six months.
+

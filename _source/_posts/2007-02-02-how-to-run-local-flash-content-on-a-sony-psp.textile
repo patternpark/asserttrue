@@ -1,0 +1,48 @@
+---
+layout: post
+title: How to Run Local Flash Content on a Sony PSP
+author: Ali Mills
+---
+
+h1. How to Run Local Flash Content on a Sony PSP
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+After going through the process of configuring my "PSP":http://www.yourpsp.com/psp/locale.html to run local Flash content, I thought I'd take the time to list all the steps it took me here in one place.  These steps summarize the information from "Sony PSP & Flash Player 6: Supported Features":http://www.flashdevices.net/2006/04/sony-psp-flash-player-6-supported.html.  They follow:
+
+>*1.* Format the memory stick on your PSP by selecting "Settings" > "System Settings" > "Format Memory Stick'
+
+>*2.* Create a Flash Player 6 SWF with a resolution of 480x272 called "MyPSP.swf" and put it on your newly formatted memory stick in a folder named "flash"
+
+>*3.* Follow the directions at "http://www.us.playstation.com/psp/downloads/SystemUpdate/pc.html":http://www.us.playstation.com/psp/downloads/SystemUpdate/pc.html to update your PSP's ROM to a version equal to or greater than 2.70 (when I followed the directions, I ended up installing version 3.10)
+
+>*4.* Enable the Flash Player by selecting "Settings" > "System Settings" > "Enable Flash Player" on your PSP
+
+>*5.* Accept the Flash Player user agreement
+
+>*6.* Press "OK" to connect to the internet to enable the Flash Player
+
+>>*6a.* If you - like me - need to create a new network connection to continue, do so (notice that there is a dependency of being online to enable the Flash Player)
+
+>>*6b.* If you - like me - keep getting the error message, "A connection error has occured. The WLAN switch is not turned on." flip the silver switch on the lower-left side of your PSP up
+
+>>*6c.* And, if you - like me - are creating a new network connection at a hotspot location select "Custom" under "Address Settings" in the network settings wizard and then "Automatic" under "IP Address Setting", "Automatic" under "DNS Setting", "Do Not Use" under "Proxy Server", and "Start" under "Internet Browser"
+
+>>*6d.* Log in to your hotspot when the internet browser opens and then close the browser (ignore this step if you're not connecting to a hotspot network)
+
+>>*6e.* If you had to go through the previous sub-steps, go back to step *4.* to make sure the Flash Player is enabled
+
+>*7.* Now, to finally see your content go to "Network" > "Internet Browser"
+
+>*8.* Once the internet browser opens, select "File" > "Address Entry", enter "file:/flash/mypsp.swf" (case doesn't matter), and press "Enter"
+
+>>*8a.* If you get an error message alerting you that, "The content cannot be displayed." make sure that your path "file:/flash/mypsp.swf" is correct (notice there is only one forward slash after "file:" not two, so it's "file:/" and not "file://")
+
+>>*8b.* Otherwise, choose "Yes" to the prompted question, "Do you want to run the plugin embedded in this page?".
+
+>*9.* Woohoo!  At this point, you should be seeing your SWF running on your PSP!
+
+>*10.* If you've made it this far, I suggest that you add the location of your SWF to your PSP bookmarks unless you really like typing...
+
+Good Luck!
+

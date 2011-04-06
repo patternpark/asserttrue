@@ -1,0 +1,116 @@
+---
+layout: post
+title: Test-Driven Development with ActionScript 3.0
+author: Ali Mills
+---
+
+h1. Test-Driven Development with ActionScript 3.0
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+On March 2nd, Luke and I presented at "Flashfoward":http://www.flashforwardconference.com on the topic "Test-Driven Development with ActionScript 3.0".  The talk covered "ActionScript 3.0":http://labs.macromedia.com/technologies/actionscript3/, "Flex Builder 2.0":http://labs.macromedia.com/technologies/flexbuilder2/, and "AsUnit":http://www.asunit.org/.  We had a blast giving it and were stunned at the level of attendence.  For all who attended, we thank you for being there!  For those who couldn't make it, we've posted our presentation notes.  They follow:
+
+- - - - 8< - - - - - - - - - - - - - - - - - - - - - - - 
+
+*what*
+* What is TDD? 
+** TDD is a technique that allows you to embrace change and ultimately leads to clean code that works.
+
+*why*
+* Why was TDD created?  It was because of change. 
+** Change is difficult/expensive/impossible in software
+** Change is inevitable 
+** Business needs change and developers need to respond to and inform these changes (Ward Cunningham example)
+** Designs change and developers need to have confidence while improving the design of the existing code
+** We donâ€™t know what the future will hold
+* In addition to helping developers deal with change, TDD helps you to
+** Avoid long debugging sessions
+** Avoid fear and code with courage
+* There are three popular testing strategies for code
+** Acceptance testing
+** Customer testing
+** Developer testing
+* Developer testing includes
+** Unit testing (trace() and the first AsUnit which was just an Assert class) â€“ unit testing is the act of proving that any small bit of code works as expected
+** Unit testing with xUnit frameworks â€“ made up of test fixtures and test harnesses where tests are executed in an isolated environment and assembled into a harness that runs them in order and presents the results in a display (rich ui?)
+** Red, Green, Refactor â€“ write a failing test, get it to pass, and remove duplicate code
+* If youâ€™re not having problems, then donâ€™t change anything
+** Weâ€™re not here to convince you of anything
+** Weâ€™re here to show you a path that smart people before us created and guide you down that path since youâ€™re interested 
+
+*how*
+* How do you perform TDD in AS 3.0?  With AsUnit!  AsUnitâ€¦
+** Is a xUnit framework for AS 2.0 and 3.0
+** Supports development for Flash Player versions 6, 7, 8, and 8.5
+* AsUnit 2.x (note that 2 corresponds to the AS language version)
+** Integrates with authoring MX 2004 and 8
+** One click MXP extension manager install
+** Simple class creation utility
+** Integrated results panel
+** Integrated test UI
+* AsUnit 3.x beta
+** XulRunner
+** Framework 
+** Integrated test runner
+* AsUnit works with Flash MX 2004, Flash 8, Flex Builder, FDT, TextPad, Scite, ASDT, Primal Script
+* AsUnit works with Flash Authoring compiler, MTASC, and MXMLC
+* No test code ships in projects tested with AsUnit!
+
+*steps*
+# Download and install AsUnit 3.x beta
+## Download
+## Unzip
+## Double-click
+# Examine what just installed (note that MAC folks should email us)
+## XulRunner
+## XUL UI
+## Framework (show TestRunner, Assert, and TestCase)
+# Discuss the project that weâ€™re going to create
+## A proto for our soon to launch Web 2.0 live preview app
+# Create a FlexBuilder project
+## Create a new AS project
+## Edit classpath
+## Change â€˜extends MovieClipâ€™ to â€˜extends Spriteâ€™
+## Import flash.util.trace
+## Debug and see â€˜hello worldâ€™ trace statement
+## Talk about changing the debug key command
+## Change the debug profile to â€˜.swfâ€™
+# Creating your first test case (the model)
+## set up XUL UI for the project
+## note that superclasses are not yet present because Adobe hasnâ€™t provided source
+## create â€˜LivePreviewModel extends EventDispatcherâ€™
+## in XUL UI create and show pop up that confirms file creation
+## create again and show how to create only one of the two files
+## open newly created test case and examine it
+## how do we see the test case in action?
+# Create the testRunner
+## create LivePreviewTestRunner (add â€˜start(AllTests)â€™)
+## set LivePreviewTestRunner to an application launcher file
+## compile and see red
+## WOW!
+## Change the debug publish settings for the test runner
+## Add scaleMode, stageAlign, and fullscreen = true to test runner
+# Non-visual test - digging into LivePreviewModelTest
+## Add setContent to test
+## Compile and see RED
+## Discuss stack trace
+## Add setContent to model
+## Compile and see GREEN
+# Visual test â€“ creating LivePreviewViewTest
+## Create draw method on LivePreviewView (talk about height and width)
+## Update test to include addChild and removeChild
+## Update test runnerâ€™s start call to â€˜start(TestCast, â€œtestMethodâ€)â€™
+## Test visual entity by checking width and height
+# Mock Objects
+## Create LivePreviewViewMock and LivePreviewModelMock
+# Asynchronous test discussion
+
+*tips*
+
+back yourself out of a corner, leave a broken test, figure out where to start 
+
+*thanks*
+
+- - - - >8 - - - - - - - - - - - - - - - - - - - - - - - -
+
+

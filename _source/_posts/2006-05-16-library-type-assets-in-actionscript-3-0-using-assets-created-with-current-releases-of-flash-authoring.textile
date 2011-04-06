@@ -1,0 +1,291 @@
+---
+layout: post
+title: Library Type Assets in ActionScript 3.0 - using assets created with current releases of Flash Authoring
+author: Ali Mills
+---
+
+h1. Library Type Assets in ActionScript 3.0 :: using assets created with current releases of Flash Authoring
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+In the previous post <a href="http://www.asserttrue.com/articles/2006/04/18/library-type-assets-in-actionscript-3-0-using-the-embed-metatdata-tag">Library Type Assets in ActionScript 3.0 :: using the [Embed] metatdata tag</a>, I mentioned that an <a href="http://labs.adobe.com/technologies/actionscript3/">ActionScript 3.0</a> application can load library type assets (i.e. SWFs) created in current releases of <a href="http://www.adobe.com/products/flash/flashpro/">Flash Authoring</a> during run time.  This is a big deal - a huge deal - because without this ability there wouldn't be any way to create a <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/display/MovieClip.html">MovieClip</a> and include it in a <a href="http://labs.adobe.com/technologies/flexbuilder2/">Flex Builder 2.0</a> project until <a href="http://weblogs.macromedia.com/md/archives/2005/10/codename_for_th.cfm">Blaze</a> becomes available.
+
+The simplest way to load a legacy SWF is with the <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/display/Loader.html">Loader</a> class.  After it's loaded, you can manipulate its <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/display/DisplayObject.html">DisplayObject</a> properties with the <a href="http://labs.adobe.com/technologies/flashplayer9/">Flash 9 Player</a>'s <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/display/AVM1Movie.html">AVM1Movie</a> adapter class.
+
+While this method works well for canned widgets like video and music players that don't need to communicate with their host application, it doesn't work well when host communication is a requirement.  When this is a requirement, it's necessary to take advantage of features available through the <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/net/LocalConnection.html">LocalConnection</a>  class, because the only way for <a href="http://labs.adobe.com/technologies/actionscript3/">ActionScript 3.0</a> running in the AVM2 to communicate with legacy ActionScript running in the AVM1  is over a <a href="http://livedocs.macromedia.com/labs/1/flex20beta3/langref/flash/net/LocalConnection.html">LocalConnection</a> .
+
+While researching an elegant solution to the problem of how two pieces of code (AS2 and AS3) running in two separate virtual machines (AVM1 and AVM2) can communicate, I looked to the book <a href="http://martinfowler.com/books.html#eip">Enterprise Integration Patterns : Designing, Building, and Deploying Messaging Solutions</a> from the signature series of one of my favorite authors <a href="http://www.martinfowler.com/">Martin Fowler</a>.  Chapter 2 of the book explores different integration styles and suggests that the _Remote Procedure Invocation_ approach is a, "mechanism for one application to invoke a function in another application, passing the data that needs to be shared and invoking the function that tells the receiver application how to process the data."  After reading this and the rest of the section (the full _Remote Procedure Invocation_ section can be found online at <a href="http://www.awprofessional.com/articles/article.asp?p=169483&seqNum=4">http://www.awprofessional.com/articles/article.asp?p=169483&seqNum=4</a>), I was convinced that the _Remote Procedure Invocation_
+approach would work and designed an AS3 stub and AS2 skeleton class.  They follow:
+
+*AS3 LegacyAsStub*
+{% highlight actionscript %}
+package {
+	import flash.display.Loader;
+	import flash.net.LocalConnection;
+
+	public class LegacyAsStub extends Loader {
+		private static var AVM1_POSTFIX:String = "_AVM1"; 
+		private static var AVM2_POSTFIX:String = "_AVM2"; 
+
+		private var avm1Connection:LocalConnection;
+		private var avm2Connection:LocalConnection;
+		private var connectionKey:String;
+		
+		public function LegacyAsStub(url:String) {
+			avm1Connection = new LocalConnection();
+			avm2Connection = new LocalConnection();
+			connectionKey = createConnectionKey(url);
+			initAvm2Connection();
+			load(new URLRequest(url));
+		}
+
+		private function createConnectionKey(url:String):String {
+			var splitUrl:Array = url.split("/");
+			return splitUrl[splitUrl.length - 1];
+		}
+
+		private function initAvm2Connection():void {
+			var avm2Key:String = connectionKey + AVM2_POSTFIX;
+			avm2Connection.client = this;
+			avm2Connection.connect(avm2Key);
+		}
+		
+		public function invoke(methodName:String, ... args):void {
+			var avm1Key:String = connectionKey + AVM1_POSTFIX;
+			avm1Connection.send(avm1Key, "invoke", methodName, args);
+		}
+	}
+}
+{% endhighlight %}
+
+*AS2 LegacyAsSkeleton*
+{% highlight actionscript %}
+class LegacyAsSkeleton extends MovieClip {
+	private static var AVM1_POSTFIX:String = "_AVM1"; 
+	private static var AVM2_POSTFIX:String = "_AVM2"; 
+
+	private var avm1Connection:LocalConnection;
+	private var avm2Connection:LocalConnection;
+	private var connectionKey:String;
+
+	public function LegacyAsSkeleton() {
+		avm1Connection = new LocalConnection();
+		avm2Connection = new LocalConnection();
+		connectionKey = createConnectionKey(_url);
+		initAvm1Connection();
+	}
+	
+	private function createConnectionKey(url:String):String {
+		var splitUrl:Array = url.split("/");
+		return splitUrl[splitUrl.length - 1];
+	}
+	
+	private function initAvm1Connection():Void {
+		var avm1Key:String = connectionKey + AVM1_POSTFIX;
+		var context:MovieClip = this;
+		avm1Connection.invoke = function(methodName:String, args:Array) {
+			context[methodName].apply(context, args);
+		};
+		avm1Connection.connect(avm1Key);
+	}
+
+	public function invoke(methodName:String, args:Array):Void {
+		var avm2Key:String = connectionKey + AVM2_POSTFIX;
+		if(args.length > 0) {
+			avm2Connection.send(avm2Key, methodName, args);
+		}
+		else {
+			avm2Connection.send(avm2Key, methodName);
+		}
+	}
+
+}
+{% endhighlight %}
+
+To demonstrate how to use these classes, let's add an animation created in <a href="http://www.adobe.com/products/flash/flashpro/">Flash Professional 8</a> to the AutoComplete project we started in <a href="http://www.asserttrue.com/articles/2006/04/09/actionscript-projects-in-flex-builder-2-0">ActionScript Projects in Flex Builder 2.0</a> and extended in <a href="http://www.asserttrue.com/articles/2006/04/18/library-type-assets-in-actionscript-3-0-using-the-embed-metatdata-tag">Library Type Assets in ActionScript 3.0 :: using the [Embed] metatdata tag</a>.
+
+First, create a new Flash document in <a href="http://www.adobe.com/products/flash/flashpro/">Flash Professional 8</a> and save it in a folder called "swf" that's inside you AutoComplete project folder at the same level as _AutoComplete.as_.  Add the code:
+
+<typo:code class="code-example">
+attachMovie("RememberAnimation", "RememberAnimation", 1);
+{% endhighlight %}
+
+to the first frame.
+
+Now, create a new MovieClip and name it, "RememberAnimation".  Set its linkage to "Export for ActionScript" and "Export in first frame".  Give it the identifier, "RememberAnimation" and the AS 2.0 class, "LegacyAsSkeleton".  After pressing the "OK" button and creating the "RememberAnimation" MovieClip, give it two layers with a single keyframe in the first frame of the first layer with the code:
+
+<typo:code class="code-example">
+stop();
+{% endhighlight %}
+
+and an animation in the second layer with as many frames as you wish.
+
+Next, copy the LegacyAsSkeleton class code from above and save it in a file called _LegacyAsSkeleton.as_ within the "swf" folder, and publish your FLA.  A SWF called _RememberAnimation.swf_ should have been created in the "swf" folder.  If not, you can download a prebuilt FLA and SWF from <a href="/files/libraryTypeAssets_legacyFlashAuthoring.zip">here</a>.
+
+Close Flash and open the AutoComplete project in <a href="http://labs.adobe.com/technologies/flexbuilder2/">Flex Builder 2.0</a>.
+
+Modify _AutoCompleteRunner.as_ to look like:
+
+{% highlight actionscript %}
+package {
+	import flash.display.Bitmap;
+	import flash.display.SimpleButton;
+	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+	import flash.net.SharedObject;
+	import flash.util.describeType;
+	import flash.util.getClassByName;
+
+	public class AutoCompleteRunner extends Sprite {
+		[Embed(source="/img/Remember_up.png")] private var Remember_UpImage:Class;
+		[Embed(source="/img/Remember_over.png")] private var Remember_OverImage:Class;
+		[Embed(source="/img/Remember_down.png")] private var Remember_DownImage:Class;
+
+		private static var ANIMATION_LOCATION:String = "swf/RememberAnimation.swf";
+		private var animation:LegacyMovieClip;
+		private var savedWords:Array;
+		private var persistenceLayer:SharedObject; 
+		private var autoCompleteTxt:AutoComplete;
+		private var rememberBtn:SimpleButton;
+
+		public var className:String;
+	
+		public function AutoCompleteRunner() {						
+			savedWords = new Array();
+			
+			configureStage();
+			
+			persistenceLayer = SharedObject.getLocal("AutoCompleteRunner"); 
+			configureSharedObject(persistenceLayer);
+			
+			autoCompleteTxt = new AutoComplete("Start typing...");
+			configureAutoComplete(autoCompleteTxt);
+
+			rememberBtn = new SimpleButton();
+			configureButton(rememberBtn, "Remember");
+			rememberBtn.addEventListener(MouseEvent.CLICK, clickHandler);
+			
+			addChild(rememberBtn).x = addChild(autoCompleteTxt).width;
+
+			animation = LegacyMovieClip(addChild(new LegacyMovieClip(ANIMATION_LOCATION)));
+			animation.x = rememberBtn.width + autoCompleteTxt.width;
+		}
+		
+		private function configureStage():void {
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+		}
+		
+		private function configureSharedObject(sharedObject:SharedObject):void {
+			if(sharedObject.data.savedWords != undefined) {
+				savedWords = sharedObject.data.savedWords;
+			}
+		}
+				
+		private function configureAutoComplete(autoComplete:AutoComplete):void {
+			autoComplete.addToDictionary("Flex");
+			autoComplete.addToDictionary("Fireworks");
+			autoComplete.addToDictionary("Dreamweaver");
+			autoComplete.addToDictionary("Contribute");
+			autoComplete.addToDictionary("ColdFusion");
+			autoComplete.addToDictionary("Flash Paper");
+			autoComplete.addToDictionary("Flash");
+			autoComplete.addToDictionary("Breeze");
+			autoComplete.addToDictionary("JRun");
+			autoComplete.addToDictionary("Director");
+			autoComplete.addToDictionary("Studio");
+			autoComplete.addToDictionary("Captivate");
+			autoComplete.addToDictionary("RoboHelp");
+			autoComplete.addToDictionary("Authorware");
+			autoComplete.addToDictionary("Web Publishing System");	
+			
+			var len:uint = savedWords.length;
+			for(var i:uint; i < len; i++) {
+				autoComplete.addToDictionary(savedWords[i]);
+			}
+		}
+
+		private function configureButton(button:SimpleButton, name:String):void {
+			button.upState = createImage(name + "_UpImage");
+			button.overState = createImage(name + "_OverImage");
+			button.downState = createImage(name + "_DownImage");
+			button.hitTestState = createImage(name + "_UpImage");
+			button.useHandCursor = true;
+		}
+
+		private function createImage(embedLinkage:String):Bitmap {
+			if(className == null) {
+				className = describeType(this).@name.toXMLString();
+			}
+			var imgName:String = className + "_" + embedLinkage;
+			var imgRef:Class = getClassByName(imgName);
+			var img:Bitmap = new imgRef();
+			return img;
+		}
+
+		private function clickHandler(event:MouseEvent):void {
+			var newWord:String = autoCompleteTxt.text;
+			autoCompleteTxt.addToDictionary(newWord);
+			savedWords.push(newWord);
+			persistenceLayer.data.savedWords = savedWords;
+			persistenceLayer.flush();
+			animation.play();
+//			animation.exec("gotoAndStop", 10);
+		}
+	}
+}
+{% endhighlight %}
+
+
+Copy the LegacyAsStub class code from above and add it as a new class called _LegacyAsStub.as_ to the AutoComplete project, and finally add another class to the AutoComplete project called _LegacyMovieClip.as_ with the contents:
+
+{% highlight actionscript %}
+package {
+	import flash.net.URLRequest;
+	import flash.util.trace;
+	
+	public class LegacyMovieClip extends LegacyAsStub {
+		
+		public function LegacyMovieClip(url:String) {
+			super(url);
+		}
+
+//		public function onLoad():void {
+//			trace(">> onLoad");
+//		}
+
+		public function loadMovie(url:String):void {
+			var urlRequest:URLRequest = new URLRequest(url);
+			load(urlRequest);
+		}
+		
+		public function stop():void {
+			invoke("stop");
+		}
+		
+		public function play():void {
+			invoke("play");
+		}
+		
+		// the rest of MovieClip's interface ...
+		// - draw methods should probably wrap Graphics calls
+		// - _x, _y, _height, and _width should be handled in AS3
+		// - if it makes sense to do so, pass on to AS2
+	}
+}
+{% endhighlight %}
+
+Compile/build the AutoComplete project and after pressing the "Remember" button watch the AS2 animation play!
+
+Notice that the onLoad() method is commented out in _LegacyMovieClip.as_.  You can make this fire by adding the code:
+
+<typo:code class="code-example">
+	private function onLoad():Void {
+		invoke("onLoad");
+	}
+{% endhighlight %}
+
+to a class that extends _LegacyAsSkeleton.as_.
+
+The stub and skeleton above are merely the foundation for AVM1/AVM2 communication, and you can easily build on them to create more complex AVM1 objects to host within your AVM2 applications.  You're not restriced to just legacy <a href="http://livedocs.macromedia.com/flash/8/main/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00002436.html">MovieClip</a> functionality.  To take advantage of other legacy classes, simply extend the above stub and skeleton with the interface of these more complex legacy classes.
+

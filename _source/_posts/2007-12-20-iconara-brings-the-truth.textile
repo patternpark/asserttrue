@@ -1,0 +1,18 @@
+---
+layout: post
+title: Iconara Brings the Truth
+author: Luke Bayes
+---
+
+h1. Iconara Brings the Truth
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+In the spirit of always running late to the party, I just discovered a  blog today that other folks have probably been following since '06.
+
+"This guy":http://blog.iconara.net articulates many of my gripes, moans and complaints in a way that is definitely helpful. If you're building large applications with ActionScript 3 (or Flex for that matter), he can provide some insight into why things just aren't working the way you may have expected them to.
+
+"http://blog.iconara.net":http://blog.iconara.net
+
+
+

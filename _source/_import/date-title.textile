@@ -1,0 +1,12 @@
+---
+layout: post
+title: <%= safe_title %>
+author: <%= author_label %>
+---
+
+h1. <%= title %>
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+<%= clean_body %>
+

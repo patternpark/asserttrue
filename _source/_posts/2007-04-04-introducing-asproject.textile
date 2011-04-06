@@ -1,0 +1,33 @@
+---
+layout: post
+title: Introducing AsProject!
+author: Luke Bayes
+---
+
+h1. Introducing AsProject!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+*UPDATE:* The new versions of Sprouts actually pull down and install the Flex SDK automatically!
+
+*UPDATE:* _AsProject has been refactored, renamed and moved, development is ongoing at the new location for "<a href="http://code.google.com/p/projectsprouts/">Sprouts</a>"._
+
+I'm elated to finally announce <a href="http://code.google.com/p/asproject">AsProject</a>!
+
+This is a cross platform, open source ActionScript development tool set that I've been working on for the past couple of months.
+
+<a href="http://code.google.com/p/asproject">AsProject</a> automates a variety of tasks including the creation of projects, classes, test cases, test suites, and swfmill libraries. It automates the download, installation and configuration of the debug flash player and many open source tools. <a href="http://code.google.com/p/asproject">AsProject</a> also includes sophisticated build tools written in rake to automate build processes.
+
+If this sounds interesting to you check out the video demo!
+<center>
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,14,0" width="650" height="530" id="AsProject" align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+<param name="movie" value="http://www.asserttrue.com/files/AsProject8.swf" />
+<param name="quality" value="high" />
+
+<param name="bgcolor" value="#828c95" />
+<param name="wmode" value="transparent" />
+<embed src="http://www.asserttrue.com/files/AsProject8.swf" quality="high" bgcolor="#828c95" width="650" height="530" name="AsProject" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"  wmode="transparent" />
+</object>
+</center>
+

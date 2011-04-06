@@ -1,0 +1,277 @@
+---
+layout: post
+title: ActionScript Projects in Flex Builder 2.0
+author: Ali Mills
+---
+
+h1. ActionScript Projects in Flex Builder 2.0
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I learned a lot about writing <a href="http://labs.macromedia.com/technologies/actionscript3/">ActionScript 3.0</a> and using <a href="http://labs.macromedia.com/technologies/flexbuilder2/">Flex Builder 2.0</a> while working on code examples for the <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/langref/index.html">ActionScript 3.0 Language Reference</a>.  Finally, I feel like we're at a place where I can talk openly about most of what I learned.  I mean, search the web, <a href="http://weblogs.macromedia.com/mesh/">Mike</a>, <a href="http://weblogs.macromedia.com/sho/">Sho</a>, <a href="http://www.darronschall.com/weblog/">Darron</a>, and <a href="http://www.jessewarden.com/">Jesse</a> are all actively blogging about things AS3/Flex related.  I like AS3.  I'm excited to see the language succeed.  Hopefully, sharing what I know will help.  This first AS3 post is about creating and working with ActionScript projects in Flex Builder 2.0.
+
+A few days ago Sho posted source for the <a href="http://weblogs.macromedia.com/sho/archives/2006/04/new_version_of.cfm#comments">Flex auto complete text input control v0.6</a> on his <a href="http://weblogs.macromedia.com/sho/">blog</a>.  Today, in a comment on that blog, *bokonn* asked if the component could be reused in ActionScript, and Sho replied that it wouldn't work in an ActionScript only project.
+
+Well, since we're going to need a context to create and work with our Flex Builder 2.0 ActionScript project, I've written an AS3 AutoComplete class that works in ActionScript only projects.  We'll use this class as our context.  Before proceeding, I feel the need to point out that Sho's component and my class are two very different creations with one of the main differences being that his is very feature rich and mine is not.
+
+OK, here we go.  Say you're one of those developers who's not interested in using either the <a href="http://labs.macromedia.com/technologies/flexframework2/">Flex Framework</a> or <a href="http://www.macromedia.com/devnet/flex/articles/paradigm.html">MXML</a>, is Flex Builder 2.0 still for you?  It sure is.  For you, dear developer, Flex Builder 2.0 offers the ActionScript project.  To create one, follow these steps:
+
+* Launch Flex Builder 2.0.
+* Click "File > New > ActionScript Project".  It's the 8th choice but should really be the second top level choice under "Flex Project".  Come to think of it, shouldn't "Flex Project" be named "MXML Project" since technically you can import the Flex Framework into an ActionScript project?  Doesn't the inclusion of the Framework into a project imply that it's Flex project?
+* Give the new project the name "AutoComplete" and set its location where ever you wish.  Using the default location in this case is fine.
+* Click "Finish".
+* Notice that a project named "AutoComplete" should have been created with a single class with the same name.  The contents of that class should be:
+
+{% highlight actionscript %}
+package {
+	import flash.display.MovieClip;
+	public class AutoComplete extends MovieClip {
+		public function AutoComplete() {
+
+		}
+	}
+}
+{% endhighlight %}
+
+* Now, let's modify the basic configuration of our newly created project so that it makes more sense.
+* There's no reason for the class AutoComplete to extend MovieClip.  MovieClip's have frames, and there is no way - no way - to create anything in Flex Builder 2.0 with frames.  Since extending MovieClip doesn't make sense, the first thing we do with our new project is to change the lines:
+
+{% highlight actionscript %}
+	import flash.display.MovieClip;
+	public class AutoComplete extends MovieClip {
+{% endhighlight %}
+
+to:
+
+{% highlight actionscript %}
+	import flash.display.Sprite;
+
+	public class AutoComplete extends Sprite {
+{% endhighlight %}
+
+* The new line was added for style.
+* With our more precise base class in place, our next step is to compile and see the project run.  Since we come from a Flash IDE background where we've been conditioned to compile with the key combination "CTRL + ENTER", let's make Flex Builder 2.0 respect the same one.  To do so, open "Window > Preferences > General > Keys".  In the view tab under the category "Run/Debug" highlight the "Debug Flex Application" command and click the edit button.  Select the "Assignment" in the "Command" area and remove it by pressing the "Remove" button.  Next, place the mouse cursor in "Name" textfield under "Key Sequence" and press "CTRL + ENTER".  You should see the combination show up in the textfield.  Press the "Add" button, and close the preferences window.
+* Compile (debug) the project by clicking "CTRL + ENTER".
+* See the project open in your default browser window.
+* Now, let's change our debug profile so that our project opens in the stand-alone player.  To do this, click on the bug button in the toolbar and select "Debug" from it's options.  Under configurations, select "AutoComplete".  Under "URL or path to launch:" deselect the "Use defaults" checkbox and change the extensions of the files to launch from ".html" to ".swf".
+* Press "Apply", "Close", and compile (debug) the project by clicking "CTRL + ENTER".
+* See the project open in the stand-alone Flash player.
+* To get debug trace output, we need to import the trace package-level function.  Yep, the trace method has moved from its prior global space to the package "flash.util".  Let's change our AutoComplete class to look like the following block of code:
+
+{% highlight actionscript %}
+package {
+	import flash.display.Sprite;
+	import flash.util.trace;
+
+	public class AutoComplete extends Sprite {
+		public function AutoComplete() {
+			trace("AutoComplete");
+		}
+	}
+}
+{% endhighlight %}
+
+* Compile (debug) the project and see that the text "AutoComplete" was written to the "Console" window.  For other migration tips, go to the <a href="http://livedocs.macromedia.com/labs/1/flex/langref/migration.html">ActionScript 2.0 to ActionScript 3.0 Migration</a> page.
+* Whew, we've gotten our project created and to a state where we can work on it.  Let's code!
+* Here's the complete AutoComplete class that you should copy and paste over your existing one:
+
+{% highlight actionscript %}
+package {
+	import flash.display.TextField;
+	import flash.display.TextFieldType;
+	import flash.events.Event;
+	import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
+	import flash.util.trace;
+
+	public class AutoComplete extends TextField {
+		private var txt:String;
+		private var dict:Object;
+		private var paused:Boolean = false;
+		
+		public function AutoComplete(t:String = "", w:uint = 200, h:uint = 20) {
+			init(t);
+			draw(w, h);
+		}
+		
+		private function init(t:String):void {
+			txt = t;
+			dict = new Object();
+			this.addEventListener(Event.CHANGE, changeListener);
+			this.addEventListener(KeyboardEvent.KEY_DOWN, keyDownListener);
+		}
+		
+		private function draw(w:uint, h:uint):void {
+			this.border = true;
+			this.background = true;
+			this.type = TextFieldType.INPUT;
+			this.height = h;
+			this.width = w;
+			this.text = txt;
+		}
+		
+		public function addToDictionary(str:String):void {
+			var strParts:Array = str.split("");
+			strParts.push(new String());
+			insert(strParts, dict);
+		}
+		
+		private function insert(parts:Array, page:Object):void {
+			if(parts[0] == undefined) {
+				return;
+			}
+
+			var letter:String = parts[0];
+						
+			if(!page[letter]){
+				page[letter] = new Object();
+			}
+			insert(parts.slice(1, parts.length), page[letter]);
+		}
+
+		private function getSuggestion(arr:Array):String {
+			var suggestion:String = "";
+			var len:uint = arr.length;
+			var tmpDict:Object = dict;
+			
+			if(len < 1) {
+				return suggestion;
+			}
+			
+			var letter:String;
+			for(var i:uint; i < len; i++) {
+				letter = arr[i];
+			    if(tmpDict[letter.toUpperCase()] && tmpDict[letter.toLowerCase()]) {
+					var upperTmpDict:Object = tmpDict[letter.toUpperCase()];
+					var lowerTmpDict:Object = tmpDict[letter.toLowerCase()];
+					tmpDict = mergeDictionaries(lowerTmpDict, upperTmpDict);
+			    }
+			    else if(tmpDict[letter.toUpperCase()]) {
+					tmpDict = tmpDict[letter.toUpperCase()];
+			    }
+			    else if(tmpDict[letter.toLowerCase()]){
+					tmpDict = tmpDict[letter.toLowerCase()];
+			    }
+			    else {
+					return suggestion;
+			    }
+			}
+
+			var loop:Boolean = true;
+			while(loop) {
+				loop = false;
+				for(var l:String in tmpDict) {
+				    if(shouldContinue(tmpDict)) {
+						suggestion += l;
+						tmpDict = tmpDict[l];
+						loop = true;
+						break;
+				    }
+				}
+			}
+
+			return suggestion;
+		}
+		
+		private function mergeDictionaries(lowerCaseDict:Object, upperCaseDict:Object):Object {
+			var tmpDict:Object = new Object();
+
+			for(var j:String in lowerCaseDict) {
+				tmpDict[j] = lowerCaseDict[j];
+			}
+
+			for(var k:String in upperCaseDict) {
+				if(tmpDict[k] != undefined && upperCaseDict[k] != undefined) {
+					tmpDict[k] = mergeDictionaries(tmpDict[k], upperCaseDict[k]);
+				}
+				else {
+					tmpDict[k] = upperCaseDict[k];
+				}
+			}
+			return tmpDict;
+		}
+
+		private function shouldContinue(tmpDict:Object):Boolean {
+			var count:Number = 0;
+	    	for(var k:String in tmpDict) {
+		    	if(count > 0) {
+		    		return false;
+		    	}
+		    	count++;
+	    	}
+	    	return true;
+		}
+		
+		private function changeListener(e:Event):void {
+			if(!paused) {
+				complete();
+			}
+		}
+		
+		private function keyDownListener(e:KeyboardEvent):void {
+			if(e.keyCode == Keyboard.BACKSPACE || e.keyCode == Keyboard.DELETE) {
+				paused = true;
+			}
+			else {
+				paused = false;
+			}
+		}
+
+		private function complete():void {
+			var str:String = text.substr(0, caretIndex);
+			var strParts:Array = str.split("");
+			this.text = str;
+			this.text += getSuggestion(strParts);
+			setSelection(caretIndex, this.text.length);
+		}		
+	} 
+}
+{% endhighlight %} 
+
+* If you try to compile the project now, you'll get the error, "TypeError: Error #2023: Class AutoComplete$ must inherit from Sprite to link to the root.
+".  This is fine.  The MXML compiler (MXMLC) expects the default application of ActionScript projects to have a Sprite in their superclass chain.  My AutoComplete doesn't; it only extends TextField.  This is a completely acceptable design since this class should never be the root of an application.
+* This speedbump is easily addressed by creating a new class called "AutoCompleteRunner".  Do so by right-clicking on the "AutoComplete" project and selecting "New > ActionScript Class".  Give it the "Name:" "AutoCompleteRunner" and the "Superclass:" "Sprite".
+* Into this new class paste the following code:
+
+{% highlight actionscript %}
+package {
+	import flash.display.Sprite;
+
+	public class AutoCompleteRunner extends Sprite {
+	
+		public function AutoCompleteRunner() {
+			var autoCompTxt:AutoComplete = new AutoComplete("Start typing...");
+			autoCompTxt.addToDictionary("Flex");
+			autoCompTxt.addToDictionary("Fireworks");
+			autoCompTxt.addToDictionary("Dreamweaver");
+			autoCompTxt.addToDictionary("Contribute");
+			autoCompTxt.addToDictionary("ColdFusion");
+			autoCompTxt.addToDictionary("Flash Paper");
+			autoCompTxt.addToDictionary("Flash");
+			autoCompTxt.addToDictionary("Breeze");
+			autoCompTxt.addToDictionary("JRun");
+			autoCompTxt.addToDictionary("Director");
+			autoCompTxt.addToDictionary("Studio");
+			autoCompTxt.addToDictionary("Captivate");
+			autoCompTxt.addToDictionary("RoboHelp");
+			autoCompTxt.addToDictionary("Authorware");
+			autoCompTxt.addToDictionary("Web Publishing System");			
+			
+			addChild(autoCompTxt);			
+		}
+	}
+}
+{% endhighlight %}
+
+* Before this is all going to work, we need to do one last thing.  We need to add "AutoCompleteRunner" to this list of files that this project will try to use as its root application when it has focus and the debug command fires.  This is done by right-clicking on "AutoCompleteRunner" in the "Navigator" view and selecting "Application Management > Set as default application".
+* Compile and start typing!
+* Arg, the browser is back...  Get the project launching in the stand-alone player again by changing the newly create debug profile for "AutoCompleteRunner".
+
+There we have it.  We've just created, configured, and worked with an ActionScript project.  Nice work!
+
+I'm not going to say much about the AutoComplete class except that I got the idea for using an object of objects data structure to store the potential completions from an old <a href="http://blog.debreuil.com/default.aspx">Robin Debreuil</a> post about <a href="http://blog.debreuil.com/archive/2003/10/21/154.aspx">String Lookup in MS Compiler</a>.  Thanks Robin!
+
+If you're still curious and want more, try to bind this class to a shared object and a button.  It shouldn't be very difficult to get this class working with a persistence layer.
+
+Have fun!
+

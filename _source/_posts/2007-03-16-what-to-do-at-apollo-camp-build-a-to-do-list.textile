@@ -1,0 +1,30 @@
+---
+layout: post
+title: What to do at Apollo Camp?  Build  a to-do list!
+author: Ali Mills
+---
+
+h1. What to do at Apollo Camp?  Build  a to-do list!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+As of today, Apollo is in alpha, and boy does it look promising!  I'm so impressed with what I've seen tonight that I've been sitting in the corner for the past hour playing with Apollo (yep, by attending <a href="http://apollocamp.eventbrite.com/">Apollo Camp</a> I scored an alpha copy of Apollo which will be available via <a href="http://labs.adobe.com">labs</a> any day).  And, with all the exciting Flash-related things going on lately (<a href="http://weblogs.macromedia.com/jd/archives/2007/02/flash_lite_3_vi.cfm">Flash Lite 3</a>, <a href="http://www.chumby.com">Chumby</a>, <a href="http://code.google.com/p/flexlib/">FlexLib</a>, <a href="http://labs.adobe.com/wiki/index.php/Apollo">Apollo</a>, <a href="http://www.clixhere.net/blogicles/showentry.php?e=10">iriver's U20</a>) it seemed appropriate to build a to-do application with it.  It's both a web and desktop application, and here it is:
+<br />
+<center>
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,14,0" width="600" height="400" id="MediaPlayer" align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+<param name="movie" value="/files/2D.swf" />
+<param name="quality" value="high" />
+
+<param name="bgcolor" value="#828c95" />
+<param name="wmode" value="transparent" />
+<embed src="/files/2D.swf" quality="high" bgcolor="#828c95" width="600" height="400" name="2D" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"  wmode="transparent" />
+</object>
+<br />
+<a href="/files/2D.air">Apollo AIR File</a>
+</center>
+
+Download the Apollo AIR file by <a href="/files/2D.air">clicking here</a>.  When Apollo becomes available, the AIR file should install on your Win or Mac desktop and run the same way it does on this web page.  That's what excites me about Apollo most - the ability to create applications that run (practically) the same way on the web and desktop.
+
+More later.  Going to hang out with <a href="http://www.dougmccune.com/blog/">Doug McCune</a> - the Flex Component master who made the <a href="http://dougmccune.com/blog/2007/02/07/quest-for-the-perfect-tabnavigator-part-3-with-source/">SuperTabNavigator</a> I'm using in this app.  It's a great component!  Check out more of his work at <a href="http://code.google.com/p/flexlib/">FlexLib</a>.
+

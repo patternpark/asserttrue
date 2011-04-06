@@ -1,0 +1,26 @@
+---
+layout: post
+title: Focus on the Future
+author: Ali Mills
+---
+
+h1. Focus on the Future
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+A friend just sent me the "YouTube":http://www.youtube.com link "_Chris Hall, Ali Mills - Useless Wooden Toys 1990 New Deal_":http://www.youtube.com/watch?v=VInHfsHHR-A.  Wow, I'm on "YouTube":http://www.youtube.com.  Check it out:
+
+<br />
+<center>
+<object width="425" height="350"><param name="movie" value="http://www.youtube.com/v/VInHfsHHR-A"></param><embed src="http://www.youtube.com/v/VInHfsHHR-A" type="application/x-shockwave-flash" width="425" height="350"></embed></object>
+</center>
+<br />
+
+The second skateboarder in that clip is me!  That was seventeen years ago when I was a skateboarder (OK, I'm still a skateboarder, but now I happen to run, surf, boulder, spearfish, and code much more than I skateboard).  I get a lot of credit ("*Ali Mills*, first documented nollie kickflip":http://www.slapmagazine.com/new_site/mar_03/data/index.shtml) for one of the tricks I did in that video part, and that credit is one of my proudest accomplishments.  Like all worthwhile things in life, that accomplishment came from a lot of preparation combined with a little luck.  I was lucky enough to have been skateboarding at a time when invention and innovation were still pretty easy to do in the sport, and I was prepared enough to make the best of that time.  Back then, I was skateboarding so much that I could make my skateboard do almost anything with a day of practice.
+
+These days, I spend so much time writing code that I almost feel the same way about it...
+
+To the point - I have a strong feeling that we're at a time in application development history that's comparable to skateboarding in the '90s.  Right now, it's still pretty easy to invent new ways of doing things and innovate on the old.  There's a lot of it going on ("Web 2.0":http://www.oreillynet.com/pub/a/oreilly/tim/news/2005/09/30/what-is-web-20.html).  As SWF developers, we're at an advantage because the platform we've practiced with is optimized for this future.
+
+Focus on the future, and accomplish something you're proud of.  Now's a great time.
+

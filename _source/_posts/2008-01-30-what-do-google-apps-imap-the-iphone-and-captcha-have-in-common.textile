@@ -1,0 +1,55 @@
+---
+layout: post
+title: What do Google Apps, IMAP, the iPhone and Captcha have in common?
+author: Luke Bayes
+---
+
+h1. What do Google Apps, IMAP, the iPhone and Captcha have in common?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Together, they can save and waste an amazing amount of time!
+
+I finally broke down today and got an iPhone. Thanks to the fanboys and marketing hype, it is still embarrassing to break out in public, much less write about! But I just feel compelled to get this out there in case I need it again and in case it helps someone else.
+
+Basically, I wanted to get the iPhone email client to pull down my Google Apps hosted email. It seemed like the best way to do this was to set up IMAP.
+I started this process by opening my desktop email client in the browser (which is essentially gmail, but slightly different for the google app premium edition), and followed the instructions "found here":https://mail.google.com/support/bin/answer.py?answer=77702.
+
+It seemed that no matter what I tried, my iPhone kept crying about:
+<typo:code>
+Your IMAP server wants to alert you to the following: Invalid
+credentials (Failure)
+{% endhighlight %}
+
+After getting frustrated that there is no support for copy and paste in the iPhone and getting *really* tired of entering minor variations of my credentials, I finally decided to try it out using the desktop mail client on OS X.
+
+Same problem there.
+
+Long story short, it turns out there is some issue that has to do with Google Apps, IMAP and Captcha coming together in a perfect storm of hidden documentation and not-so-helpful error messages.
+
+After some searches in a variety of Google App and Gmail discussion groups didn't result in anything helpful, I finally decided to get down to the Google Apps premium customer support. This led me down the rabbit hole that finally led "to the answer I was looking for":http://www.google.com/support/a/bin/answer.py?answer=33384&ctx=sibling.
+
+Can't log into your IMAP server?
+
+Go reset your Captcha by visiting this URL:
+<typo:code>
+https://www.google.com/a/[your domain].com/UnlockCaptcha
+{% endhighlight %}
+Note: Even though, every other authentication page in Google requires your *complete* google apps email address as a username, this one wants only what is to the left of the @ symbol.
+
+There is also a handy tidbit on this page related to the url for the imap and smtp servers.
+
+There is another "page in the documentation":http://mail.google.com/support/bin/answer.py?answer=14257 that looks very similar, but fails to mention that the host names can be either:
+
+<code>imap.gmail.com</code> and <code>smtp.gmail.com</code>
+
+*OR*
+
+<code>imap.googlemail.com</code> and <code>smtp.googlemail.com</code>
+
+
+Hope this helps shave some time off of someone's troubles!
+
+Oh, and one more thing, during my searches, I stumbled over "this helpful post":http://5thirtyone.com/archives/862 on how to avoid creating duplicate folders/labels in your web client.
+
+

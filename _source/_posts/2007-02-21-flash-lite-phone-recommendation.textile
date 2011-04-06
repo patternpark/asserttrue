@@ -1,0 +1,38 @@
+---
+layout: post
+title: Flash Lite Phone Recommendation
+author: Ali Mills
+---
+
+h1. Flash Lite Phone Recommendation
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+If you're interested enough in Flash Lite to (like me) "buy a phone":http://www.mobilebee.com/ to experiment on, I've got some recommendations for you.  My recommendations are based on experience spent on two recently completed Flash Lite projects (one "Flash Lite 1":http://www.asserttrue.com/articles/2006/11/07/flash-lite-1-1-google-calendar and one "Flash Lite 2":http://www.flickr.com/photo_zoom.gne?id=388312580&size=o) where I worked with over twenty different phone models during the past three months.  
+
+From a Flash Lite performance perspective, I recommend a "Symbian S60 2nd Edition phone":http://www.s60.com/life/s60phones/browseDevices.do?edition=SECOND_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE.  The "S60 2nd Edition phones":http://www.s60.com/life/s60phones/browseDevices.do?edition=SECOND_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE consistently worked better for me than all others and never crashed.  It's funny.  I'd think that if "2" is good then "3" would be better, but that's not the case here.  Flash Lite performs better on S60 2nd Edition than the S60 3rd Edition.  I recommend the following phones in the following order based on Flash Lite performance:
+
+# "Symbian S60 2nd Edition phones":http://www.s60.com/life/s60phones/browseDevices.do?edition=SECOND_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE
+# "Symbian S60 3nd Edition phones":http://www.s60.com/life/s60phones/browseDevices.do?edition=THIRD_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE
+# "Symbian S40 phones":http://www.adobe.com/devnet/devices/nokia_s40.html
+# "Verizon Wireless supported handsets":http://www.adobe.com/devnet/devices/verizon.html
+# "Windows Mobile 5.0 devices":http://www.adobe.com/devnet/devices/pocket_pc.html
+
+From a money-making perspective, I recommend a "Verizon Wireless supported handset":http://www.adobe.com/devnet/devices/verizon.html.  The "LG Chocolate":http://estore.vzwshop.com/chocolate/ performs best, but supposedly more customers have a "RAZR":http://www.vzwshop.com/razr/, so the "RAZR":http://www.vzwshop.com/razr/ gets the recommendation since we're taking the money angle.  You'll have to jump though insane hoops just to "get started":http://www.adobe.com/devnet/devices/verizon.html testing your content (and even more to publish it), but Verizon undoubtedly has the best Flash ecosystem in the US.  I recommend the following phones in the following order based on money-making potential in the US:
+
+# "Verizon Wireless supported handsets":http://www.adobe.com/devnet/devices/verizon.html
+# "Symbian S60 2nd Edition phones":http://www.s60.com/life/s60phones/browseDevices.do?edition=SECOND_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE
+# "Symbian S60 3nd Edition phones":http://www.s60.com/life/s60phones/browseDevices.do?edition=THIRD_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE
+# "Symbian S40 phones":http://www.adobe.com/devnet/devices/nokia_s40.html
+# "Windows Mobile 5.0 devices":http://www.adobe.com/devnet/devices/pocket_pc.html
+I already mentioned why Verizon gets the top slot in the list above, but let me explain why the other phones are ordered the way they are.  The Symbian phones get the next three slots because "Handango":http://www.adobe.com/devnet/devices/index.html?tab:sell=5#nokia provides a service to sell and distribute content for "Nokia handsets":http://www.adobe.com/devnet/devices/nokia.html.  The S60 phones are first in the Symbian division because with with some "custom":http://www.adobe.com/devnet/devices/articles/creating_sis_files.html "work":http://www.adobe.com/devnet/devices/articles/s60_swf_launcher.html you can wrap the product with an installer and application icon (2nd Edition is above 3rd because "SWF3SIS":http://www.blueskynorth.com/swf2sis/ is available to build an installer with icon for S60 2nd Edition running Flash Lite 2.0 and earlier).  Then come the "Symbian S40 phones":http://www.adobe.com/devnet/devices/nokia_s40.html.  These just barely made it above "Windows Mobile 5.0 devices":http://www.adobe.com/devnet/devices/pocket_pc.html because I haven't seen a way to make an installer and icon for them.  Also, and more importantly, on "S40 phones":http://www.adobe.com/devnet/devices/nokia_s40.html Flash Lite is treated as a second-class citizen.  For example, on my "Nokia 5300":http://europe.nokia.com/A4199012 SWFs are nested under "Menu" > "Applications".  I've tried but am unable to get SWFs to rest on my phone's main menu beside "Applications".  It's possible that I'm syncing incorrectly - it did take me a little while to realize that on S60 phones putting SWFs in the "Others" folder when syncing places them in the Flash menu - but doubt that's the case.  The "Windows Mobile 5.0 devices":http://www.adobe.com/devnet/devices/pocket_pc.html come in last from a money-making perspective because there's no system in place to distribute content to them and no prebuilt installers that I've seen.
+
+Hold on.  That last line is a little odd.  How can it be that, "there's no system in place to distribute the content"?  Why do we need a network like "Handango":http://www.handango.com when we have the SMS/MMS network and the internet?  Personally, I hope to distribute all of my Flash Lite content in one of the following ways: server SMS/MMS to device, email program SMS/MMS to device, and Bluetooth from device to device.  The Verizon network is ridiculously locked down with proprietary installers, though, so we do need to use their network to get content on their BREW devices. 
+
+OK, back to recommendations.  Unless there's a way to make Flash Lite a first-class citizen on "Symbian S40 phones":http://www.adobe.com/devnet/devices/nokia_s40.html, I feel strange even recommending them.  I was pretty disappointed when my phone arrived and I couldn't get a content icon on the main menu.
+
+In conclusion, if you're interested in buying a phone to experiment on with Flash Lite, I recommend getting a "Symbian S60 2nd Edition":http://www.s60.com/life/s60phones/browseDevices.do?edition=SECOND_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE or a "Symbian S60 3nd Edition":http://www.s60.com/life/s60phones/browseDevices.do?edition=THIRD_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE.  I've bought my last three phones from "Mobilebee.com":http://www.mobilebee.com/, so if you can't find a used "S60 2nd or 3rd Edition":http://www.s60.com/life/s60phones/browseDevices.do?edition=SECOND_EDITION&region=&manufacturer=&sortBy=MANUFACTURER_AND_DATE somewhere (you should be able to find a used "Nokia 6600":http://www.nokiausa.com/phones/6600/) you might want to try "them":http://www.mobilebee.com/.
+
+Have fun!
+
+

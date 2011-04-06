@@ -1,0 +1,24 @@
+---
+layout: post
+title: Microsoft uses Flash for Video?
+author: Luke Bayes
+---
+
+h1. Microsoft uses Flash for Video?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+It looks like the folks over at MSN  <a href="http://articles.moneycentral.msn.com/Investing/HomeMortgageSavings/shower.aspx">agree that SWF really is the best way to get video content in front of the most users</a>!
+
+Maybe this is just a switch for those of us on Mac?
+
+<br />
+<center>
+<img src="/files/MicrosoftUsesFlash.png" width="322" height="287" />
+</center>
+<br />
+This is probably old news to you, but Ali and I were pretty surprised.
+
+
+
+

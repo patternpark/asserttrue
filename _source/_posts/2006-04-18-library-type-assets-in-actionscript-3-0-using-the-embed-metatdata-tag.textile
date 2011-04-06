@@ -1,0 +1,321 @@
+---
+layout: post
+title: Library Type Assets in ActionScript 3.0 - using the [Embed] metatdata tag
+author: Ali Mills
+---
+
+h1. Library Type Assets in ActionScript 3.0 :: using the [Embed] metatdata tag
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+In a comment to the previous post <a href="http://www.asserttrue.com/articles/2006/04/09/actionscript-projects-in-flex-builder-2-0">ActionScript Projects in Flex Builder 2.0</a>, *Ben* asked how to get library type assets into <a href="http://labs.macromedia.com/technologies/flexbuilder2/">Flex Builder 2.0</a> projects.  There are two ways.  The first is by using the [Embed] (not the Embed from Object/Embed) metadata tag to include assets at compile time.  The second is using the <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/display/Loader.html">_Loader_</a> class to load them at run time.  What's interesting is that assets loaded at run time can be created in current releases of <a href="http://www.macromedia.com/software/flash/flashpro/">Flash Authoring</a> and contain legacy ActionScript.  What's challenging is that loaded SWFs containing legacy ActionScript are extremely limited in how they can communicate with their loading AS3 container. They can only communicate with one another over <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/net/LocalConnection.html">_LocalConnection_</a>.  <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/net/LocalConnection.html">_LocalConnection_</a> is neccessary for communication because AS3 runs in a new and different ActionScript Virtual Machine (AVM) than the legacy AS.  The <a href="http://labs.macromedia.com/wiki/index.php/ActionScript_3:overview">ActionScript 3.0 Overview</a> a talks a little more about how the 8.5 player runs legacy ActionScript with the AVM1 and ActionScript 3.0 with the AVM2.
+
+In this post, I'm only going to discuss the first of these two ways: compile time inclusion with the [Embed] meta tag.
+
+The [Embed] meta tag provides a way to include external resources like images, sounds, and fonts into a finished project by compiling them into the SWF.  It can be used to import JPEG, GIF, PNG, SVG, SWF, TTF, and MP3 files.  It can also be used to add fonts.  The <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001270.html">Developing Flex Applications</a> chapter <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001270.html">Embedding Resources</a> does a good job of explaining the details of [Embed].  If you're interested in this topic, you should read it.  To demonstrate how [Embed] works, we'll add a "Remember" button to the AutoComplete project we created in the <a href="http://www.asserttrue.com/articles/2006/04/09/actionscript-projects-in-flex-builder-2-0">ActionScript Projects in Flex Builder 2.0</a> post.
+
+The first step to adding a "Remember" button is to create three PNGs for the button states up, over, and down with the graphics program of your choice.  Create them (or download them from <a href="http://www.asserttrue.com/files/libraryTypeAssets_embed.zip">here</a>) and place them in a folder called "img" inside you AutoComplete project folder at the same level as _AutoComplete.as_.  Name the PNGs "Remember_up.png", "Remember_over.png", and "Remember_down.png".
+
+The second step is to write the code to embed and use the button art.  This code will be added to _AutoCompleteRunner.as_.  At the end of <a href="http://www.asserttrue.com/articles/2006/04/09/actionscript-projects-in-flex-builder-2-0">ActionScript Projects in Flex Builder 2.0</a> _AutoCompleteRunner.as_ looked like:
+
+{% highlight actionscript %}
+package {
+    import flash.display.Sprite;
+
+    public class AutoCompleteRunner extends Sprite {
+
+        public function AutoCompleteRunner() {
+            var autoCompTxt:AutoComplete = new AutoComplete("Start typing...");
+            autoCompTxt.addToDictionary("Flex");
+            autoCompTxt.addToDictionary("Fireworks");
+            autoCompTxt.addToDictionary("Dreamweaver");
+            autoCompTxt.addToDictionary("Contribute");
+            autoCompTxt.addToDictionary("ColdFusion");
+            autoCompTxt.addToDictionary("Flash Paper");
+            autoCompTxt.addToDictionary("Flash");
+            autoCompTxt.addToDictionary("Breeze");
+            autoCompTxt.addToDictionary("JRun");
+            autoCompTxt.addToDictionary("Director");
+            autoCompTxt.addToDictionary("Studio");
+            autoCompTxt.addToDictionary("Captivate");
+            autoCompTxt.addToDictionary("RoboHelp");
+            autoCompTxt.addToDictionary("Authorware");
+            autoCompTxt.addToDictionary("Web Publishing System");            
+
+            addChild(autoCompTxt);            
+        }
+    }
+}
+{% endhighlight %}
+
+According to <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001270.html">Using the [Embed] metadata tag</a>, "You must use the [Embed] metadata tag before a variable definition, where the variable is of type Class."  Doing so leaves _AutoCompleteRunner.as_ looking like:
+
+{% highlight actionscript %}
+package {
+    import flash.display.Sprite;
+
+    public class AutoCompleteRunner extends Sprite {
+        [Embed(source="/img/Remember_up.png")] 
+        private var Remember_UpImage:Class;
+        
+        [Embed(source="/img/Remember_over.png")] 
+        private var Remember_OverImage:Class;
+        
+        [Embed(source="/img/Remember_down.png")] 
+        private var Remember_DownImage:Class;
+        
+        public function AutoCompleteRunner() {
+            var autoCompTxt:AutoComplete = new AutoComplete("Start typing...");
+            autoCompTxt.addToDictionary("Flex");
+            autoCompTxt.addToDictionary("Fireworks");
+            autoCompTxt.addToDictionary("Dreamweaver");
+            autoCompTxt.addToDictionary("Contribute");
+            autoCompTxt.addToDictionary("ColdFusion");
+            autoCompTxt.addToDictionary("Flash Paper");
+            autoCompTxt.addToDictionary("Flash");
+            autoCompTxt.addToDictionary("Breeze");
+            autoCompTxt.addToDictionary("JRun");
+            autoCompTxt.addToDictionary("Director");
+            autoCompTxt.addToDictionary("Studio");
+            autoCompTxt.addToDictionary("Captivate");
+            autoCompTxt.addToDictionary("RoboHelp");
+            autoCompTxt.addToDictionary("Authorware");
+            autoCompTxt.addToDictionary("Web Publishing System");            
+
+            addChild(autoCompTxt);            
+        }
+    }
+}
+{% endhighlight %}
+
+Or, as I've been starting to place the [Embed] and the variable definition on the same line, like this:
+
+{% highlight actionscript %}
+package {
+    import flash.display.Sprite;
+
+    public class AutoCompleteRunner extends Sprite {
+        [Embed(source="/img/Remember_up.png")] private var Remember_UpImage:Class;
+        
+        [Embed(source="/img/Remember_over.png")] private var Remember_OverImage:Class;
+        
+        [Embed(source="/img/Remember_down.png")] private var Remember_DownImage:Class;
+        
+        public function AutoCompleteRunner() {
+            var autoCompTxt:AutoComplete = new AutoComplete("Start typing...");
+            autoCompTxt.addToDictionary("Flex");
+            autoCompTxt.addToDictionary("Fireworks");
+            autoCompTxt.addToDictionary("Dreamweaver");
+            autoCompTxt.addToDictionary("Contribute");
+            autoCompTxt.addToDictionary("ColdFusion");
+            autoCompTxt.addToDictionary("Flash Paper");
+            autoCompTxt.addToDictionary("Flash");
+            autoCompTxt.addToDictionary("Breeze");
+            autoCompTxt.addToDictionary("JRun");
+            autoCompTxt.addToDictionary("Director");
+            autoCompTxt.addToDictionary("Studio");
+            autoCompTxt.addToDictionary("Captivate");
+            autoCompTxt.addToDictionary("RoboHelp");
+            autoCompTxt.addToDictionary("Authorware");
+            autoCompTxt.addToDictionary("Web Publishing System");            
+
+            addChild(autoCompTxt);            
+        }
+    }
+}
+{% endhighlight %}
+
+That looks good; now compile/debug.
+
+Uh oh!  The compile fails.  We have "Errors in Project".  The error, unfortunately, is due to what seems to be a bug in either <a href="http://labs.macromedia.com/technologies/flexbuilder2/">Flex Builder 2.0</a> or the <a href="http://labs.macromedia.com/technologies/flexframework2/">Flex Framework</a>.  The error (whose description you can see in the "Problems" view) is that the, "Definition of base class '<a href="http://livedocs.macromedia.com/labs/1/flex20beta2/langref//mx/core/SkinBitmap.html">_SkinBitmap_</a>' not found".  This seems like a bug because according to documentation the <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/langref//mx/core/SkinBitmap.html">_SkinBitmap_</a> class is, "A subclass of the Bitmap class that implements the _IFlexDisplayObject_ interface. This class is the base class for Bitmap skin elements."  Why would <a href="http://livedocs.macromedia.com/labs/1/flex/langref/mx/core/IFlexDisplayObject.html">_IFlexDisplayObject_</a> , a framework class, be part of including assets in an ActionScript project?  On the other hand, maybe the object relationship is by design.  In the article <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00001264.html">
+Accessing the embedded object</a>, there's a line that says, "The data type of the class is either <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/langref//mx/core/SkinBitmap.html">_SkinBitmap_</a>, if the image is a JPEG, GIF, or PNG file, or <a href="http://livedocs.macromedia.com/labs/1/flex/langref/mx/core/SkinSprite.html">_SkinSprite_</a> if it is a SVG or SWF file. If you embed an MP3 file, data type of the class is Sound."
+
+Why does it matter if we have to implement an _IFlexDisplayObject_?  Why should we care?  One reason is the concern of including code in your project that can't be manipulated.  Code that, if broken, you can't personally fix.  The <a href="http://labs.macromedia.com/technologies/flexframework2/">Flex Framework</a> is an example of such code, and to use _IFlexDisplayObject_ we need to include the framework.  As long as the framework remains closed-source [Embed] shouldn't create a class that implements or sub-classes anything in the <a href="http://labs.macromedia.com/technologies/flexframework2/">Flex Framework</a>.  If the framework were open-sourced this would be less of an issue (hint, hint)...
+
+A second reason to be concerned is file size.  Without the framework our project is 2K.  With the framework, it'll probably be larger.  To get the [Embed] meta tag working and find out how much our SWF size grows, let's include the <a href="http://labs.macromedia.com/technologies/flexframework2/">Flex Framework</a>.  To do so, take the following steps:
+
+* Right-click on your AutoComplete project in the "Navigator" window.
+* Select "Properties".
+* In the "Properties for AutoComplete" window select "ActionScript Build Path" from the left-hand option list.
+* Select the "Libraries" tab.
+* Press the "Add SWC" button.
+* Browse to the Flex Builder 2.0 installation location which is probably "C:\Program Files\Adobe\Flex Builder 2 Beta 2".
+* Open the "frameworks" folder.
+* Open the "libs" folder.
+* Select "framework.swc".
+
+After OKing out of the "Properties for AutoComplete" window, your project is now configured to point at classes in the <a href="http://labs.macromedia.com/technologies/flexframework2/">Flex Framework</a>.  Compile/debug again.
+
+Woo Hoo!!!  We get a successful compilation!  (We'll get to why the images aren't showing up in a moment, but for now trust me that they've been embedded.)  Let's check _AutoCompleteRunner.swf_ and see how much it's grown in size.  Go into the AutoComplete project's "bin" folder on your file system (probably located at "C:\Documents and Settings\USER_NAME\My Documents\Flex\AutoComplete") to find it.  Notice that it's grown to 18K.  That's a 16K size increase.  How much of the increase was caused by the framework, and how much was caused by the embeded PNGs?  To answer this question, comment out the three [Embed] lines, recompile, and recheck _AutoCompleteRunner.swf_.  It's now a little smaller.  It's 15K.  It appears that the framework added 13K and the three PNGs added 3K (which is magical considering that my three images together total 88K).  While 15K isn't huge, it still seems like a little too much for a project that doesn't do anything framework related.  That said, 15K isn't horrible either and a lot of appreciation goes to Flex engineers like <a href="http://labs.macromedia.com/wiki/index.php/Special:Search?search=gordon+smith&go=Go">Gordon Smith</a> and <a href="http://mannu.livejournal.com/">Manish Jethani</a> for their efforts towards <a href="http://mannu.livejournal.com/332221.html">Avoiding linker dependencies</a>.
+
+Why aren't the images showing up?  They're not because we haven't attached them to the <a href="http://livedocs.macromedia.com/labs/1/flex20beta2/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Parts&file=00002301.html">display list</a>.  While we could add them directly, we're dealing with button images so we'll add them to a <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/display/SimpleButton.html">SimpleButton</a> instance and add it to the display.  Creating instances of the images and assigning them to the button's states takes some work.  The code that does this  follows:
+
+{% highlight actionscript %}
+package {
+	import flash.display.Bitmap;
+	import flash.display.SimpleButton;
+	import flash.display.Sprite;
+	import flash.util.describeType;
+	import flash.util.getClassByName;
+
+	public class AutoCompleteRunner extends Sprite {
+		[Embed(source="/img/Remember_up.png")] private var Remember_UpImage:Class;
+		[Embed(source="/img/Remember_over.png")] private var Remember_OverImage:Class;
+		[Embed(source="/img/Remember_down.png")] private var Remember_DownImage:Class;
+
+		public var className:String;
+	
+		public function AutoCompleteRunner() {
+			var autoCompTxt:AutoComplete = new AutoComplete("Start typing...");
+			autoCompTxt.addToDictionary("Flex");
+			autoCompTxt.addToDictionary("Fireworks");
+			autoCompTxt.addToDictionary("Dreamweaver");
+			autoCompTxt.addToDictionary("Contribute");
+			autoCompTxt.addToDictionary("ColdFusion");
+			autoCompTxt.addToDictionary("Flash Paper");
+			autoCompTxt.addToDictionary("Flash");
+			autoCompTxt.addToDictionary("Breeze");
+			autoCompTxt.addToDictionary("JRun");
+			autoCompTxt.addToDictionary("Director");
+			autoCompTxt.addToDictionary("Studio");
+			autoCompTxt.addToDictionary("Captivate");
+			autoCompTxt.addToDictionary("RoboHelp");
+			autoCompTxt.addToDictionary("Authorware");
+			autoCompTxt.addToDictionary("Web Publishing System");			
+
+			var rememberBtn:SimpleButton = configureButton(new SimpleButton(), "Remember");
+			
+			addChild(rememberBtn).x = addChild(autoCompTxt).width;
+		}
+
+		private function configureButton(button:SimpleButton, name:String):SimpleButton {
+			button.upState = createImage(name + "_UpImage");
+			button.overState = createImage(name + "_OverImage");
+			button.downState = createImage(name + "_DownImage");
+			button.hitTestState = createImage(name + "_UpImage");
+			button.useHandCursor = true;
+			return button;
+		}
+
+		private function createImage(embedLinkage:String):Bitmap {
+			if(className == null) {
+				className = describeType(this).@name.toXMLString();
+			}
+			var imgName:String = className + "_" + embedLinkage;
+			var imgRef:Class = getClassByName(imgName);
+			var img:Bitmap = new imgRef();
+			return img;
+		}
+	}
+}
+{% endhighlight %}
+
+In the constructor, a new <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/display/SimpleButton.html">_SimpleButton_</a> instance called _rememberBtn_ is created and configured with the helper method _configureButton()_.  The _configureButton()_ method in turn calls the workhorse of this entire process - _createImage()_.  Since the reflection utility <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/util/package.html#describeType()">_describeType()_</a> is an expensive operation, the first thing _createImage()_ does is cache the _className_ that the combination of <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/util/package.html#describeType()">_describeType()_</a> and <a href="http://labs.macromedia.com/wiki/index.php/ActionScript_3:resources:apis:E4X:overview">E4X</a> return.  Then, the method uses a little know fact that the [Embed] meta tag creates a class definition whose constructor can be accessed with a string formatted as "ClassNameInWhichTheEmbedTagIsDefined_ClassVariableDefinedAfterTheEmbedTag".  The <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/util/package.html#getClassByName()">_getClassByName()_</a> package-level function uses this string to return the constructor, and the next lines in _createImage()_ create and return an instance of the embedded images.
+
+That's it for using the [Embed] metadata tag.  The project with an added <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/net/SharedObject.html">_SharedObject_</a> based persistence layer follows:
+
+{% highlight actionscript %}
+package {
+	import flash.display.Bitmap;
+	import flash.display.Sprite;
+	import flash.display.SimpleButton;
+	import flash.net.SharedObject;
+	import flash.util.describeType;
+	import flash.util.getClassByName;
+	import flash.events.MouseEvent;
+
+	public class AutoCompleteRunner extends Sprite {
+		[Embed(source="/img/Remember_up.png")] private var Remember_UpImage:Class;
+		[Embed(source="/img/Remember_over.png")] private var Remember_OverImage:Class;
+		[Embed(source="/img/Remember_down.png")] private var Remember_DownImage:Class;
+
+		private var savedWords:Array;
+		private var persistenceLayer:SharedObject; 
+		private var autoCompleteTxt:AutoComplete;
+		private var rememberBtn:SimpleButton;
+
+		public var className:String;
+	
+		public function AutoCompleteRunner() {						
+			savedWords = new Array();
+			
+			configureStage();
+			
+			persistenceLayer = SharedObject.getLocal("AutoCompleteRunner"); 
+			configureSharedObject(persistenceLayer);
+			
+			autoCompleteTxt = new AutoComplete("Start typing...");
+			configureAutoComplete(autoCompleteTxt);
+
+			rememberBtn = new SimpleButton();
+			configureButton(rememberBtn, "Remember");
+			rememberBtn.addEventListener(MouseEvent.CLICK, clickHandler);
+			
+			addChild(rememberBtn).x = addChild(autoCompleteTxt).width;
+		}
+		
+		private function configureStage():void {
+			stage.scaleMode = StageScaleMode.NO_SCALE;
+			stage.align = StageAlign.TOP_LEFT;
+		}
+		
+		private function configureSharedObject(sharedObject:SharedObject):void {
+			if(sharedObject.data.savedWords != undefined) {
+				savedWords = sharedObject.data.savedWords;
+			}
+		}
+				
+		private function configureAutoComplete(autoComplete:AutoComplete):void {
+			autoComplete.addToDictionary("Flex");
+			autoComplete.addToDictionary("Fireworks");
+			autoComplete.addToDictionary("Dreamweaver");
+			autoComplete.addToDictionary("Contribute");
+			autoComplete.addToDictionary("ColdFusion");
+			autoComplete.addToDictionary("Flash Paper");
+			autoComplete.addToDictionary("Flash");
+			autoComplete.addToDictionary("Breeze");
+			autoComplete.addToDictionary("JRun");
+			autoComplete.addToDictionary("Director");
+			autoComplete.addToDictionary("Studio");
+			autoComplete.addToDictionary("Captivate");
+			autoComplete.addToDictionary("RoboHelp");
+			autoComplete.addToDictionary("Authorware");
+			autoComplete.addToDictionary("Web Publishing System");	
+			
+			var len:uint = savedWords.length;
+			for(var i:uint; i < len; i++) {
+				autoComplete.addToDictionary(savedWords[i]);
+			}
+		}
+
+		private function configureButton(button:SimpleButton, name:String):void {
+			button.upState = createImage(name + "_UpImage");
+			button.overState = createImage(name + "_OverImage");
+			button.downState = createImage(name + "_DownImage");
+			button.hitTestState = createImage(name + "_UpImage");
+			button.useHandCursor = true;
+		}
+
+		private function createImage(embedLinkage:String):Bitmap {
+			if(className == null) {
+				className = describeType(this).@name.toXMLString();
+			}
+			var imgName:String = className + "_" + embedLinkage;
+			var imgRef:Class = getClassByName(imgName);
+			var img:Bitmap = new imgRef();
+			return img;
+		}
+
+		private function clickHandler(event:MouseEvent):void {
+			var newWord:String = autoCompleteTxt.text;
+			autoCompleteTxt.addToDictionary(newWord);
+			savedWords.push(newWord);
+			persistenceLayer.data.savedWords = savedWords;
+			persistenceLayer.flush();
+		}
+	}
+}
+{% endhighlight %}
+
+There's an issue with the 8.5 desktop player where flushing a <a href="http://livedocs.macromedia.com/labs/1/flex/langref/flash/net/SharedObject.html">_SharedObject_</a> causes it to crash, so the above code needs to run in a browser player.  Change the project's debug profile to open in a browser window instead of the desktop player.  Search for, "Now, letâ€™s change our debug profile" in <a href="http://www.asserttrue.com/articles/2006/04/09/actionscript-projects-in-flex-builder-2-0">ActionScript Projects in Flex Builder 2.0</a> for directions to do this.
+

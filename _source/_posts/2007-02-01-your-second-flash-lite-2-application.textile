@@ -1,0 +1,255 @@
+---
+layout: post
+title: Your Second Flash Lite 2 Application
+author: Ali Mills
+---
+
+h1. Your Second Flash Lite 2 Application
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Until recently, most of "my Flash Lite experience was with version 1.1":http://www.asserttrue.com/articles/2006/11/07/flash-lite-1-1-google-calendar.  Flash Lite 1.1 is hard.  The "language is different":http://livedocs.macromedia.com/flash/8/main/wwhelp/wwhimpl/common/html/wwhelp.htm?href=Part12_FL_API_Reference.html, and you're restricted to writing code in Flash Authoring on the timeline.  This makes working on a team or using source control nearly impossible.  And, without a team or source control it's much harder to build anything complicated or interesting...
+
+If you're someone who looked into Flash Lite 1 and quickly turned to run for cover, I don't blame you.
+
+If you're still taking cover, I want to share what I've recently learned with you - Flash Lite 2 isn't bad.  Actually, from a development perspective it's quite good!  To show you what I mean, I've written what could count as your second Flash Lite 2 application.  An app you might write after knocking out a "Hello World".  The app is a text messenger, and here it is:
+
+<center>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="TextIt" width="176" height="208" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab">
+<param name="movie" value="/files/TextIt.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#869ca7" />
+<param name="allowScriptAccess" value="sameDomain" />
+<embed src="/files/TextIt.swf" quality="high" bgcolor="#869ca7" width="176" height="208" name="PoopyHeader" align="middle" play="true" loop="false" quality="high" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed>
+</object>
+<br />
+"download":/files/TextIt.zip
+</center>
+
+Let's take a look at the application code...
+First, we have our root application class *TextIt*.  *TextIt* handles dynamic sizing (which in a device world is hugely important because you don't want to build your app for all the screen dimensions out there), key events, environment initialization, and determines if the app is running on a device or not so there can be different behavior (for example, on a phone this app sends SMS messages but everywhere else - like on this page - it sends an email message).  Here's the class *TextIt*:
+
+{% highlight actionscript %}
+import patternpark.devices.DeviceApp;
+import patternpark.display.Component;
+
+class TextIt extends Component {
+	public static var linkageId:String = "__Packages.TextIt";
+	public static var classRef:Function = TextIt;
+	private var deviceApp:DeviceApp;
+	
+	public function TextIt() {
+		deviceApp = DeviceApp(attachMovie(DeviceApp.linkageId, "deviceApp", getNextHighestDepth(), {width:Stage.width, height:Stage.height}));
+	}
+	
+	public function initialize():Void {
+		super.initialize();
+		Stage.align = "TL";
+		Stage.scaleMode = "noscale";
+		FSCommand2("FullScreen", true);
+		FSCommand2("SetQuality", "high");
+	}
+	
+	public function configure():Void {
+		super.configure();
+		FSCommand2("SetSoftKeys", "Left", "Right");
+		Key.addListener(this);
+		Stage.addListener(this);
+	}
+	
+	private function onKeyDown():Void {
+		switch(Key.getCode()) {
+			case Key.ENTER:
+				if(!isDevice()) {
+					deviceApp.onLeftSoftKey();
+				}
+				break;
+			case ExtendedKey.SOFT1: 
+				deviceApp.onLeftSoftKey();
+				break;
+			case ExtendedKey.SOFT2: 
+				deviceApp.onRightSoftKey();
+				break;
+		}
+	}
+	
+	public function onResize():Void {
+		deviceApp.width = Stage.width;
+		deviceApp.height = Stage.height;
+		deviceApp.draw();
+	}
+	
+	public function isDevice():Boolean {
+		return System.capabilities.hasSMS;
+	}
+	
+	public static var serializable:Boolean = Object.registerClass(linkageId, classRef);
+}
+{% endhighlight %}
+
+Second, we have the class that's attached to *TextIt*, *DeviceApp*.  *DeviceApp* handles the actual drawing of the text fields and sending of the SMS or email message.  *DeviceApp* looks like: 
+
+{% highlight actionscript %}
+import patternpark.display.Component;
+
+class patternpark.devices.DeviceApp extends Component {
+	public static var linkageId:String = "__Packages.patternpark.devices.DeviceApp";
+	public static var classRef:Function = DeviceApp;
+	private var toTxt:TextField;
+	private var bodyTxt:TextField;
+	private var leftLabelTxt:TextField;
+	private var rightLabelTxt:TextField;
+
+	public function DeviceApp() {
+	}
+	
+	public function initialize():Void {
+		super.initialize();
+		backgroundColor = 0x00FF00;
+	}
+	
+	public function configure():Void {
+		super.configure();
+		createTextField("toTxt", getNextHighestDepth(), 0, 0, 0, 0);		
+		createTextField("bodyTxt", getNextHighestDepth(), 0, 0, 0, 0);
+		createTextField("leftLabelTxt", getNextHighestDepth(), 0, 0, 0, 0);
+		createTextField("rightLabelTxt", getNextHighestDepth(), 0, 0, 0, 0);
+
+		configureTextFields();
+	}
+	
+	private function configureTextFields():Void {
+		toTxt.type = "input";
+		toTxt.border = true;
+		toTxt.background = true;
+		toTxt.text = "To:";
+		
+		bodyTxt.type = "input";
+		bodyTxt.multiline = true;
+		bodyTxt.wordWrap = true;
+		bodyTxt.border = true;
+		bodyTxt.background = true;
+		bodyTxt.text = "Message:";
+		
+		leftLabelTxt.autoSize = "left";
+		leftLabelTxt.text = "SEND";
+		
+		rightLabelTxt.autoSize = "right";
+		rightLabelTxt.text = "EXIT";
+	}
+
+	public function draw():Void {
+		super.draw();
+		var txtHeight:Number = 20;
+		var gutter:Number = 10;
+		var adjustedGutter:Number = gutter * 2;
+		var adjustedWidth:Number = width - adjustedGutter;
+		
+		toTxt._x = gutter;
+		toTxt._y = gutter;
+		toTxt._width = adjustedWidth;
+		toTxt._height = txtHeight;
+		
+		bodyTxt._x = gutter;
+		bodyTxt._y = txtHeight + adjustedGutter;
+		bodyTxt._width = adjustedWidth;
+		bodyTxt._height = height - toTxt._height - txtHeight - adjustedGutter;
+		
+		leftLabelTxt._x = gutter;
+		leftLabelTxt._y = bodyTxt._y + bodyTxt._height;
+		leftLabelTxt._width = 0;
+		leftLabelTxt._height = txtHeight;
+		
+		rightLabelTxt._x = width - gutter;
+		rightLabelTxt._y = bodyTxt._y + bodyTxt._height;
+		rightLabelTxt._width = 0;
+		rightLabelTxt._height = txtHeight;
+	}
+	
+	public function onLeftSoftKey():Void {
+		if(isDevice()) {
+			getURL(getText());
+		}
+		else {
+			getURL(getEmail());
+		}
+	}
+	
+	private function getText():String {
+		var phoneNumber:String = toTxt.text;
+
+		var message:String = "";
+		message += "sms:" + phoneNumber;
+		message += "?body=" + bodyTxt.text;
+		
+		return message;
+	}
+	
+	private function getEmail():String {
+		var emailAddress:String = toTxt.text;
+	
+		var message:String = "";
+		message += "mailto:" + emailAddress;
+		message += "?subject=TextIt!";
+		message += "&body=" + bodyTxt.text;
+		
+		return message;
+	}
+
+	public function onRightSoftKey():Void {
+		FSCommand2("Quit");
+	}
+
+	public static var serializable:Boolean = Object.registerClass(linkageId, classRef);
+}
+{% endhighlight %}
+
+Finally, we have our third class *Component*.  *Component* is the base class for both *TextIt* and *DeviceApp*.  It draws a rectangle background, calls some "Template Methods":http://en.wikipedia.org/wiki/Template_method_pattern, and sets the structure for the "Chain of Responsibility":http://c2.com/cgi/wiki?ChainOfResponsibilityPattern.  Here's the *Component* class:
+
+{% highlight actionscript %}
+class patternpark.display.Component extends MovieClip {
+	public static var linkageId:String = "__Packages.patternpark.display.Component";
+	public static var classRef:Function = Component;
+	public var initialize:Function;
+	public var configure:Function;
+	public var width:Number;
+	public var height:Number;
+	public var backgroundColor:Number = 0xFF0000;
+	private var background:MovieClip;
+	
+	
+	public function Component() {
+		initialize();
+		configure();
+		draw();
+	}
+	
+	public function draw():Void {
+		background = this.createEmptyMovieClip("background", -1);
+		background.clear();
+		background.beginFill(backgroundColor);
+		background.moveTo(0, 0);
+		background.lineTo(width, 0);
+		background.lineTo(width, height);
+		background.lineTo(0, height);
+		background.lineTo(0, 0);
+		background.endFill();
+	}
+	
+	public function isDevice():Boolean {
+		return _parent.isDevice();
+	}
+					
+	public static var serializable:Boolean = Object.registerClass(linkageId, classRef);
+}
+{% endhighlight %}
+
+Interesting, isn't it?  It's like real AS2 development!
+
+To run this application on your device, you need to "download":http://www.adobe.com/devnet/devices/index.html?tab:downloads=1 the proper Flash Lite 2 player.  Flash Lite 2.1 is available for "Symbian":https://www.adobe.com/cfusion/entitlement/index.cfm?e=flashlite2%5F1%5Fsymbian%5Fdownload, "Windows Mobile 5.0":https://www.adobe.com/cfusion/entitlement/index.cfm?e=flashlite2%5F1%5Fwinmobile%5Fdownload, and "BREW":https://brewx.qualcomm.com/developer/devexhome.jsp.  BREW is a pain to get set up - so much so that it's debatable whether it's  even worth developing for.  Use the "'Getting Started'":http://www.adobe.com/devnet/devices/verizon.html section on "http://www.adobe.com/devnet/devices/verizon.html":http://www.adobe.com/devnet/devices/verizon.html to figure it out.
+
+You'll also need the SWF!  You can "download":/files/TextIt.zip the SWF and source "here":/files/TextIt.zip.
+
+Have fun!
+

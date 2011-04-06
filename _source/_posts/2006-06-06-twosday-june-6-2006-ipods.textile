@@ -1,0 +1,40 @@
+---
+layout: post
+title: Twosday, June 6, 2006 - iPods
+author: Ali Mills
+---
+
+h1. Twosday, June 6, 2006 :: iPods
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+On this second <a href="http://www.asserttrue.com/articles/2006/05/09/twosday-may-9-2006-keynotes">Twosdays</a>, I'm posting photos of two iPods that I've been given as gifts from companies who make SWF creation tools.  I got my <a href="http://www.apple.com/ipodshuffle/">iPod shuffle</a> from <a href="http://www.xamlon.com/">Xamlon</a> for wearing a <a href="http://www.xamlon.com/">Xamlon</a> shirt to <a href="http://blog.debreuil.com/default.aspx">Robin Debreuil</a>'s QA session at <a href="http://www.flashforwardconference.com/">Flashforward</a> a couple years ago.  Here it is:
+<br />
+<center>
+<img src="/files/shuffle.jpg" />
+</center>
+
+And, a close up of the branding...
+
+<center>
+<img src="/files/shuffle_branding.jpg" />
+</center>
+<br />
+
+My <a href="http://www.apple.com/ipodnano/">iPod nano</a> was a gift from <a href="http://www.adobe.com">Macromedia</a> for being part of the <a href="http://www.adobe.com/products/studio/">Studio 8</a> product team.  <a href="http://www.lukebayes.com/">Luke</a> and I worked on documentation.  We wrote ActionScript code examples for the <a href="http://www.adobe.com/support/documentation/en/flash/">ActionScript Language Reference</a>.  Here's my <a href="http://www.apple.com/ipodnano/">nano</a>:
+
+<br />
+<center>
+<img src="/files/nano.jpg" />
+</center>
+
+And, a close up of the custom etching...
+
+<center>
+<img src="/files/nano_branding.jpg" />
+</center>
+<br />
+
+Of course, I use my <a href="http://www.apple.com/ipod/">iPods</a> to listen to <a href="">Mike Chambers</a>' podcasts (<a href="http://weblogs.macromedia.com/mesh/archives/2006/04/podcast_april_5.html">April 5</a>, <a href="http://weblogs.macromedia.com/mesh/archives/2006/04/podcast_april_1.html">April 12</a>, <a href="http://weblogs.macromedia.com/mesh/archives/2006/04/podcast_april_2.html">April 26</a>, and <a href="http://weblogs.macromedia.com/mesh/archives/2006/05/podcast_may_10.html">May 10</a> shows available), but lately I've been more interested using them for carrying data that isn't audio.  For example, the site <a href="http://www.isubwaymaps.com/">iSubwayMaps.com</a> provides - you guessed it - transit maps that fit on your iPod.  The maps are broken up into images that, when transferred to a photo-supporting iPod, make for pretty useful interactive maps.  If you live in Boulder, Colorado you can even <a href="http://www.dailycamera.com/bdc/recreation/article/0,1713,BDC_2403_3883151,00.html">download</a>
+an <a href="http://www.dailycamera.com/bdc/recreation/article/0,1713,BDC_2403_3883151,00.html">iPod trail guide</a> for area biking, camping, and hiking from the local newspaper  site <a href="http://www.dailycamera.com/bdc/recreation/article/0,1713,BDC_2403_3883151,00.html">The Daily Camera</a>.  I've got a experiment going too, and if it works well, I'll share the idea in a future post.  If you know of other ways that people are creativly using <a href="http://www.apple.com/ipod/">iPods</a>, I'm interested to hear about it.  Please post a comment.
+

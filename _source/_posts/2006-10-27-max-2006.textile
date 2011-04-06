@@ -1,0 +1,30 @@
+---
+layout: post
+title: Max 2006
+author: Luke Bayes
+---
+
+h1. Max 2006
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+We just got back in town from Vegas for the Max conference last night and I wanted to blog a little bit about a few different things...
+
+First off, we promised to post our presentation materials, so here they are:
+# <a href="/DesignPatternsInActionScript3-src.zip">Source code from the project we demoed</a> <i>(6 KB)</i>
+# <a href="/DesignPatternsInActionScript3-ppt.zip">Powerpoint doc</a> <i>(5 MB)</i>
+
+Secondly, I feel like our presentation on Thursday went exceptionally well, but the one on Wednesday could have been better. I'm not going to lament it too much - or try to make excuses - but suffice to say that neither of us feels our performance on Wednesday met our expectations. 
+
+If you agree with us about Wednesday, you have our apologies, if you disagree, well, we both appreciate the support!
+
+Finally, I wanted to express some real gratitude for some of the other presentations that I was able to attend. I have to say that I was absolutely blown away by both the quantity and quality of the presentations that I attended, following are some highlights from my somewhat blurry memory:
+
+* <a href="http://blogs.adobe.com/rgonzalez/">Roger Gonazales</a> gave an awesome presentation highlighting some low-level details in the MXMLC compiler and how they pertain to building modular swf applications. I've known that he was a smart guy for quite awhile now, man, I really had no idea. He managed to jam about a years' worth of information into an hour, and still make it comprehensible!
+
+* <a href="http://www.quietlyscheming.com/blog/">Ely Greenfield</a> gave a really good talk on component development in Flex2. He answered a lot of the questions that I've been pondering over the past month or so. But the most amazing thing he did, was present a swf file of a project with snapshots of it at each stage of development. So he was able to step through the development of a Flex2 component, one step at a time, without actually making us sit there and watch him type... It was also nice to see him present a really nice-looking Flex component. It was a Flash version of the new album browser from iTunes and it looked great.
+
+There were quite a few other presos that I really liked, but I'm out of time for now, maybe Mills will talk about some of those...
+
+
+

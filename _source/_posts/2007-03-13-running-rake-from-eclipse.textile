@@ -1,0 +1,45 @@
+---
+layout: post
+title: Running Rake from Eclipse
+author: Luke Bayes
+---
+
+h1. Running Rake from Eclipse
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I've been working on a new open source project in my spare time that involves using Rake to compile and display ActionScript SWFs, (more on that project coming soon), and one of the surprisingly difficult parts had to do with trying to get Rake tasks running from Eclipse.
+
+Since I finally figured it out, and couldn't seem to find any decent resources out there, I figured other folks might find this info useful.
+
+
+Basically, I'm running on Windows XP and the steps that worked for me are as follows:
+
+# Right-Click on an existing project and choose "Properties" (at the bottom of the context menu)
+# In the list on the left, select "Builders"
+# Click the "New" button in the upper right
+# Choose "Program" from the pop up and select "OK"
+# You're now confronted with the "New Builder" menu
+# Give your builder a name (I chose "Rake Builder")
+# For the "Location" field, choose "Browse File System" and select the rake.bat file that is inside of your ruby installation/bin. On my system, this is at: C:\ruby\bin\rake.bat
+#* This was actually THE crux, because I kept choosing C:\ruby\bin\rake which does *not* work properly. On windows, this must be the rake.bat file....
+# For the "Working Directory" field, choose "Browse Workspace" and select the folder that contains your rake file. (This was the project directory in my case)
+
+You should be ready go!
+
+From now on, you should be able to hit CTRL+B to re-run your default rake task...
+
+If you would like to run a task other than the default task, you can add the task name to the arguments field of the 
+"Main" tab.
+
+Following are images of what each of those tabs look like on my system:
+
+
+<img src="http://asserttrue.com/files/RakeBuilder-Main.gif" />
+
+<img src="http://asserttrue.com/files/RakeBuilder-Refresh.gif" />
+
+<img src="http://asserttrue.com/files/RakeBuilder-Environment.gif" />
+
+<img src="http://asserttrue.com/files/RakeBuilder-BuildOptions.gif" />
+

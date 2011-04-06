@@ -1,0 +1,32 @@
+---
+layout: post
+title: Flex Builder 2 and Flash Authoring CS3 on OS X
+author: Luke Bayes
+---
+
+h1. Flex Builder 2 and Flash Authoring CS3 on OS X
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Is it just me? or is this a strange decision?
+
+After installing CS3, debugging in Flex Builder suddenly launches Flash Authoring and stops sending trace output to Eclipse.
+
+
+
+Ali and I went down to the Apple store during lunch and picked up our shrink-wrapped copies of CS3 Web Premium. We also purchased full versions of Flex Builder some time ago as we're trying to make sure to support Adobe's efforts.
+
+While we definitely get value out of this software (it is our  career and all), it's pretty painful to part with over $5,000 for licenses over just a few months - knowing that if we decide to switch back to Windows, we'll have to pay that entire amount all over again. (cross-platform license anyone?)
+
+After about 10 minutes of panicked cursing, I realized that Flash Authoring CS3 registered itself as the application that executes SWF files on this system. WTF? Somehow this registration was actually kind of subtle because if I double-click swfs, they still open with the debug player.
+
+I found and installed the Flex Builder patch <a href="http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=kb401493">mentioned here</a> with no change in the behavior. (Btw, what kind of installation process is that!?)
+
+Another great thing about this switch to OS X, is that registering a handler for files by type isn't exactly as clear as one might expect. In windows, you just right-click and choose "Open With", and then check the "always" check box.
+
+In Mac, you get a very similar menu option, but it only affects the particular file that you've selected, if you want to modify this setting for *all* files of that type, you have to find a SWF, hit "CMD+i" or right-click and "Get Info". In the pop up, there is a section called "open with" where you can choose the application and check that little box.
+
+Hope this saves someone else the heart attack. I can't imagine what I would do if Flash Authoring had to be launched in order for me to run a SWF file!
+
+
+

@@ -1,0 +1,57 @@
+---
+layout: post
+title: Where's haXe?
+author: Ali Mills
+---
+
+h1. Where's haXe?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+The code below may look like "ActionScript":http://www.adobe.com/support/documentation/en/flash/, but it's not.  It's "haXe":http://www.haxe.org/ref.  Can you spot the differences?
+
+{% highlight actionscript %}
+package mediator.events;
+
+import mediator.events.Event;
+import mediator.events.EventListener;
+
+class EventDispatcher {
+	private var listeners:Array<EventListener>;
+	private var eventTarget:Dynamic;
+	
+	public function new(?eventTarget:Dynamic) {
+		listeners = new Array();
+		if(eventTarget) this.eventTarget = eventTarget else this.eventTarget = this; 
+	}
+	
+	public function addEventListener(type:EventType, handler:Dynamic, context:Dynamic):Void {
+		removeEventListener(type, handler, context);
+		listeners.push(new EventListener(type, handler, context));
+	}
+	
+	public function removeEventListener(type:EventType, handler:Dynamic, context:Dynamic):EventListener {
+		var listener:EventListener = new EventListener(type, handler, context);
+		for(i in 0...listeners.length) {
+			if(listeners[i].equals(listener)) {
+				return listeners.splice(i, 1)[0];
+			}
+		}
+		return null;
+	}
+	
+	public function dispatchEvent(event:Event):Bool {
+		var type:EventType = event.type;
+		var listener:EventListener;
+		untyped {event["target"] = eventTarget;}
+		for(i in 0...listeners.length) {
+			listener = listeners[i];
+			if(listener.type == type) {
+				Reflect.callMethod(listener.context, listener.handler, [event]);
+			}
+		}
+		return true;
+	}
+}
+{% endhighlight %}
+

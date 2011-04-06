@@ -1,0 +1,142 @@
+---
+layout: post
+title: Getting Started With The AsUnit 2.5 Framework
+author: Luke Bayes
+---
+
+h1. Getting Started With The AsUnit 2.5 Framework
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Itâ€™s 1:48am.
+
+I suppose it's as good a time as any to break in the new blog...
+
+Ali and I have been working furiously over the past few weeks cleaning up AsUnit for our Flashforward presentation. While doing all this work, we have been spending quite a bit of time thinking about all the things that bother us about AsUnit, and trying to fix them one at a time. One of the biggest things is (and has always been) the separate results panel (or AsUnitUi.swf). We recently resolved this particular issue for ActionScript 3.0, but I have been concerned about leaving the ActionScript 2.0 build as a poor, neglected child. Some recent decisions that we made about our own product releases have revived our interest in ongoing support for ActionScript 2.0 projects.
+
+Basically, the separate results panel is the result of some pretty big architectural tradeoffs that we made back in 2004 with our first release. We originally wanted a test framework that would support applications that run in the browser, on the desktop and on mobile devices.
+
+At the time, the newest player that ran on devices was Flash Player 6. So we got stuck in supporting the least common denominator. This meant no Try..Catch statements. We were also concerned about placing the result UI directly onto the stage because the results panel could be inadvertently clobbered by some random attachMovie call when trying to test visual entities. We had another problem in that we were using V2 Components in the results panel, and they do some pretty gross mixins to the core prototype chain. Injecting V2 Component code into the test environment for an application that doesnâ€™t ship with the same code meant that we would be testing in an environment that was significantly different from what we were planning on shipping. The best (simplest?) thing we could come up with was a completely separate SWF file for presenting test results, and sending those results over LocalConnection.
+
+These decisions led us down a long and slippery slope that ultimately meant we couldnâ€™t directly port the JUnit implementation to ActionScript, and basically AsUnit has been running with some pretty big development, performance and reliability issues that have remained unresolved - until nowâ€¦
+
+Iâ€™d like to announce the as25 branch of AsUnit.
+
+From today forward, if you download the AsUnit XUL UI or the AsUnit Framework, you will find a framework directory that has three branches in it.
+<pre>
+as2/
+as3/
+as25/
+</pre>
+
+The as2/ folder has all of the original code that has been shipping for quite some time now. This build supports deployments that target Flash Players 6, 7 or 8 and are implemented using ActionScript 2.0. This branch requires (and includes) the AsUnitUi.swf in order to display results.
+
+The as3/ folder is the beta release that supports ActionScript 3.0 and will be continuously updated while FlexBuilder drives toward a release.
+
+The as25/ folder supports what weâ€™re calling ActionScript 2.5, or projects that target Flash Players 7 or 8. This is a direct migration of the ActionScript 3.0 branch down to ActionScript 2.0. This build is very exciting and is the core of what Iâ€™m talking about tonight...
+
+Like the AS 3.0 branch, new build has some major differences from the original AS 2.0 release, some are as follows:
+
+* It has been implemented as a direct migration of the ActionScript 3.0 branch which was migrated directly from the JUnit java sources.
+* In the as2 branch, each "assert" method call is counted, in the as25 (and as3) branch, each "test" method is counted. This means that your total "test cases" count, may seem much lower â€“ but itâ€™s still executing them all.
+* The framework has been moved from com/asunit/framework to asunit/framework. This means a simple find..replace will be required to migrate any existing projects.
+* From the perspective of concrete test cases, all features *should* remain identical â€“ except the package name â€“ so migrating existing projects *should* be a snap _(please let us know if you find this to not be the case â€“ as we would like to address any issues quickly)_
+* No more waiting for LocalConnection transmission
+* No more wondering if the LocalConnection worked
+* Test results are displayed directly in the SWF thatâ€™s being compiled
+* Built-in support for trace output for MTASC users. Just add the following compile directive to your MTASC command, "-trace asunit.runner.BaseTestRunner.trace".
+* You can now execute a single test case very easily
+* You can now execute a single test method very easily, and prevent teardown from executing so that visual entities will be shown on screen â€“ above the results.
+* You can very easily add new test runners that send results to any number of places â€“ like the file system or socket servers.
+* Extensive test suites execute in fractions of a second rather than fractions of a minute.
+
+
+Letâ€™s take a look at what it takes to get started with the new frameworkâ€¦
+
+Here are the steps involved _(sorry these aren't numbered, I can't get "http://textism.com/tools/textile/index.php":textile to play nice)_:
+
+* Download and install the XUL UI from "http://www.asunit.org":http://www.asunit.org
+* Find the place where it was installed and add the framework/as25 folder to your project class path.
+* Create a new project in XUL UI using the provided project wizard.
+* Using the XUL UI, create a new class named, "example.Person". Make sure the "Create Test Case" and "Generate Test Suites" checkboxes are checked.
+** As of 3/10/2006 there is a bug in the XUL UI, that means you need to actually click "public" in the Constructor modifier section or else your class will be written with an "undefinedâ€™ constructor modifier.
+* Using a text editor, create a class that looks like the following:
+
+{% highlight actionscript %}
+import asunit.textui.TestRunner;
+
+class PersonRunner extends TestRunner {
+    public function PersonRunner() {
+        start(AllTests);
+        }
+
+        public function static main():Void {
+                var runner:TestRunner = new PersonRunner();
+        }
+}
+{% endhighlight %}
+
+* You should be able to compile and run this project and see a single failing test.
+* Now return to the XUL UI, and check the "Make Class Serializable" and "Add __Packages prefix" checkboxes and click "Create". Choose "yes" when prompted to overwrite existing files.
+** You should see some pretty nice changes to your test case and class under test. Basically, the test case will now take advantage of a relatively new feature of TestCase where we can call an attachMovie helper method. This method will accept all of the same parameters the regular attachMovie calls expect, but it will also work with *just* a linkageId and an optional "init object" argument. This helps us test visual entities without needing to worry about cleaning up the _root timeline instance names or depths.
+* If you return to the Person class, you can modify it to look something like the following:
+
+{% highlight actionscript %}
+class example.Person extends MovieClip {
+	public static var linkageId:String = "__Packages.example.Person";
+	public static var classRef:Function = Person;
+
+	private var bgColor:Number = 0xFFCC00;
+	private var width:Number = 300;
+	private var height:Number = 200;
+
+	public function Person() {
+	}
+
+	private function onLoad():Void {
+		draw();
+	}
+
+	public function draw():Void {
+		clear();
+		beginFill(bgColor);
+		lineTo(width, 0);
+		lineTo(width, height);
+		lineTo(0, height);
+		lineTo(0, 0);
+		endFill();
+	}
+
+	public static var serializable:Boolean = Object.registerClass(linkageId, classRef);
+}
+{% endhighlight %}
+
+* Now you can modify the runner to look like the following:
+
+{% highlight actionscript %}
+import asunit.textui.TestRunner;
+import example.PersonTest;
+
+class PersonRunner extends TestRunner {
+
+	public function PersonRunner() {
+		start(PersonTest, "test");
+	}
+
+	public static function main():Void {
+		var runner:TestRunner = new PersonRunner();
+	}
+}
+{% endhighlight %}
+
+* You should be able to see a big orange rectangle on screen. This is how you can execute a single test method of a single test case and confirm that visual entities are in fact doing what theyâ€™re supposed to do. If you use this feature, be warned:
+** The concrete TestCase (PersonTest.as) *must* have a constructor that accepts a String argument and passes it to super().
+** You can easily change the "<code>start</code>" call back to "<code>start(AllTests);</code>" to execute your entire test harness.
+** If you are testing visual entities, it is really important to use the TestCase.attachMovie helper method so that you donâ€™t clobber any AsUnit interface elements, and so that your test cases donâ€™t clobber each other while running.
+
+
+Gosh... this whole thing started out as an effort to talk about a bug in Try..Catch that I discovered!
+
+Weâ€™ll have to hold that off for another day I guess...
+
+

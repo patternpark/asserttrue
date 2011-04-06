@@ -1,0 +1,111 @@
+---
+layout: post
+title: Firefox and Flash SWF selection and focus problems
+author: Luke Bayes
+---
+
+h1. Firefox and Flash SWF selection and focus problems
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+<p>
+Ali and I have been providing support for the past couple of months on a large application that we built and deployed earlier this year. We had an interesting bug filed today and I set about trying to address it.
+<br /><br />
+The bug is this:
+<br /><br />
+<strong>If I click around in the SWF application, and especially if I select a text input field at some point, I can no longer edit the Firefox Location bar (Address bar).</strong>
+<br /><br />
+In addressing this issue, I immediately suspected our focus/selection management layer, then moved on to our TextInput controls, and eventually wound up scouring the web to see if anyone else reported the same problem. As it turned out, I still haven't found anyone else reporting this issue, but in my searching - I did discover the root cause.
+<br /><br />
+It's the "wmode" parameter of the embed tag. As far as I can tell, this attribute can be set to "opaque", "transparent" or not set at all. Setting it with an empty value, or an unexpected one appears to default to the opaque behavior. NOT declaring it at all behaves very differently as I soon discovered...
+<br /><br />
+I was surprised to find an issue with this setting because we're using the swfObject deployment package and it came highly recommended. As it turned out, there doesn't seem to be much the swfObject folks could have done, and by not declaring this property at all, they in fact chose the least of 3 evils...
+<br /><br />
+After finding out about this attribute, I immediately set it to "opaque" in my embed tag and found that my bug disappeared. I was so excited I started integrating and was just about to check in to version control, when it occurred to me that this setting might actually have side-effects beyond the background opacity... As a last minute double-check, I began searching google for the meaning of this parameter and quickly learned that this seemingly innocuous little attribute was sitting on top of a giant mountain of subtle bugs...
+<br /><br />
+Following are the side-effects that I discovered:
+<br />
+<br />
+<i>*NOTE: All of these behaviors are Firefox-related, and I'm only editing the embed tag, so IE users probably won't get much benefit from this page.</i>
+</p>
+<br /><br />
+<hr />
+<p>
+	<strong>Flash Movies:</strong><br />
+	<p>
+		<strong>wmode null (no attribute declared):</strong> clicking around in this movie will disallow direct selection/editing in the location bar.
+		<br />
+		In fact, the location bar will allow you to select it, but input focus will not leave the swf if the next-selected item is the location bar. Oddly, you *can* select the Firefox search input, and *then* the location bar!
+		<br />
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="420" height="120" id="BrowserFocus" align="middle">
+		<param name="allowScriptAccess" value="sameDomain" />
+		<param name="movie" value="/BrowserFocus.swf" /><param name="quality" value="high" /><param name="bgcolor" value="#ffffff" /><embed src="/BrowserFocus.swf" quality="high" bgcolor="#ffffff" width="420" height="120" name="BrowserFocus" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		</object>
+	</p>
+	<p>
+		<strong>wmode="opaque":</strong> Clicking in this movie will appropriately allow you to select and edit the location bar.
+		<br />
+		Unfortunately, setting this property has the following problems:
+		<ul>
+			<li>I-Beam does not show up in editable text fields</li>
+			<li>ScrollWheel doesn't seem to work at all. (Others reported that: OnMouseWheel events return ScrollTarget ~50-60 pixels away from the mouse, but I can't get the swf to even capture scroll wheel events...)</li>
+		</ul>
+
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="420" height="120" id="BrowserFocus" align="middle">
+		<param name="allowScriptAccess" value="sameDomain" />
+		<param name="movie" value="/BrowserFocus.swf" /><param name="quality" value="high" /><param name="wmode" value="opaque" /><param name="bgcolor" value="#ffffff" /><embed src="/BrowserFocus.swf" quality="high" wmode="opaque" bgcolor="#ffffff" width="420" height="120" name="BrowserFocus" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		</object>
+	</p>
+
+	<p>
+		<strong>wmode="transparent":</strong> This setting *does* allow us to select the location bar, but after quite a bit of searching, it seems that setting wmode to transparent creates a whole host of problems in firefox, Following are some of what others found:
+		<br />
+		<ul>
+			<li>Key.isDown() returns false every time</li>
+			<li>I-Beam does not show up in editable text fields</li>
+			<li>ScrollWheel doesn't seem to work at all. (Others reported that: OnMouseWheel events return ScrollTarget ~50-60 pixels away from the mouse, but I can't get the swf to even capture scroll wheel events...)</li>
+			<li>Non-US keyboard layouts revert to US key codes</li>
+			<li>Reported degradation in performance</li>
+		</ul>
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="420" height="120" id="BrowserFocus" align="middle">
+		<param name="allowScriptAccess" value="sameDomain" />
+		<param name="movie" value="/BrowserFocus.swf" /><param name="quality" value="high" /><param name="wmode" value="transparent" /><param name="bgcolor" value="#ffffff" /><embed src="/BrowserFocus.swf" quality="high" wmode="transparent" bgcolor="#ffffff" width="420" height="120" name="BrowserFocus" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+		</object>
+</p>
+<p />
+<hr />
+<p>
+In closing, I sure hope someone is able to address these issues.
+<br/>
+I'm planning on doing some more research over the weekend and hopefully reporting the bug to Firefox and/or Adobe. I suspect that some of these issues fall into each camp...
+<br />
+It just makes me sad to lose a day of productivity chasing such strange integration bugs that seemingly should have been found before one or another of these products were released...
+</p>
+
+<p />
+<hr />
+<p>
+<strong>Resources:</strong>
+<br />
+Following are some links to what other folks had to say on some of these issues:
+
+<ul>
+	<li><a href="/BrowserFocusSource.zip">Source Files</a></li>
+	<li><a href="http://www.headlondon.com/blog/index.php/archives/no-wmode-please-were-british/" target="_blank">Keyboard Mapping Issues</a></li>
+	<li><a href="http://www.johanvanmol.org/content/view/47/41/" target="_blank">Key Handler Failures</a></li>
+	<li><a href="http://arulprasad.blogspot.com/2006/04/wmode-transparent-in-ff-plugin-its.html" target="_blank">Key.isDown()</a></li>
+	<li><a href="http://arulprasad.blogspot.com/2006/02/mousewheel-has-issues-when-used-with.html" target="_blank">MouseWheel problems</a></li>
+	<li><a href="http://forums.mozillazine.org/viewtopic.php?p=2589598&sid=4f8fac054ca54cb8477198a3e7df6d73" target="_blank">Performance Differences?</a></li>
+	<li><a href="http://snook.ca/archives/other/hit_bug_in_fire/" target="_blank">Hit Location</a></li>
+</ul>
+</p>
+<p>
+<strong>[Update 11/20/2006]</strong>
+</p>
+<p>
+I just verified that this issue can be reproduced in the <a href="http://www.adobe.com/cfusion/exchange/#view=sn105&viewName=Exchange%20Search&loc=en_us">Adobe Exchange</a> using Firefox 2.0, but *not* using Firefox 1.5.0.8. The problem does reproduce here using both versions of Firefox. I'm intensely curious about how Adobe is embedding that swf, but can't easily get at the page source thanks to iframes and linked js files...
+
+Is anyone else seeing the same problem?
+
+</p>
+

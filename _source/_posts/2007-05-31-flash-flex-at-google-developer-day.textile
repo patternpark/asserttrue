@@ -1,0 +1,21 @@
+---
+layout: post
+title: Flash/Flex at Google Developer Day
+author: Ali Mills
+---
+
+h1. Flash/Flex at Google Developer Day
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Luke and I took the day off from our new "job":http://www.bunchball.com/ today to head down to Mountain View and attend "Google's Developer Day":http://code.google.com/events/developerday/mv-home.html.    Google's big announcements today have to do with "Mapplets":http://maps.google.com/maps/mm?mapprev=1,  "Geoweb searching":http://maps.google.com/maps?f=q&hl=en&q=google+developer+day&sll=37.0625,-95.677068&sspn=64.497063,111.269531&ie=UTF8&mrt=kmlkmz&om=1&ll=37.335907,-121.887517&spn=0.01614,0.027165&z=15&iwloc=E and "Gears":http://code.google.com/apis/gears/.
+
+Today, we learned that SWFs relate to these announcements in the following ways:
+* "Mapplets":http://maps.google.com/maps/mm?mapprev=1 were shown with a "YouTube":http://www.youtube.com/ video in an info window which had me believing that SWFs were always supported in maps now, but later in the day at the "KML Search and Developing Maps Mashups Using KML/GeoRSS":http://code.google.com/events/developerday/mv-sessions.html#kml_georss  session we learned that all Flash content isn't necessarily supported - maybe just SWFs from certain domains (YouTube and Google video only?).  The presenters weren't sure.
+
+* "Kevin Lynch":http://www.klynch.com/ was asked on stage near the end of the keynote to talk about "Adobe's":http://www.adobe.com involvement in "Google Gears":http://code.google.com/apis/gears/.  They're involved!  Apparently Google's working on it with "Adobe":http://www.adobe.com, "Opera":http://www.opera.com/, and "Mozilla":http://www.mozilla.org/.  Kevin presented an "Apollo":http://labs.adobe.com/technologies/apollo/ app working online, syncing with "Google Gears":http://code.google.com/apis/gears/, and then working offline from the data pulled from "gears":http://code.google.com/apis/gears/.    He did a great job.  You can "watch the keynote here":http://www.youtube.com/watch?v=1tnXwNp3EMo and read more about SWFs and "gears":http://code.google.com/apis/gears/ on "Ryan Stewart's blog":http://blog.digitalbackcountry.com/?p=840.  What's up with the new wave of browser plugins - first Microsoft with Silverlite and now Google with Gears?  Anyway, I was really impressed to see "Apollo's embedded SQLite database":http://www.mikechambers.com/blog/2007/05/30/apollo-beta-will-include-sqlite-embedded-database/   demonstrated!
+
+* At the "Advanced Topics with the Google Data APIs":http://code.google.com/events/developerday/mv-sessions.html#gdata_advanced session we learned that "Google":http://www.google.com intends to add a "crossdomain.xml":http://www.adobe.com/cfusion/knowledgebase/index.cfm?id=tn_14213 file at some point in the future so that ActionScript developers can hit the "GData APIs":http://code.google.com/apis/gdata/index.html from the browser Flash Player.  Since "I asked for a crossdomain.xml file last November":http://groups.google.com/group/google-help-dataapi/browse_thread/thread/e1fe326519c01bf2/019d2d202833e60c?lnk=gst&q=alimills&rnum=1#019d2d202833e60c, I'm not holding my breath that it'll happen anytime soon.  It is, however, exciting for us to hear that it might someday happen since Luke and I spent four months developing a desktop Google Calendar complete with AS3 HTTP and  AS3 GData layers.  Now, it looks like our calendar is going to be an "Apollo":http://labs.adobe.com/technologies/apollo/ application, and the HTTP and GData layers we wrote will be open-sourced.  We spoke with some Google employees about making this happen and will keep our blog readers up-to-date with the progress.  Personally, I want Google to host a crossdomain.xml file before I put more work into our GData implementation.
+
+* Finally, I showed my "Flash Lite Google Calendar":http://www.asserttrue.com/articles/2006/11/07/flash-lite-1-1-google-calendar to a couple people down here and there's still interest.  I've decided to port it to Flash Lite 2+, release the code, and start an open-source project around it.  Stay tuned!
+

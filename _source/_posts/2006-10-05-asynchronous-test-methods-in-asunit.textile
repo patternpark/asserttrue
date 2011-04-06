@@ -1,0 +1,61 @@
+---
+layout: post
+title: Asynchronous Test Methods in AsUnit!
+author: Luke Bayes
+---
+
+h1. Asynchronous Test Methods in AsUnit!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Thanks to some gentle prodding from the <a href="http://www.eyefodder.com/blog/2006/07/flexunit_asunit_deathmatch_res.shtml">Eyefodder "Deathmatch"</a> and more than a small handful of requests, We finally got asynchronous test methods working in AsUnit!
+
+We have also introduced much more robust support for Flex 2 applications.
+
+The latest build of AsUnit 3.x (in Subversion only) has these features but we need your help to test them out.
+
+Please pull down the latest sources from sourceforge svn by opening a terminal and performing the following steps:
+(you must have subversion client installed and available in your path)
+<a name="svnDirections"></a>
+<typo:code class="code-example">
+mkdir asunit
+svn co https://svn.sourceforge.net/svnroot/asunit/trunk/framework/as3 .
+{% endhighlight %}
+(the trailing period will put the files into the current directory without creating another subdirectory).
+
+<p />
+<p />Here is an example of an asynchronous test method:
+{% highlight actionscript %}
+public function testAsyncFeature():void {
+    // create a new object that dispatches events...
+    var dispatcher:IEventDispatcher = new EventDispatcher();
+    // get a TestCase async event handler reference
+    // the 2nd arg is an optional timeout in ms. (default=1000ms )
+    var handler:Function = addAsync(changeHandler, 2000);
+    // subscribe to your event dispatcher using the returned handler
+    dispatcher.addEventListener(Event.CHANGE, handler);
+    // cause the event to be dispatched.
+    // either immediately:
+    //dispatcher.dispatchEvent(new Event(Event.CHANGE));
+    // or in the future < your assigned timeout
+    setTimeout( dispatcher.dispatchEvent, 200, new Event(Event.CHANGE));
+}
+
+protected function changeHandler(event:Event):void {
+    // perform assertions in your handler
+    assertEquals(Event.CHANGE, event.type);
+}
+{% endhighlight %}
+
+That should be enough to get you going with Asynchronous test methods!
+
+
+Please let us know on this list if you have any problems.
+
+
+Thanks,
+
+
+Luke Bayes
+<p /><a href="http://www.asunit.org">www.asunit.org</a>
+

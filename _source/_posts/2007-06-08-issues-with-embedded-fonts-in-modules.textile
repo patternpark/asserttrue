@@ -1,0 +1,128 @@
+---
+layout: post
+title: Issues with Embedded Fonts in Flex Modules
+author: Ali Mills
+---
+
+h1. Issues with Embedded Fonts in Flex Modules
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+We're working on a "modular application in Flex":http://livedocs.adobe.com/flex/201/html/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Book_Parts&file=modular_083_1.html and until recently were having issues with embedded fonts in modules.  The main issue was that we wanted "fonts embedded in the main CSS":http://livedocs.adobe.com/flex/201/html/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Book_Parts&file=fonts_070_04.html to be available in the loaded modules, and we were having a heck of a time getting this to work.
+
+Some research led me to "Alex Harui's":http://blogs.adobe.com/aharui/ post about "how to use embedded fonts in modules and late-load the embedded font":http://blogs.adobe.com/aharui/2007/03/embedded_fonts_in_modules.html.  "Alex's example":http://blogs.adobe.com/aharui/360Flex/EmbeddedFontsInModule/EmbeddedFontInModuleCSS.zip demonstrates "Flex 2.0.1's":http://www.onflex.org/ted/2007/01/1-one-solid-flex-release-201.php new "runtime CSS":http://www.onflex.org/ted/2007/01/flex-201-understand-runtime-css.php approach and uses the "StyleManager":http://livedocs.adobe.com/flex/2/langref/mx/styles/StyleManager.html class. 
+
+We're not, however, interested in loading the CSS at runtime (although we reserve the right to change our mind, because it's a really handy thing to be able to do), so I modified "Alex's example":http://blogs.adobe.com/aharui/360Flex/EmbeddedFontsInModule/EmbeddedFontInModuleCSS.zip to more closely represent our application structure with hopes of finding my mistake.  After the modification, it became clear that I wasn't making a mistake, but that I had run into a bug.  Can you spot it?  Here's the code...
+
+*MyAppStyle.css*
+{% highlight actionscript %}
+@font-face {
+        src:url("assets/Vera.ttf");
+        font-family: myFont;
+}
+
+@font-face {
+        src:url("assets/Verabd.ttf");
+        font-family: myFont;
+        font-weight: bold;
+}
+
+.myFont {
+	font-family: myFont;
+}
+{% endhighlight %}  
+
+*MyApp.mxml*
+{% highlight actionscript %}
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*">
+	<mx:Style source="MyAppStyle.css" />
+
+	<mx:TabNavigator id="tn" width="100%" height="100%" >
+		<mx:VBox label="Panel 1" >
+		</mx:VBox>
+		<mx:ModuleLoader url="MyDataGridView.swf" label="Panel 2" />
+		<mx:ModuleLoader url="MyDataGridView2.swf" label="Panel 3" />
+	</mx:TabNavigator>	
+</mx:Application>
+{% endhighlight %}  
+
+*MyDataGridView.mxml*
+{% highlight actionscript %}
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Text 
+		fontFamily="myFont"
+		text="PANEL TWO"
+		rotation="5" />
+
+</mx:Module>
+{% endhighlight %}  
+
+*MyDataGridView2.mxml*
+{% highlight actionscript %}
+<mx:Module xmlns:mx="http://www.adobe.com/2006/mxml">
+
+	<mx:Text 
+		styleName="myFont"
+		text="PANEL THREE" 
+		rotation="10" />
+
+</mx:Module>
+{% endhighlight %}
+
+The code looks like it should work, doesn't it?  The "Text":http://livedocs.adobe.com/flex/2/langref/mx/controls/Text.html components in tabs 2 and 3 should rotate and contain embedded text.  Well, they don't.  The code doesn't work.  Here's the resulting SWF, which was compiled using the "link-report":http://livedocs.adobe.com/flex/201/html/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Book_Parts&file=compilers_123_24.html and "load-externs":http://livedocs.adobe.com/flex/201/html/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Book_Parts&file=compilers_123_24.html compiler options, as proof:  
+
+<center>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="MyApp_bug" width="400" height="300" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab">
+<param name="movie" value="/files/MyApp_bug.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#CCCCCC" />
+<param name="allowScriptAccess" value="sameDomain" />
+<embed src="/files/MyApp_bug.swf" quality="high" bgcolor="#CCCCCC" width="400" height="300" name="MyApp_bug" align="middle" play="true" loop="false" quality="high" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed>
+</object>
+</center>
+
+</center>
+
+Hm...
+
+Well, it appears that there's a MXMLC or Flex framework bug that prevents embedded fonts from showing up in modules built using "load-externs":http://livedocs.adobe.com/flex/201/html/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Book_Parts&file=compilers_123_24.html  unless the class definition of the component presenting the font is included in the main application.  To address the bug, we modified *MyApp.mxml* to include the class definition for "Text":http://livedocs.adobe.com/flex/2/langref/mx/controls/Text.html, and it worked!  Here're the file changes and the working SWF which, again, was compiled using the "link-report":http://livedocs.adobe.com/flex/201/html/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Book_Parts&file=compilers_123_24.html and "load-externs":http://livedocs.adobe.com/flex/201/html/wwhelp/wwhimpl/common/html/wwhelp.htm?context=LiveDocs_Book_Parts&file=compilers_123_24.html options:
+
+*MyApp.mxml*
+{% highlight actionscript %}
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:local="*">
+	<mx:Script>
+	<![CDATA[
+		import mx.controls.Text;
+		private var textRef:Text;
+	]]>
+	</mx:Script>
+	<mx:Style source="MyAppStyle.css" />
+
+	<mx:TabNavigator id="tn" width="100%" height="100%" >
+		<mx:VBox label="Panel 1" >
+		</mx:VBox>
+		<mx:ModuleLoader url="MyDataGridView.swf" label="Panel 2" />
+		<mx:ModuleLoader url="MyDataGridView2.swf" label="Panel 3" />
+	</mx:TabNavigator>	
+</mx:Application>
+{% endhighlight %}  
+
+<center>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="MyApp" width="400" height="300" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab">
+<param name="movie" value="/files/MyApp.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#CCCCCC" />
+<param name="allowScriptAccess" value="sameDomain" />
+<embed src="/files/MyApp.swf" quality="high" bgcolor="#CCCCCC" width="400" height="300" name="MyApp" align="middle" play="true" loop="false" quality="high" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed>
+</object>
+</center>
+<br />
+<center>
+"Download Alex's modified files here.":/files/EmbeddedFontsInModulesIssues.zip
+</center>
+

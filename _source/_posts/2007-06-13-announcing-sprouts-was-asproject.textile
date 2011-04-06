@@ -1,0 +1,51 @@
+---
+layout: post
+title: Announcing Sprouts! was AsProject
+author: Luke Bayes
+---
+
+h1. Announcing Sprouts! (was AsProject)
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I just wanted to get out a quick announcement before too much more time went by....
+
+I introduced "AsProject":http://www.asserttrue.com/articles/2007/04/04/introducing-asproject  in April and have since been redesigning it under a new, much more manageable project called "Sprouts":http://code.google.com/p/projectsprouts. Just yesterday it reached a point where it's at least testable on both OS X and Windows (with Cygwin).
+
+I'm looking for some help getting it production ready (check out the "issues list":http://code.google.com/p/projectsprouts/issues/list) and feature feedback from the community before I go much further.
+
+Please check it out and "let me know":http://groups.google.com/group/projectsprouts what you think, what it needs, and what doesn't work the way you expect.
+<hr />
+For Flex 2 MXML projects, just do the following:
+{% highlight actionscript %}
+sudo gem install sprout
+sprout -s mxml SomeProject
+cd SomeProject/project
+rake
+
+script/generate class utils.MathUtil
+rake test
+{% endhighlight %}
+_(Don't use <code>sudo</code> if you're on Windows)_
+<br /><br />
+The mxml installation will actually download the entire "Flex 2 SDK":http://www.adobe.com/products/flex/sdk/ (40MB), along with the "Flex Compiler SHell":http://labs.adobe.com/wiki/index.php/Flex_Compiler_Shell (FCSH) so you may not want to run it if you're not on a good connection.
+
+<hr />
+For ActionScript 2 projects:
+
+{% highlight actionscript %}
+sudo gem install sprout
+sprout -s as2 OtherProject
+cd OtherProject/project
+rake
+
+script/generate class utils.MathUtil
+rake test
+{% endhighlight %}
+
+Finally, you can run the same script with the sprout -s as3 for a vanilla ActionScript 3 project too!
+
+We're hoping to get some "Haxe":http://www.haxe.org templates in at some point, if you're interested in building them, they're quite easy and I'll be glad to help get you started!
+
+
+

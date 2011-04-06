@@ -1,0 +1,26 @@
+---
+layout: post
+title: BDD Behaviour-Driven Development in AS2
+author: Ali Mills
+---
+
+h1. BDD: Behavio(u)r-Driven Development in AS2
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+"Eloy Duran":http://www.superalloy.nl/blog/?page_id=2 posted an "interesting idea on his blog today":http://www.superalloy.nl/blog/?p=16 about "behaviour-driven development (BDD)":http://72.14.253.104/search?q=cache:8o0JYCvbqNQJ:behaviour-driven.org/+http://behaviour-driven.org/&hl=en&ct=clnk&cd=1&gl=us in ActionScript 2.  According to "http://behaviour-driven.org/":http://72.14.253.104/search?q=cache:8o0JYCvbqNQJ:behaviour-driven.org/+http://behaviour-driven.org/&hl=en&ct=clnk&cd=1&gl=us:
+
+<i>
+Behaviour-Driven Development (BDD) is an evolution in the thinking behind TestDrivenDevelopment and AcceptanceTestDrivenPlanning.
+
+It pulls together strands from TestDrivenDevelopment and DomainDrivenDesign into an integrated whole, making the relationship between these two powerful approaches to software development more evident.
+
+...
+
+For people familiar with the concept of DomainDrivenDesign, you could consider BDD to be a UbiquitousLanguage for software development.
+</i>
+
+Interesting...
+
+"Eloy's":http://www.superalloy.nl/blog/?page_id=2 idea, "ASpec":http://www.superalloy.nl/blog/?p=16, is based on "Ruby's":http://www.ruby-lang.org/en/ BDD framework "RSpec":http://rspec.rubyforge.org/.  If you're a student of test-driven development (TDD) or an "AsUnit":http://www.asunit.org user, you might want to check it out. 
+

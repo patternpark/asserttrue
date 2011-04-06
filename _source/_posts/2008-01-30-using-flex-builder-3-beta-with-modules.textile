@@ -1,0 +1,30 @@
+---
+layout: post
+title: Using Flex Builder 3 Beta with Modules?
+author: Luke Bayes
+---
+
+h1. Using Flex Builder 3 Beta with Modules?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Ali and I have been struggling with a problem in the latest beta of Flex Builder 3.
+
+We're planning on filing a bug in the public bug base, but I just wanted to get this post out quickly in case anyone else is having the issue. Apparently there is a bug in Eclipse Europa (3.3) that crashes Eclipse when certain dialogs are opened or closed. 
+
+This issue surfaces in the Flex Builder 3 plugin and standalone versions at least on OS X whenever we try to use the "Open Type" dialog from a project that uses Flex Modules and Eclipse Environment variables for folder targets.
+
+
+
+Without getting too deep into it, we just got everything working by doing the following:
+
+ * Destroy all Eclipse project files and folders (.project, .actionScriptProperties, .flexProperties, .settings)
+ * Install Eclipse 3.2
+ * Install Flex Builder 3 Plugin into Eclipse 3.2
+ * Set up the project again from scratch
+
+
+That seemed to get things working for the time being. 
+
+Hope it helps!
+

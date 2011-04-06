@@ -1,0 +1,85 @@
+---
+layout: post
+title: Flash Player 9 Installation errors on OSX intel
+author: Luke Bayes
+---
+
+h1. Flash Player 9 Installation errors on OSX intel
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Those of you who know me might be surprised to hear that I purchased a Mac mini earlier this summer.
+
+There were quite a few reasons for me to get a mac. Ali and I needed a modern mac for testing, I'm curious about OSX/Intel performance, I needed a home media center and didn't want a giant, noisy box in the living room, I'm attracted to linux, and wanted a more friendly introduction than red hat, all the cool kids are doing it, I'm a sucker for pretty, shiny things... 
+
+If you ask Nancy, I'm sure she'll tell you that my daily mac-bashing railing and ranting can be entertaining (at first)... I'm not going to get too far into that stuff here (for fear of being firebombed). 
+
+Overall, I think OSX is successful and even though my mini is brutally slow, I am convinced that it's because I scrimped on RAM and it will be considerably faster once I outlay a few hundred bones to rectify the situation.
+
+What I want to talk about here, is the truly awesome and simple work flow for installing the Flash 9 player on Macintel... 
+I have been working on a <a href="http://www.martinfowler.com/articles/rake.html">rake</a> script in order to automate our project build process and I figured since <a href="http://www.ruby-lang.org">Ruby</a> is a cross platform language and ActionScript / Flash Player is a cross platform language, my build scripts should be pretty easy to run on my mac.
+
+This was pretty much not the case.
+
+It took quite a bit of hacking just to get my poorly-written ruby/rake code running, but once I got that far, I discovered that I don't have the mac-intel flash player. No problem I thought, I'll just cruise over to <a href="http://www.adobe.com">adobe</a> and grab it...
+
+I found the <a href="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash&P2_Platform=MacOSX">flash player</a> and downloaded it.
+
+I then did what seemed like the next logical step and double-clicked the thing that I downloaded.
+
+Apparently the whole thing was delivered in a zip file, so stuffit unzipped it.
+
+I then double-clicked the thing (dmg file) that came out of the zip file, and it created a new mounted drive with another clickable-thing in that...
+
+I'm starting to get used to this process with the mac, but I'm having a difficult time describing it with words like, "simple", "intuitive", or even "successful".
+
+Now, I double-click on the non-extension file that's in the finder inside of this newly-mounted "dmg-thing".
+
+It starts running what appears to be a standard mac installation package and things appear to be going pretty smoothly. It makes me quit my browser, but overall, it seems to be running fine.
+
+UNTIL...
+
+At the very end of the process, I get the following message:
+
+<pre>
+Error Creating File.
+1008:5,-500 Access denied error
+</pre>
+
+This seemed pretty straight forward at first. I just need to figure out how to become root and then click the file.
+
+Now - I'm pretty familiar with linux. I know about sudo, I know about su, I've been setting up and managing linux boxes on and off for at least 7 years. I'm definitely not a guru, but I'm proficient.
+
+I know *nothing* about modern macs. I used to be a full-time mac zealot (back in '97), but then I realized that I needed a computer that would actually stay on for more than 10 minutes, and switched to windows (Which could - amazingly - keep running for 20 minutes at a stretch). 
+
+I understand that those old versions of the Mac os are nothing like the new ones, and as a result, I'm giving it another try. So far, most of the problems I have had are clearly a result of my lack of knowledge rather than some major flaw, so I'm trying to learn patience. The point is, I truly don't know what I'm doing with this computer.
+
+So, here I am, faced with what is clearly a permissions problem. I do some searching on google and find mostly things that tell me to sudo. I even find one article that tells me about how to activate the root user, and then how to add my user account to the "wheel" group. These seemed like pretty straightforward, simple tasks that someone like Nancy would be perfectly comfortable doing [sarcasm]...
+
+The first thing I try is just get into a terminal and cd to this mount. I got lucky and figured /Volumes was the place to go - holy moly - it was in fact the right place. But once I get into the mounted image, the thing I double-click in the Finder is a directory!
+
+I tried executing it with <code>sudo ./Adobe Flash Player 9</code>, but alas, no love.
+
+I spent a small bit of time digging around in the directory, but didn't see anything that appeared to be executable, so I went back to trying to figure out how to make my GUI-user-account act like root. This was a bad idea. 
+
+I'm not sure how much time I spent doing stupid things to this poor computer, But I think I've run that installer a few hundred times at this point and my security settings are probably a mess.
+
+Mainly I just wanted to share with everyone what actually worked, since I couldn't find the process described anywhere, here it is:
+
+# Download the <a href="http://www.adobe.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash&P2_Platform=MacOSX">Player installer</a> to your computer
+# Double Click the downloaded file to extract the DMG file
+# Double Click the DMG file to mount the disk image
+# Open up a terminal window and execute the following commands:
+
+<pre>
+<code class="typocode_default code-example">
+cd /Volumes/Adobe Flash Player 9/Install Flash Player 9 UB/Contents/MacOS
+
+sudo ./Install Flash Player 9 UB
+</code> 
+</pre>
+Enter your administrative password when prompted and everything will go smoothly.
+
+It's amazing to me how easy that was. I'm guessing everyone that owns a mac probably knows all about navigating into a DMG using the terminal, but I've never done it until today, so hopefully some other poor windows slob like me will benefit from this!
+
+

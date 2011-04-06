@@ -1,0 +1,26 @@
+---
+layout: post
+title: Twosday, May 9, 2006 - Keynotes
+author: Ali Mills
+---
+
+h1. Twosday, May 9, 2006 :: Keynotes
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+A fair amount of things have been happening in twos lately that seem interesting enough to share.  On this first of several Twosdays (Twosdays happen on Tuesday; isn't that clever?) posts to come, I'm posting two photos taken from the keynotes of two conferences over the past year - <a href="http://www.adobe.com/macromedia/events/max/">MAX</a> and <a href="http://www.flashforwardconference.com/">Flashforward</a> - where Luke and I ended up on the big screen.
+
+Here we are on big screen at the <a href="http://www.adobe.com/macromedia/events/max/">MAX</a> keynote:
+
+<center><img width="300" height="200" src="/files/maxKeynote.jpg" /></center>
+
+This shot of us was taken at <a href="www.macromedia.com">Macromedia</a>'s Ultimate Party at the <a href="http://www.thefillmore.com/">Fillmore</a> in San Francisco.  The party was <a href="www.macromedia.com">Macromedia</a>'s last official company party.
+
+And, here's the picture of us that the <a href="http://www.yahoo.com/">Yahoo!</a> gang used while demonstrating the <a href="http://developer.yahoo.com/flickr/index.html">fickr</a> web service during the <a href="http://www.flashforwardconference.com/">Flashforward</a> keynote:
+
+<center><img width="300" height="200" src="/files/flashForwardKeynote.jpg" /></center>
+
+With <a href="http://www.yahoo.com/">Yahoo!</a>'s recent investments in their <a href="http://developer.yahoo.com/">developer network</a>, <a>Flash</a> (check their <a href="http://maps.yahoo.com/beta/">maps</a>), and all things <a href="http://radar.oreilly.com/tag/web_20">Web 2.0</a> it'll be exciting to see how they grow.  <a href="http://justin.everett-church.com/">Justin</a>'s blog is a good one to watch if you're interested in keeping tabs.
+
+It seems that we're not the only ones hip to the days of the week.  So are the <a href="http://pragmaticprogrammer.com/index.html">Pragmatic Programmers</a>, but they seem to prefer Fridays.  Check out their <a href="http://pragmaticprogrammer.com/fridays.html">Pragmatic Fridays</a>.  The PDF idea is interesting, and <a href="http://pragmaticprogrammer.com/titles/ctrubyqt/index.html">Rapid GUI Development with QtRuby</a> could be a good title.
+

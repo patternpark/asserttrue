@@ -1,0 +1,67 @@
+---
+layout: post
+title: AS3 Bug When Nesting 'if' Within 'switch'
+author: Ali Mills
+---
+
+h1. AS3 Bug When Nesting 'if' Within 'switch'
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+"Luke":http://www.lukebayes.com and I ran into an ActionScript 3.0 bug today when nesting an _if_ statement within a _switch_.  It looks like the compiler has problems referencing object properties when this happens.  The following code demonstrates what we found:
+
+{% highlight actionscript %}
+package {
+	import flash.display.Sprite;
+
+	public class SwitchBug extends Sprite {
+		public function SwitchBug() {
+			var num:Number = 1;
+			var firstNumber:Number = num;
+			var secondNumber:Number = num;
+			tryNumSwitch("go", firstNumber, secondNumber);
+
+			var now:Date = new Date();
+			var firstDate:Date = now;
+			var secondDate:Date = now;
+			tryDateSwitch("go", firstDate, secondDate);			
+
+			// this method causes a crash
+			tryCrashingDateSwitch("go", firstDate, secondDate);
+		}
+		
+		private function tryNumSwitch(val:String, firstNumber:Number, secondNumber:Number):void {
+			switch(val) {
+				case "go":
+					if(firstNumber == secondNumber) {
+						trace(">> tryNumSwitch successful !!");
+					}
+			}
+		}
+
+		private function tryDateSwitch(val:String, firstDate:Date, secondDate:Date):void {
+			switch(val) {
+				case "go":
+					if(firstDate == secondDate) {
+						trace(">> tryDateSwitch successful !!");
+					}
+			}
+		}
+
+		private function tryCrashingDateSwitch(val:String, firstDate:Date, secondDate:Date):void {
+			switch(val) {
+				case "go":
+					// the compiler crashes on DATE.milliseconds call
+					if(firstDate.milliseconds == secondDate.milliseconds) {
+						trace(">> tryCrashingDateSwitch successful !!");
+					}
+					// uncommenting the trace below fixes the situation
+//					trace("Fixed");
+			}
+		}
+	}
+}
+{% endhighlight %}
+
+Oddly, adding a trace (or any line of code) after the _if_ statement fixes the issue.
+

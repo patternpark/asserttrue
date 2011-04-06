@@ -1,0 +1,57 @@
+---
+layout: post
+title: FlexUnit / AsUnit Deathmatch Rematch?
+author: Luke Bayes
+---
+
+h1. FlexUnit / AsUnit Deathmatch Rematch?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+While Ali and I were at the Max conference, we had the pleasure of meeting "Paul from Eyefodder":http://www.eyefodder.com/blog/2006/07/flexunit_asunit_deathmatch_res.shtml.
+ 
+He and his group have been active supporters of AsUnit for a long time and I really enjoyed getting to talk with him.
+
+He definitely did a good job of holding our feet to the fire in terms of getting asynchronous test methods into AsUnit. Thanks to his and other community requests, this feature is now in the AS3 build and is being ported to the AS25 framework. 
+
+I have to confess that I resisted implementing this feature mainly because it seemed time consuming and I couldn't really see the value. As it turned out, as soon as Ali and I started working with the Flex 2 framework, it became glaringly apparent that this feature was critical because of how the framework handles visual updates.
+
+While we were chatting with Paul, he asked me something to the effect of, "Seeing as how FlexUnit has the apparent backing of Adobe, why should I use AsUnit instead?".
+
+I thought this was a damn good question and figure there are probably one or two other people out there wondering the same thing...
+
+My response follows:
+<hr />
+__AsUnit is the only open-source unit test framework that can be run in Flash Players 6, 7, 8, 9 and Flash Lite 2.__
+
+For us, this is huge. Ali and I seem to take on projects with pretty high variance in terms of their deployment requirements. It has been comforting to know that regardless of where our clients want to take their project, we can write tests to support it.
+
+This is really the main reason for us. We think of ourselves as SWF developers and need to be able to create and test SWF files in a variety of target environments.
+
+<hr />
+__A test environment should match as exactly as possible the anticipated deployed environment.__
+
+This is one of the most fundamental principles of testing - be it unit testing or functional testing.
+
+If there are subtle (or in some cases - not so subtle) differences between these two environments, you are much more likely to see passing tests and very hard to find actual failures... More importantly, failures that cannot be reproduced in your test environment and therefore can never be fully tested.
+
+From the beginning, Ali and I have worked hard to avoid injecting external dependencies into the AsUnit framework.
+
+With the first release, we were concerned about the fact that a SWF file compiled with a Flash MX Component had subtly different behaviors than one that didn't (Because Component developers infuriatingly and needlessly added mixins to the _root and _global namespaces). It was this concern combined with some others that led us to create a separate output SWF file where we could safely embed components, and thereby leave the primary test environment unmolested.
+
+This fundamental priority has continued to our latest releases including the ActionScript 3 framework. This is critical for those of you that may someday wish to compile a SWF file __without__ the Flex Framework. We are in fact using the Flex 2 framework in our latest project, but have found it missing some of what we feel are major and low level features (like actually supporting HTTP for example). As we implement these features, we are building them in separate ActionScript only projects. This way, our libraries can continue to be valuable - even in projects that don't take advantage of the Framework.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

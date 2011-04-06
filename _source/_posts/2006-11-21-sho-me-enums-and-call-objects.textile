@@ -1,0 +1,258 @@
+---
+layout: post
+title: Sho Me Enums and Call Objects
+author: Ali Mills
+---
+
+h1. Sho Me Enums and Call Objects
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+"Sho Kuwamoto":http://kuwamoto.org/ wrote two great posts on "his bog":http://kuwamoto.org/ earlier this year.  One is about "simulating enums in AS3":http://kuwamoto.org/2006/04/04/as3-technique-using-object-instances-as-enums/, and the other is about "using closures to deal with asynchronous events":http://kuwamoto.org/2006/05/16/dealing-with-asynchronous-events-part-2/.  I revisited these posts lately because I'm considering implementing "HTTP":http://www.w3.org/Protocols/ and "HTTPS":http://en.wikipedia.org/wiki/Https in AS3.  I'm considering it because not being able to "set HTTP headers for GET requests":http://www.abdulqabiz.com/blog/archives/flash_and_actionscript/http_authentica.php, not having "any access to HTTP response headers":http://blogs.adobe.com/kiwi/2006/07/making_http_calls_in_actionscr.html, and not being "able to add custom HTTP methods":http://blogs.adobe.com/kiwi/2006/07/making_http_calls_in_actionscr.html with either the "HTTPService":http://livedocs.macromedia.com/flex/2/langref/mx/rpc/http/HTTPService.html class or the "URLLoader":http://livedocs.macromedia.com/flex/2/langref/flash/net/URLLoader.html /  "URLRequest":http://livedocs.macromedia.com/flex/2/langref/flash/net/URLRequest.html#requestHeaders combination is driving me bonkers.
+
+To experiment with Sho's ideas, I modified the "ActionScript Language Reference's":http://livedocs.macromedia.com/flex/2/langref/index.html "Socket example":http://livedocs.macromedia.com/flex/2/langref/flash/net/Socket.html#includeExamplesSummary to use "simulated AS3 enums":http://kuwamoto.org/2006/04/04/as3-technique-using-object-instances-as-enums/ and "closures in the form of call objects":http://kuwamoto.org/2006/05/16/dealing-with-asynchronous-events-part-2/.  The rewritten example follows:
+{% highlight actionscript %}
+package {
+	import flash.display.Sprite;
+    import flash.events.Event;
+
+    public class SocketExample extends Sprite {
+
+		public function SocketExample() {
+			var mxnaDomain:String = "weblogs.macromedia.com";
+			var mxnaPath:String = "/mxna/xml/rss.cfm?query=byMostRecent&languages=1";
+
+			var socket:HttpSocket = new HttpSocket(mxnaDomain);
+			socket.requestMethod = HttpRequestMethod.GET;
+			socket.path = mxnaPath;
+
+			var lastCall:ILastCall = socket.send();
+
+			lastCall.onResult = function(html:String):void {
+				trace(">> lastCall.onResult: " + html);
+			}
+
+			lastCall.onFault = function(event:Event):void {
+				trace(">> lastCall.onFault: " + event);
+			}
+		}
+	}
+}
+
+import flash.errors.*;
+import flash.events.*;
+import flash.net.Socket;
+
+class HttpSocket extends Socket {
+	private var response:String;
+	private var domain:String;
+	private var port:int;
+	public var requestMethod:HttpRequestMethod;
+	public var path:String;
+    
+
+	public function HttpSocket(host:String = null, port:uint = 80) {
+		super(host, port);
+		this.domain = host;
+		this.port = port;
+	}
+    
+	public function send():ILastCall {
+		connect(domain, port);
+		return configureListeners();
+	}
+
+	private function configureListeners():ILastCall {
+		var lastCall:LastCall = new LastCall();
+		addEventListener(Event.CLOSE, getCloseHandler(lastCall));
+		addEventListener(Event.CONNECT, connectHandler);
+		addEventListener(IOErrorEvent.IO_ERROR, getIoErrorHandler(lastCall));
+		addEventListener(SecurityErrorEvent.SECURITY_ERROR, getSecurityErrorHandler(lastCall));
+		addEventListener(ProgressEvent.SOCKET_DATA, socketDataHandler);
+		return lastCall;
+	}
+
+	private function writeln(str:String):void {
+		str += "\r\n";
+		try {
+			writeUTFBytes(str);
+		}
+		catch(e:IOError) {
+			trace(e);
+		}
+	}
+
+	private function sendRequest():void {
+		trace("sendRequest");
+		response = "";
+//		writeln("GET /");
+		writeln(requestMethod + " " + path + " " + "HTTP/1.1");
+		writeln("Host: " + domain);
+		writeln("");
+		flush();
+	}
+
+	private function readResponse():void {
+		var str:String = readUTFBytes(bytesAvailable);
+		response += str;
+		if(str.search(/\r?\n\r?\n$/) != -1) {
+			close();
+			dispatchEvent(new Event(Event.CLOSE));
+		} 
+	}
+
+//	private function closeHandler(event:Event):void {
+//		trace("closeHandler: " + event);
+//		trace(response.toString());
+//	}
+
+	private function getCloseHandler(lastCall:LastCall):Function {
+		return function(event:Event):void {
+			callOnResult(lastCall, response.toString());
+		};
+	}
+
+	private function connectHandler(event:Event):void {
+		trace("connectHandler: " + event);
+		sendRequest();
+	}
+
+//	private function ioErrorHandler(event:IOErrorEvent):void {
+//		trace("ioErrorHandler: " + event);
+//	}
+
+	private function getIoErrorHandler(lastCall:LastCall):Function {
+		return function(event:IOErrorEvent):void {
+			callOnFault(lastCall, event);
+		};
+	}
+
+//	private function securityErrorHandler(event:SecurityErrorEvent):void {
+//		trace("securityErrorHandler: " + event);
+//	}
+   	
+	private function getSecurityErrorHandler(lastCall:LastCall):Function {
+		return function(event:SecurityErrorEvent):void {
+			callOnFault(lastCall, event);
+		};
+	}
+
+	private function socketDataHandler(event:ProgressEvent):void {
+		trace("socketDataHandler: " + event);
+		readResponse();
+	}
+   	
+	protected function callOnResult(lastCall:ILastCall, obj:Object):void {
+		lastCall.executeResult(obj);
+	}
+   	
+	protected function callOnFault(lastCall:ILastCall, event:Event):void {
+		lastCall.executeFault(event);
+	}
+}
+{% endhighlight %}
+
+The supporting classes it uses are:
+
+*HttpRequestMethod*
+{% highlight actionscript %}
+package {
+	public class HttpRequestMethod {
+		public static const GET:HttpRequestMethod = new HttpRequestMethod("GET");
+		public static const POST:HttpRequestMethod = new HttpRequestMethod("POST");
+		public static const PUT:HttpRequestMethod = new HttpRequestMethod("PUT");
+		public static const DELETE:HttpRequestMethod = new HttpRequestMethod("DELETE");
+		public static const HEAD:HttpRequestMethod = new HttpRequestMethod("HEAD");
+		public static const OPTIONS:HttpRequestMethod = new HttpRequestMethod("OPTIONS");
+		public static const TRACE:HttpRequestMethod = new HttpRequestMethod("TRACE");
+		public static const CONNECT:HttpRequestMethod = new HttpRequestMethod("CONNECT");
+
+		private var method:String;
+		
+		public function HttpRequestMethod(method:String) {
+			this.method = method;
+		}
+		
+		public function equals(method:HttpRequestMethod):Boolean {
+			return this == method;
+		}
+		
+		public function valueOf():String {
+			return method;
+		}
+
+		public function toString():String {
+			return valueOf();
+		}
+	}
+}
+{% endhighlight %}
+This is the example's enum class.  Unlike "the enum in Sho's post":http://kuwamoto.org/2006/04/04/as3-technique-using-object-instances-as-enums/, _HttpRequestMethod_ takes a _String_ method value as a constructor argument.  I like this technique for two reasons.  The first is the ability to actually access and use the value like we do with "GET" in the _HttpSocket.sendRequest()_ method.  The second is the flexibility it gives us to add a custom _HttpRequestMethod_ on the fly.  For example, we could do something like _new HttpRequestMethod("PROPFIND")_ to add a WebDAV header from a class other than _HttpRequestMethod_.
+<br />
+<br />
+*LastCall*
+{% highlight actionscript %}
+package {
+	public class LastCall implements ILastCall {
+		private var resultHandlers:Array;
+		private var faultHandlers:Array;
+
+		public function LastCall() {
+			resultHandlers = new Array();
+			faultHandlers = new Array();
+		}
+		
+		public function executeResult(obj:Object):void {
+			var fn:Function = onResult;
+			while(fn != null) {
+				fn(obj);
+				fn = onResult;
+			}
+		}
+		
+		public function executeFault(obj:Object):void {
+			var fn:Function = onFault;
+			while(fn != null) {
+				fn(obj);
+				fn = onFault;
+			}
+		}
+		
+		public function set onResult(fn:Function):void {
+			resultHandlers.push(fn);
+		}
+		
+		public function get onResult():Function {
+			return resultHandlers.shift() as Function;
+		}
+		
+		public function set onFault(fn:Function):void {
+			faultHandlers.push(fn);
+		}
+		
+		public function get onFault():Function {
+			return faultHandlers.shift() as Function;
+		}
+	}
+}
+{% endhighlight %}
+_LastCall_ manages the closures returned from the _HttpSocket.getXXXHandler(lastCall:LastCall)_ methods.  It has an array of _resultHandlers_ and _faultHandlers_ so that _ILastCalls_ can be passed to multiple objects without a risk that their callbacks will be clobbered. 
+<br />
+<br />
+And, the interface *ILastCall*
+{% highlight actionscript %}
+package {
+	public interface ILastCall {
+		function executeResult(obj:Object):void;
+		function executeFault(obj:Object):void;
+		function set onResult(fn:Function):void;
+		function get onResult():Function;
+		function set onFault(fn:Function):void;
+		function get onFault():Function;
+	}
+}
+{% endhighlight %}
+Experience has taught me to write call objects to an interface so they can be passed between projects.  For example, to reduce class duplication between two different projects - a service layer and a client that uses the service layer - I've found that interfaces are the way to go.
+
+Even though it feels a little like the AS1 callback days, I'm starting to like the call object/closure approach...
+

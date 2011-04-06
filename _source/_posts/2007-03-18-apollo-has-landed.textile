@@ -1,0 +1,12 @@
+---
+layout: post
+title: Apollo Has Landed!
+author: Ali Mills
+---
+
+h1. Apollo Has Landed!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Adobe Apollo has landed on <a href="http://labs.adobe.com/technologies/apollo/">labs</a>!  Get it from <a href="http://labs.adobe.com/technologies/apollo/">http://labs.adobe.com/technologies/apollo/</a> and let the fun begin...
+

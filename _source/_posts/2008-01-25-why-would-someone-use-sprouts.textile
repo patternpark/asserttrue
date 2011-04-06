@@ -1,0 +1,89 @@
+---
+layout: post
+title: Why would someone use Sprouts?
+author: Luke Bayes
+---
+
+h1. Why would someone use Sprouts?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+An interesting conversation has emerged in the comments of a "FlexOnRails":http://flexonrails.net/?p=104 post. Firstly, I'd like to thank those guys for mentioning us! Secondly, I'd like to apologize for writing such a ridiculously long post in their comments section, it's kind of embarrassing, but anyone that knows me knows that I can run off at the mouth (or keyboard) like no one else!
+
+For the sake of getting something productive done today, I'm just going to copy and paste the comments in here:
+<h4>Commenter</h4> 
+
+I donâ€™t see the difference between tying yourself to Ruby vs. tying yourself to eclipse. In fact, Ruby seems the more esoteric choice, as more people will have eclipse installed than Ruby. Donâ€™t get me wrong, Iâ€™m on Linux, so I have Ruby installed anyways, but if tie your product to Ruby, the only people that use it will be the people that use Ruby on a day-to-day basis.
+
+Anyways, it seems to me that for a project of this breadth to succeed, you would have to have a very high user adoption. Having only dabbled in Ruby, I donâ€™t know how difficult it is to add something to Gems, but Iâ€™m assuming that it takes some knowledge of Ruby.. So all of your contributors will have to know Ruby too. It seems to me that youâ€™ll have to mask the whole Ruby aspect of the project in order to get a reasonable people to contribute/use this.
+
+just my $.02
+
+
+<h4>Response</h4>
+
+And here's a slightly modified paste of the response (I added a rake task example):
+
+You do make some really good points and I appreciate the discussion. I'll attempt to answer some of your questions here....
+
+The main difference between Ruby and Eclipse is that Eclipse is an Integrated Development Environment (IDE), while Ruby is a programming language. This is a crucial difference because choosing an IDE is a deeply personal decision that for me (and I'm sure many others) changes over time. During my career, I have edited code with a wide variety of tools, just to name a few, I have used Director, Flash Authoring, Visual Studio, NetBeans, HomeSite, Primal Script, TextPad, TextMate, Emacs, FDT (Eclipse), Aptana (Eclipse), Flex Builder (Eclipse) and RDT (Eclipse). 
+
+I need an automated build system that can follow me around from IDE to IDE, regardless of my operating system or development tool choices. Additionally, a build environment should never depend on a particular IDE, what about those of us that want to use Continuous Integration tools? We need a server somewhere (running any operating system) to compile and run our application and test harness, and in my experience, this server is usually running some form of *nix.
+
+You make some good points about some users having to install Ruby in order to get up and running. I was told not too long ago that roughly 50% of the people using Flash were running OS X. This means that at least 1/2 of the target audience of Sprouts already has Ruby and Ruby Gems.
+
+Additionally, even for the other half, it seems much more challenging for someone to:
+
+ * Find, download and unpack the Flex SDK
+ * Update their system path to include the sdk bin directory
+ * Find, download and install the Flash Debug Player
+ * Depending on the version, figure out where Flash Player reads the mm.cfg file. (This lets you tell the Flash Player to write trace output to a log file)
+ * Depending on the version, figure out where Flash Player writes the trace output log file (So that you and read it on each execution)
+ * Depending on the version, figure out where Flash Player reads the trust files (that allow you to load content both locally and from the network while debugging)
+ * Select one of the many tools that reads the Flash Player trace output log file, and get it installed and configured
+ * Find download and install AsUnit or FlexUnit
+ * Figure out how to get a test harness written and running
+ * Decide how to structure an ActionScript project
+ * Find download and install any other libraries that you'd like to use and keep them up to date
+ * Figure out how to integrate your IDE with your choice of continuous integration tools
+ * Get each and every person on a team to repeat this process
+ * As the project grows to include more or different tools, each team member must manually update their build environment or IDE settings
+
+Sprouts does all of these things for ActionScript 2, ActionScript 3 and MXML development, and the only thing you need to do is install Ruby and RubyGems. As your build script is updated and checked into version control, your team members simply update their local copy and the next time they do a local build, they will receive any new or different tools or libraries.
+
+As far as creating new gems, you are absolutely correct that it can be challenging. This is why we have built (and are still refining) some very simple Rake tasks that make this process much more like filling out a form than writing code. It is still Ruby code, and your point is valid. This may be a problem for some people. I do hope most people will agree that the hurdle is much smaller on this side than the other.
+
+Your final point is a very good one. I am intensely curious about how intimidating Ruby might be for people that are currently writing ActionScript. I am encouraged by how easily HTML and JavaScript developers seem to be able to get productive with Ruby On Rails. 
+
+One of the great things about Ruby, is that it's really easy to understand, especially when you have some existing code to start with. Here is what the Sprout project generator MXMLC build task looks like:
+
+<typo:code linenumber="false" class="code-example">
+# Download and install the Adobe corelib library
+library :corelib
+
+# Create a new compilation task and add the Adobe corelib to the library_path
+mxmlc 'bin/SomeProject.swf' => :corelib do |t|
+  t.warnings                  = true
+  t.default_background_color  = '#FFFFFF'
+  t.default_frame_rate        = 24
+  t.default_size              = '600 400'
+  t.input                     = "src/OtherProject.as"
+  t.source_path               << "lib/somelocallibrary"
+end
+
+desc "Compile application"
+task :compile => 'bin/SomeProject.swf'
+{% endhighlight %}
+
+If you're interested in which other parameters can be set, and what they do, you can simply check out the "RDocs that we have published":http://www.projectsprouts.org/rdoc. ("Here is the MXMLCTask description":http://www.projectsprouts.org/rdoc/classes/Sprout/MXMLCTask.html)
+
+Additionally, from a Sprout end user perspective, the exposure to Ruby is actually minimal. You have to touch Ruby when you deal with your build scripts, but thanks to the simplicity of the Ruby syntax, this should be less intimidating, more feature rich and far less fragile than dealing with shell scripting or Ant tasks. 
+
+I agree that it would be ideal if Sprouts had ridiculously wide adoption, but I'm not convinced that it's critical for it to be successful. This is primarily because our library and tool packaging formats don't require anything on the part of the library or tool developers. We can package and distribute open source and proprietary libraries and tools from their existing distribution points, by simply editing a simple text sprout specification.
+
+Ultimately, Sprouts does more than any other automated build tool that I know of and the only thing an end user needs is Ruby and RubyGems. I hope you give it a try sometime and let us know what you think!
+
+
+"http://www.projectsprouts.org":http://www.projectsprouts.org
+
+

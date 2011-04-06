@@ -1,0 +1,21 @@
+---
+layout: post
+title: Flash Lite 1.1 Mobile Google Calendar
+author: Ali Mills
+---
+
+h1. Flash Lite 1.1 Mobile Google Calendar
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+<center><embed style="width:400px; height:326px;" id="VideoPlayback" align="middle" type="application/x-shockwave-flash" src="http://video.google.com/googleplayer.swf?docId=-6913547523582904701&hl=en" quality="best" bgcolor="#ffffff" scale="noScale" salign="TL"  FlashVars="playerMode=embedded"> </embed></center>
+
+The "video":http://video.google.com/videoplay?docid=-6913547523582904701 above demonstrates the "Google Calendar":http://calendar.google.com edition of the "Flash Lite 1.1":http://www.adobe.com/products/flashlite/ mobile calendar project "we're":http://www.patternpark.com working on at "Pattern Park":http://www.patternpark.com.  Please forgive the video quality.  It's just a sneak peak, and we're not marketing guys.
+
+In the "video":http://video.google.com/videoplay?docid=-6913547523582904701, I walk through launching the calendar (which, as a nod to "CL2":http://www.techcrunch.com/2006/03/08/exclusive-screenshots-google-calendar/, we call CaLendar2) from a deck icon; navigating its month, day, and event views; and adding an event to "Google Calendar":http://calendar.google.com with the application's hook to "Google's SMS gateway":http://www.google.com/support/calendar/bin/answer.py?answer=37529&topic=8568.
+
+The version demo'ed above is a quite a few iterations beyond what I showed during my "MAXUP presentation":http://www.asserttrue.com/articles/2006/10/06/maxup-mobile-icalendar-reader.  In fact, it's bug free.  You may be wondering, "it sounds mature, is CaLendar2 available in source or packaged form"?  Well, for those asking, thanks for asking.  The answer is, "not yet".  We still need to implement a distribution process because of some "Flash Lite 1.1":http://www.adobe.com/products/flashlite/ details.  Our plan is to have that process complete in time to release CaLendar2 with "Lifebin":http://www.lifebin.com.  We'll be talking about "Lifebin":http://www.lifebin.com quite a bit in future posts.
+
+If you're interested in CaLendar2, will you please post a comment letting us know?  If there's enough interest, we're willing to shift priorities to get the distribution process implemented sooner.  Also, if you feel like CaLendar2 is something you would pay for, will you please include how much you feel it's worth in your comment?  "Luke":http://www.lukebayes.com and "I":http://www.alimills.com plan for it to be free, but it's always interesting to get a feel for something's "value":http://www.loudthinking.com/arc/000531.html. 
+  
+

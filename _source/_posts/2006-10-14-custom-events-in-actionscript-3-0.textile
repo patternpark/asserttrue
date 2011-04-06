@@ -1,0 +1,32 @@
+---
+layout: post
+title: Custom Events in ActionScript 3.0
+author: Luke Bayes
+---
+
+h1. Custom Events in ActionScript 3.0
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I just lost at least 2 hours to this one and figured I'd share with the hope that maybe I'll save someone else the same headache...
+
+If you're working with the Flex 2 framework and writing custom components as directed, you're probably creating custom event data types.
+
+If your event handlers are written to expect an instance of your custom data type, <strong>be sure you override the "clone" method and return a new, configured instance of your new event data type.</strong>
+
+I've been staring at this error message for hours now:
+
+<code>
+TypeError: Error #1034: Type Coercion failed: cannot convert flash.events::Event@148cb29 to lifebin.events.ActionEvent.
+</code>
+
+It was driving me nuts because the stack trace begins with a method that actually dispatches a correctly configured instance of an ActionEvent! 
+
+I even went so far as to create isolated test cases that create, dispatch and bubble custom events through a Flex and non-flex composite structure. I was unable to reproduce the error outside of our application and still don't know why or whom is calling clone - but I just tried implementing the clone method out of desparation and voila! Everything works.
+
+I'd love to know why this is happening - but for now - I'm content with spreading the word as to how to avoid it!
+
+Good Luck.
+
+
+

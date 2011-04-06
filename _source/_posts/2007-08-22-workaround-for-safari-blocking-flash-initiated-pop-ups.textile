@@ -1,0 +1,120 @@
+---
+layout: post
+title: Workaround for Safari Blocking Flash Initiated Pop Ups
+author: Ali Mills
+---
+
+h1. Workaround for Safari Blocking Flash Initiated Pop Ups
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Uncontrolled browser pop ups suck, and I'm very thankful for pop up blockers.  There are times, however, when you want controlled pop ups.  It's these times - the times when a user initiates the call to action - when the browser's pop up blocker should let them through.  Browsers are pretty good at managing this when the user initiated action starts in HTML, and most also do a good job when the action starts in a SWF.  There's at least one big exception - Safari.
+
+The standard path in Flash to open a browser pop up is to use "ExternalInterface":http://livedocs.adobe.com/flex/201/langref/flash/external/ExternalInterface.html to call a JavaScript function in the wrapping HTML page that contains a window.open call.  This path works in all the browsers I tested in except for Safari, which leads me to believe this a Safari bug.
+
+Luckily, if you want to open browser windows from a SWF in Safari there's a workaround other than disabling the "Block Pop-Up Windows"!  Check it out:
+
+<center>
+<script type="text/javascript" src="/files/PopUp.js"></script>
+
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="popUpSwf" width="140" height="20" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab">
+<param name="movie" value="/files/PopUp.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#CCCCCC" />
+<param name="allowScriptAccess" value="always" />
+<param name="allowNetworking" value="all" />
+<embed src="/files/PopUp.swf" quality="high" bgcolor="#CCCCCC" width="140" height="20" name="popUpSwf" align="middle" play="true" loop="false" quality="high" allowScriptAccess="always" allowNetworking="all" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed>
+</object>
+</center>
+
+The workaround works by:# using ExternalInterface.addCallback to register a function in
+ActionScript that calls navigateToUrl() with a target of "_blank"
+# trying the ExternalInterface.call to JavaScript to window.open path and...
+# if the above path fails, call the the navigateToUrl() registered
+ActionScript function
+
+And, here's what the example's code looks like:
+
+*ActionScript*
+{% highlight actionscript %}
+package {
+	import flash.display.Sprite;
+	import flash.events.TextEvent;
+	import flash.external.ExternalInterface;
+	import flash.net.URLRequest;
+	import flash.net.navigateToURL;
+	import flash.text.TextField;
+	import flash.text.TextFieldAutoSize;
+
+	public class PopupTest extends Sprite {
+		private var text:String = "<a href='event:http://www.google.com'><u><font color='#0000FF'>google from swf</font></u></a>";
+		private var textField:TextField;
+		
+		public function PopupTest() {
+			preInitialize();
+			initialize();
+			createChildren();
+		}
+				
+		public function openWindow(pageUrl:String):void {
+			var urlRequest:URLRequest = new URLRequest(pageUrl);
+			navigateToURL(urlRequest, "_blank");			
+		}
+
+		private function preInitialize():void {
+			if(ExternalInterface.available) {
+				ExternalInterface.addCallback("openWindowFromSwf", openWindow);
+			}
+		}
+		
+		protected function initialize():void {
+			textField = new TextField();
+			textField.autoSize = TextFieldAutoSize.LEFT;
+			textField.htmlText = text;
+			textField.addEventListener(TextEvent.LINK, linkHandler);
+		}
+		
+		protected function createChildren():void {
+			addChild(textField);
+		}
+
+		protected function linkHandler(linkEvent:TextEvent):void {
+			if(ExternalInterface.available) {
+				ExternalInterface.call("openWindow", linkEvent.text);
+			}
+		}
+	}
+}
+{% endhighlight %}
+
+*JavaScript in HTML*
+{% highlight actionscript %}
+<script>
+<!--
+	var swfId = "popupSwf";
+	
+	function openWindow(pageUrl) {
+		var winName = Math.round(9999*Math.random()) + new Date().getTime();
+		var winNew = window.open(pageUrl,winName,"toolbar=1,scrollbars=1,location=1,statusbar=0,menubar=0,resizable=1,width=800,height=700,left=200,top=100");
+		
+		if(!winNew) {
+			getSwf(swfId).openWindowFromSwf(pageUrl);
+		}
+		else {
+			winNew.focus();
+		}
+	}
+
+	function getSwf(id) {
+		if (navigator.appName.indexOf("Microsoft") != -1) {
+			return window[id];
+		} 
+		else {
+			return document[id];
+		}
+	}	
+//-->
+</script>
+{% endhighlight %}
+

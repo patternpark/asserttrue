@@ -1,0 +1,66 @@
+---
+layout: post
+title: AsUnit framework 'as2' vs 'as25'?
+author: Luke Bayes
+---
+
+h1. AsUnit framework 'as2' vs 'as25'?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I just got a really good question on the <a href="https://lists.sourceforge.net/lists/listinfo/asunit-users">AsUnit-users mailing list</a> and as I was answering it, the answer kind of turned into a more bloggy-thing, so here goes:
+
+The question:
+
+<strong>
+"Ok. So. If I use the as25 version of the code (asunit vs. com.asunit), I
+don't seem to get output to the builtin AsUnit UI panel in the IDE
+(which i installed via the .mxp). Is there a way to make the builtin UI
+work with the as25 codebase? If not, what should I be using to see the
+status of the unit-tests when using the flash IDE?"
+</strong>
+
+This is a great question and I'm really sorry that we haven't been more clear about what the different <a href="http://www.asunit.org">AsUnit</a> framework builds are and why they exist...
+
+We created the as2 build back in 2004 and built the external panel simply because we were concerned that if we instantiate different MovieClips on the _root timeline from Authoring, one might inadvertently clobber another. When a project is built entirely in Authoring, there are so many choices about where your assets wind up, we didn't feel comfortable making assumptions about framework-related assets. Also, because of the way library symbols work, we couldn't really say, "Go ahead and create a different fla file for your test suites". As it turned out, we decided that it would make sense to let people send test output to this separate, embedded panel. This worked fine but had some drawbacks. We also designed this build to support Flash Player 6 because we were hoping to run tests on PDAs and FP 6 was the latest player that ran on these devices. Unfortunately, FP 6 does not support the try..catch statements. This means that the as2 build does not support exception handling at all.
+
+As time went on, we got more and more frustrated with Flash Authoring as a compiler and <a href="http://ncannasse.free.fr/">Nicolas Cannasse</a> released <a href="http://www.mtasc.org">MTASC</a>. Our project requirements lost the need for FP 6 support and we started working on larger and larger applications. In order to support some new features, without destroying legacy support, we built the as25 branch which is intended for any projects that are compiled with Flash Authoring or MTASC and deploy to Flash Players 7 or 8. This build is a complete rewrite of the framework according to implementation decisions found in JUnit. The most important of which is support for try..catch and asynchronous TestCases. (Not to be confused with Asynchronous test "methods", which are nearing a release in the as3 build, and will likely be back-ported to the as25 build, but aren't in there yet...)
+
+The as25 build actually displays the results panel directly in the running SWF file. The main idea is that if your test cases simply take advantage of the built-in AsUnit attachMovie method found on the TestCase base class, we'll manage naming and depth appropriately. The main advantage to this is that you don't have to name your MovieClip instances or send in an appropriate/unique depth, AsUnit manages these items for you. You just build out MovieClip instances inside of your TestCase setUp method, make sure to call removeMovieClip inside of tearDown, and then each test method is gauranteed to have a new instance to operate on.
+
+Also, with the as25 branch, (I can't remember if as2 supported this or not), you can send an optional string method name to the TestRunner.start method. Doing this will execute setUp, then the test method, and <strong>not</strong> tearDown. This is especially helpful when you're developing visual components and need to make sure they're being laid out correctly. It is also helpful when you get a large test harness in place that takes a little too long to execute. You can just focus on the task at hand, but then run the entire suite before you check in your changes.
+
+Now that I've rambled uncontrollably about the origins and some reasons for these two builds, the original question was, "...what should I be using to see the status of the unit-tests [for the as25 framework] when using the flash IDE?"
+
+
+You'll need a TestRunner class that gets instantiated from within Authoring (or by MTASC for that matter). Sometimes many of our test cases need to access the same property in order to run, and we usually just put those on our runner and then access them directly. There is probably a more elegant way to do this, but this works pretty well for us.
+
+<typo:code class="code-example">
+import asunit.textui.TestRunner;
+
+class YourProjectRunner extends TestRunner {
+	public static var CSS_LOCATION:String 			= "css/yourCSSFile.css";
+	public static var STRINGS_LOCATION:String 		= "props/strings.properties";
+
+	public function YourProjectRunner() {
+	    start(AllTests);
+	    // Comment the above call to start and uncomment the following
+	    // to only execute the method named 'testSomeMethod' in the
+	    // SomeTestCaseTest.as file.
+		//start(SomeTestCaseTest, "testSomeMethod");
+	}
+
+	public static function main():Void {
+		var runner:YourProjectRunner = new YourProjectRunner();
+	}
+}
+
+// With MTASC, just point the compiler at this class as it's base, with authoring, just put something like this in a frame of your FLA:
+// YourProjectRunner.main();
+{% endhighlight %}
+
+Anyhoo, the TestRunner shown above will run a full test suite of all your test cases. These test suites can most easily be created by using the <a href="http://prdownloads.sourceforge.net/asunit/XULUI-Win.msi?download">XUL UI</a> "run now" method.
+
+Hope that helps.
+
+

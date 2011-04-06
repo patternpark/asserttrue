@@ -1,0 +1,33 @@
+---
+layout: post
+title: MAXUP - Mobile iCalendar Reader is Going to MAX
+author: Ali Mills
+---
+
+h1. MAXUP :: Mobile iCalendar Reader is Going to MAX
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+"MAXUP":http://barcamp.org/MAXUP is an "unconference":http://en.wikipedia.org/wiki/Unconference that will be running parallel to the "MAX conference":http://www.adobe.com/events/max/ from October 24rd - October 26th at the The Venetian Hotel in Las Vegas, Nevada.  I've been "hearing":http://radar.oreilly.com/archives/2006/10/thoughts_on_unconferences.html about these unconference "Foo Camp":http://wiki.oreillynet.com/foocamp05/index.cgi style spin-offs for a little while and like the idea.  Since I'll already be in Vegas "presenting at MAX on design patterns in ActionScript 3":http://www.adobe.com/events/max/sessions/wd306w.html, I'm going to join "all these attendees":http://blogs.adobe.com/imho/2006/09/we_demo_you_goi.html and participate in "MAXUP":http://barcamp.org/MAXUP, too.
+
+At "MAXUP":http://barcamp.org/MAXUP I'm going to give a demo of a mobile calendar project I'm working on that reads and presents remote calendar files (specifically "iCalendar":http://www.ietf.org/rfc/rfc2445.txt formatted files) on "Flash Lite":http://www.adobe.com/products/flashlite/ devices.  Like most projects, this one has both a server and client component.  The server is written in "Ruby":http://www.ruby-lang.org/en/ and the client in "Flash Lite 1.1":http://www.adobe.com/products/flashlite/.  I'll be demonstrating the project running on my "Nokia 6600":http://www.nokiausa.com/phones/6600 and "Nokia N70":http://www.nokia.com/nseries/index.html?loc=inside,main_n70 phones, and discuss how it was built.  I'll do my best to follow "Scott Berkin's advice on how to run a great unconference session":http://www.scottberkun.com/blog/?p=426.
+
+Here are some recent pictures of the calendar running on my "N70":http://www.nokia.com/nseries/index.html?loc=inside,main_n70:
+<center>
+	<img src="http://www.asserttrue.com/files/phone_1.jpg" width="400" height="299" />
+	<img src="http://www.asserttrue.com/files/phone_2.jpg" width="400" height="299" />
+	<img src="http://www.asserttrue.com/files/phoneScreen_2.jpg" width="400" height="299" />
+	<img src="http://www.asserttrue.com/files/phone_3.jpg" width="400" height="299" />
+	<img src="http://www.asserttrue.com/files/phoneScreen_3.jpg" width="400" height="299" />
+	<img src="http://www.asserttrue.com/files/phone_4.jpg" width="400" height="299" />
+</center>
+
+I'll see you in Vegas!
+<br />
+<br />
+If you see me first, come say hello.  Here's what I looked like 20 years ago:
+
+<center>
+<img src="http://www.asserttrue.com/files/rockStar.jpg" width="400" height="299" />
+</center>
+

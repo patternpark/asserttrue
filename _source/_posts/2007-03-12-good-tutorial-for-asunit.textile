@@ -1,0 +1,18 @@
+---
+layout: post
+title: Good tutorial for AsUnit!
+author: Luke Bayes
+---
+
+h1. Good tutorial for AsUnit!
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Someone *finally* put together a solid tutorial for getting started with AsUnit.
+
+Big thanks go out to Tim Beynart for getting 'er done!
+
+<a href="http://www.flashcodersny.org/wordpress/?p=103">http://www.flashcodersny.org</a>
+
+
+

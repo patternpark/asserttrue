@@ -1,0 +1,100 @@
+---
+layout: post
+title: Developing Visual Components with AsUnit
+author: Luke Bayes
+---
+
+h1. Developing Visual Components with AsUnit
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+I've been meaning to write up a huge tutorial on this subject for years now. Since I still haven't gotten around to it, I'm just going to jam out some quick notes for those of you that might not have caught this stuff buried in the AsUnit 2.5 and AsUnit 3.0 sources.
+
+There are a handful of features in AsUnit that help us develop visual entities. These features are:
+
+ * <code>TestRunner.start</code> method
+ * <code>addChild</code>/<code>removeChild</code> TestCase helpers
+ * <code>addAsync</code> helper method
+
+For the sake of getting this thing done, I'm not going to go into insane amounts of detail here, so here's the quick and dirty.
+<h4>The <code>TestRunner.start</code> Method</h4>
+The start method of the TestRunner accepts three arguments.
+
+<ul>
+<li>TestCase Class (required, class): A reference to the TestCase or TestSuite that you would like to run</li>
+<li>Test method name (optional, string): The string method name within the aforementioned test case that you would like to execute</li>
+<li>Show Trace (optional, boolean, defaults to false): Whether or not you would like test results printed to trace output. There is a static member at TestRunner.SHOW_TRACE if you'd prefer to use that.</li>
+</ul>
+
+The typical usage of this method looks like this:
+
+<typo:code class="code-example">
+start(AllTests, null, TestRunner.SHOW_TRACE);
+{% endhighlight %}
+
+Now, if you're working on a particular TestCase, and don't want to wait for the entire suite to run everytime you compile, you can just update that start method to run only your TestCase as follows:
+
+<typo:code class="code-example">
+start(SomeFeatureTest, null, TestRunner.SHOW_TRACE);
+{% endhighlight %}
+
+Where <code>SomeFeatureTest</code> is a class that extends TestCase.
+
+Now, to get to the meat of the matter....
+
+If you're developing a visual component, you can send in a particular test method name to that second argument. Once this argument has a non-null value, the TestRunner will do the following:
+
+ * Instantiate your <code>TestCase</code> (from the first argument)
+ * Call <code>setUp()</code> in your custom test case
+ * Call the method name you sent to the <code>start</code> method.
+
+That's it! This might seem dumb and trivial, but there is something missing here, can you guess what it is?
+
+The <code>tearDown()</code> method is not called.
+
+This means that if you put some visual entities on screen during your set up phase or within your test method, they will still be on screen for you to visually examine.
+
+This dovetails nicely with the next feature that I'd like to talk about.
+
+<h4>The <code>addChild</code>/<code>removeChild</code> (and <code>attachMovie</code>) TestCase Helpers</h4>
+
+A little-known feature of our <code>TestCase</code> base class is that we added a handful of methods that make it much easier to deal with visual component development. No, the <code>TestCase</code> class does not extend <code>MovieClip</code> or <code>DisplayObjectContainer</code>. We just implemented a couple of methods that make it behave as if it does. What these methods effectively do, is allow you to attach and remove visual entities from the display list (in ActionScript 2 or ActionScript 3).
+
+Usually, I call <code>addChild</code> in <code>setUp</code> and then call <code>removeChild</code> from the <code>tearDown</code> method.
+
+Using these methods during normal test suite execution should result in a perfectly acceptable cleanup after each test method, but using them in combination with the aforementioned <code>methodName</code> argument means that you can instantiate an element of your application in an isolated test context, then visually (manually) ensure that it does in fact look and behave as you expected, and <em>then</em> write tests to automate most of that verification!
+
+(Sorry for the exclamation, I get a little over-excited)
+
+And last but certainly not least....
+
+<h4>The <code>addAsync</code> Helper Method</h4>
+
+The AsUnit 3 framework has an <code>addAsync</code> method that allows us to pause test execution while waiting for a callback. When called, this method pauses test execution and returns a function. Test execution will be resumed when that returned function is called, or when the timeout has been exceeded. The function that <code>addAsync</code> returns is usually just a delegate to the function that it accepted.
+
+This method can accept two arguments:
+
+ * callback (closure, optional): The function that should be called when test execution is expected to resume.
+ * timeout (number, optional, default 1000): The time in milliseconds that test execution should wait for the callback to be called before throwing a timeout exception.
+
+This method can be called once inside of <code>setUp</code> and it can be called once inside of any test method. If this method is called, test execution will pause until the function that it returned is called. 
+
+Following is a short example of how I usually find myself using <code>addAsync</code>.
+
+{% highlight actionscript %}
+public function testSetSomeAsynchronousProperty():void {
+	var handler:Function = function(event:Event):void {
+		assertEquals(200, instance.otherProperty);
+	}
+	
+	instance.addEventListener(Event.COMPLETE, addAsync(handler));
+	instance.setSomeAsynchronousProperty();
+}
+{% endhighlight %}
+
+The strange thing is that these features are where I live in AsUnit, but very few folks seem to know about them!
+
+So please help us out by spreading the word on how <code>addAsync</code>, <code>addChild/removeChild</code> and the custom <code>TestRunner.start</code> method can change how we all develop features (and tests).
+
+
+

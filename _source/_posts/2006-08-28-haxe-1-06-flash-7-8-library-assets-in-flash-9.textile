@@ -1,0 +1,40 @@
+---
+layout: post
+title: HaXe 1.06 - Flash 7/8 Library Assets in Flash 9
+author: Ali Mills
+---
+
+h1. HaXe 1.06 :: Flash 7/8 Library Assets in Flash 9
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Before I've even had a chance to experiment with "haXe 1.05":http://www.asserttrue.com/articles/2006/08/17/haxe-1-05-with-flash-player-9-support, verison "1.06":http://www.haxe.org/download has been released!  How long did that take?  Maybe a week?  Two of the more interesting features of this version are that it supports the use of "Flash 7/8 library assets from Flash 9 code":http://haxe.org/tutos/flash9#using_the_library and there's been an addition of a "RubyGems":http://www.rubygems.org/ like distribution system called "haxelib":http://haxe.org/haxelib.
+
+You can read about all of the new features and "Nicolas' blog":http://ncannasse.free.fr/?p=74, but here's a quick glance at the change log:
+
+* allowed extern enums
+* use only matching construct when parameters are matched
+* fixed bug preventing & char to be sent between JS and Flash remoting
+* improved flash9 api (more strict)
+* flash9 xml : use JS ReXml parser
+* added neko.io package (Input/Output)
+* moved neko.File and neko.Socket to neko.io package
+* fixed flash optional arguments (when extending flash.MC)
+* fixed neko native serialization problems
+* variable modification does not have side effects in 'for x in a...b'
+* jit disabled by default for neko web server
+* enable flash7-8 libraries usage from flash9
+* unknown identifier become "class not found" when is a classpath
+* changed haxe.PosInfos handling
+* added -debug (removed --flash-debug) on flash9 and neko only now
+* added Type.typeof
+* improved Serializer speed
+* added Serialization support for Date, Hash, IntHash, List
+* added flash9 and JS IE/Opera class reflection
+* added haxe.xml.Check and haxe.xml.Fast
+* added Xml.parent
+* added haxelib
+* added ArrayAccess interface
+
+As always, you can download the latest build from "http://www.haxe.org/download":http://www.haxe.org/download.
+

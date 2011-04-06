@@ -1,0 +1,48 @@
+---
+layout: post
+title: HaXe Sample Application - Simple Slide Show
+author: Ali Mills
+---
+
+h1. HaXe Sample Application :: Simple Slide Show
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+If you've been reading this blog then it should be clear to you that I'm pretty interested in the "haXe":http://www.haxe.org programming language (if it's not clear see: "Invest Regulary in Your Knowledge Portfolio":http://www.asserttrue.com/articles/2006/07/25/invest-regulary-in-your-knowledge-portfolio, "Where's haXe?":http://www.asserttrue.com/articles/2006/08/02/wheres-haxe, "HaXe Found!":http://www.asserttrue.com/articles/2006/08/07/haxe-found, and "HaXe 1.05 Supports Flash Player 9!":http://www.asserttrue.com/articles/2006/08/17/haxe-1-05-with-flash-player-9-support).    My interest in "haXe":http://www.haxe.org/intro is rooted in my desire to build "universally available":http://www.asserttrue.com/articles/2006/08/02/flash-player-7-universally-available applications with a code-base that I can grow.
+
+To learn the haXe syntax and language APIs, I wrote a "Simple Slide Show":http://www.asserttrue.com/files/Mediator.zip application that I call "Mediator":http://www.asserttrue.com/files/Mediator.zip.  Here it is:
+
+<center>
+<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="450" height="450" id="info" align="middle">
+<param name="allowScriptAccess" value="sameDomain" />
+<param name="movie" value="/files/Mediator.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#cccccc" />
+<embed src="/files/Mediator.swf" quality="high" bgcolor="#cccccc" width="450" height="450" name="info" align="middle" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+</object>
+</center>
+
+You can download the source "here":http://www.asserttrue.com/files/Mediator.zip.
+
+Some interesting parts of "Mediator":http://www.asserttrue.com/files/Mediator.zip follow:
+* the "*EventDispatcher*":http://www.asserttrue.com/articles/2006/08/02/wheres-haxe class demonstrates many elements of the haXe syntax
+* background art is externalized in the FLA _art/MediatorAssets.fla_
+* slide data is externalized in the XML document _xml/Mediator.xml_
+* the *MediatorModel* class demonstrates XML parsing in haXe
+* the entire application has a flexible layout (which you won't be able to notice unless you "download Mediator.zip":http://www.asserttrue.com/files/Mediator.zip, run the _Mediator.swf_ on your desktop, and resize it)
+* *Event*s in the application bubble, this is handled by the *Component* class's _dispatchEvent()_ method; that method looks like:
+
+<typo:code>
+	public function dispatchEvent(event:Event):Bool {
+		var dispatched:Bool = dispatcher.dispatchEvent(event);
+		if(event.bubbles && dispatched && getParent() != null) {
+			getParent().dispatchEvent(event);
+		}
+		return dispatched;
+	}
+{% endhighlight %}
+
+To compile the simple slide show, first "download and install haXe":http://www.haxe.org/download, then "download Mediator.zip":http://www.asserttrue.com/files/Mediator.zip, and after unpacking it double-click _build.hxml_.
+
+To run the application locally without compiling, just double-click _Mediator.swf_.
+

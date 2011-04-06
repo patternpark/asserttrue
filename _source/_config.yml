@@ -2,6 +2,7 @@ auto: true
 server: true
 server_port: 3000
 pygments: true
-lsi: true
+lsi: false
 exclude: ['Rakefile']
+permalink: /articles/:year/:month/:day/:title
 

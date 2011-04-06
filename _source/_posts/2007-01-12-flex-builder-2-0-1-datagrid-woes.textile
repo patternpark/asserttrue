@@ -1,0 +1,83 @@
+---
+layout: post
+title: Flex Builder 2.0.1 DataGrid Woes...
+author: Luke Bayes
+---
+
+h1. Flex Builder 2.0.1 DataGrid Woes...
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Ali and I were just working on our "super-secret project":http://www.lifebin.com that's written using Flex 2 and we came across a pretty surprising problem.
+
+We have a DataGrid that slides out of the way and back again. If the application is compiled on his machine, the DataGrid header disappears after being collapsed to less than 2 pixels of width, while it works fine when compiled on my machine.
+
+We finally figured out that he has installed Flex Builder 2.0.1 while I'm still on the good old Flex Builder 2.0... Looks like some kind of fun injection!
+
+Essentially the rule is that if you're using the latest Flex Builder build (2.0.1), don't ever let your DataGrids get smaller than 2 pixels wide.
+The following example was compiled on my machine in Flex Builder 2.0. You'll notice that you can close the DataGrid to any width - including zero.
+<center>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="PoopyHeader" width="420" height="300" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab">
+<param name="movie" value="/files/PoopyHeader.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#869ca7" />
+<param name="allowScriptAccess" value="sameDomain" />
+<embed src="/files/PoopyHeader.swf" quality="high" bgcolor="#869ca7" width="420" height="300" name="PoopyHeader" align="middle" play="true" loop="false" quality="high" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed>
+</object>
+</center>
+
+
+
+This one was compiled on Ali's machine in Flex Builder 2.0.1. If you close the DataGrid to less than 2 pixels, you notice that the header is gone. We added a reset button that removes and reattaches the instance so you can do it again and again and again. It's really fun!
+
+<center>
+<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" id="PeepyHeader" width="420" height="300" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab">
+<param name="movie" value="/files/PeepyHeader.swf" />
+<param name="quality" value="high" />
+<param name="bgcolor" value="#869ca7" />
+<param name="allowScriptAccess" value="sameDomain" />
+<embed src="/files/PeepyHeader.swf" quality="high" bgcolor="#869ca7" width="420" height="300" name="PeepyHeader" align="middle" play="true" loop="false" quality="high" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer">
+</embed>
+</object>
+</center>
+
+After posting this, is appears there are other problems as Ali's swf throws up scrollbars that we can't seem to get rid of! 
+
+Yaaaay!
+
+Here's the source for this one:
+{% highlight actionscript %}
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" viewSourceURL="srcview/index.html">
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.dataGridClasses.DataGridColumn;
+			public function reset():void {
+				container.removeChild(dataGrid);
+				dataGrid = new DataGrid();
+				dataGrid.id = "dataGrid";
+				dataGrid.columns = [new DataGridColumn("Header - Don't lose me!")];
+				dataGrid.percentWidth = 100;
+				dataGrid.percentHeight = 100;
+				container.addChildAt(dataGrid, 0);
+			}
+		]]>
+	</mx:Script>
+    <mx:VBox id="container" width="100%" height="100%">
+        <mx:DataGrid id="dataGrid" width="100%" height="100%" rowHeight="20">
+            <mx:columns>
+                <mx:DataGridColumn headerText="Header - Don't lose me!" />
+            </mx:columns>
+        </mx:DataGrid>
+        <mx:HBox width="100%" horizontalAlign="center">
+            <mx:TextInput id="textInput" text="2"/>
+            <mx:Button click="{dataGrid.width = Number(textInput.text)}" label="close" />
+            <mx:Button click="dataGrid.percentWidth = 100" label="open" />           
+            <mx:Button click="{reset()}" label="reset" />           
+        </mx:HBox>
+    </mx:VBox>
+</mx:Application>
+{% endhighlight %}
+
+

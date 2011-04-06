@@ -24,6 +24,6 @@ end
 desc "Build the files and place them where they belong"
 task :deploy do
   `jekyll --no-server --no-auto`
-  copy_changed_files '_site', '..'
+  copy_changed_files '_site', './..'
 end
 

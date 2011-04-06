@@ -1,0 +1,73 @@
+---
+layout: post
+title: No Try..Catch from EventDispatchers in ActionScript 3.0?
+author: Luke Bayes
+---
+
+h1. No Try..Catch from EventDispatchers in ActionScript 3.0?
+
+{{ page.date | date_to_string }} - {{ page.author }}
+
+Wow...
+
+I was just doing some work on event handling with AsUnit 3.x and discovered something pretty strange. It seems that if an event handler throws an exception, there is no way to catch it from the initiating thread. For some reason, if an exception makes it to the EventDispatcher, it just passes right through all encountered catch/finally blocks and goes right up to the player as an uncaught exception.
+
+Just copy the following code into a new ActionScript project in FlexBuilder and make it your default application to see this in action:
+
+<typo:code class="code-example">
+package {
+	import flash.display.Sprite;
+	import flash.errors.IllegalOperationError;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+
+	public class EventDispatcherTest extends Sprite {
+
+		private var dispatcher:IEventDispatcher;
+		
+		public function EventDispatcherTest() {
+			runTests();
+		}
+
+		public function runTests():void {
+			dispatcher = new EventDispatcher();
+			dispatcher.addEventListener(Event.CHANGE, someHandler);
+			try {
+				// Uncomment this line to see the catch work...
+				//someHandler(new Event(Event.CHANGE));
+				dispatcher.dispatchEvent(new Event(Event.CHANGE));
+			}
+			catch(error:*) {
+				trace("Exception has been caught!");
+			}
+		}
+		
+		private function someHandler(event:Event):void {
+			trace("someHandler called");
+			throw new IllegalOperationError("AnyException");
+		}
+	}
+}
+{% endhighlight %}
+
+This will throw an exception up to the player with a call stack that looks like this:
+
+<pre>
+Error: AnyException
+	at EventDispatcherTest/EventDispatcherTest::someHandler()[...EventDispatcherTest\EventDispatcherTest.as:31]
+	at flash.events::EventDispatcher/flash.events:EventDispatcher::dispatchEventFunction()
+	at flash.events::EventDispatcher/dispatchEvent()
+	at EventDispatcherTest/runTests()[...EventDispatcherTest\EventDispatcherTest.as:22]
+	at EventDispatcherTest$iinit()[...EventDispatcherTest\EventDispatcherTest.as:13]
+</pre>
+
+You can see from the call stack that the exception actually passed through the "runTests" method - but didn't get caught!
+
+I'm really not sure what to make of this, but I think we're about to have to roll our own event management!
+
+Those of you using AsUnit 3.x should know that because of this issue, the old recommended way of testing event handlers in AS 2 by throwing an "AssertionPassedError" won't work in AS 3.
+
+Anyone else run into this? Perhaps there is something simple that we can do differently to avoid this behavior?
+
+
